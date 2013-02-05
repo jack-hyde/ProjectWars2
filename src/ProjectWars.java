@@ -28,7 +28,7 @@ public class ProjectWars extends StateBasedGame{
     public static void main(String[] args) {
         try {
             AppGameContainer container = new AppGameContainer(new ProjectWars());
-             container.setDisplayMode(1280, 768, false);// fenêtre de 1280*768 fullscreen =false !!
+             container.setDisplayMode(1300, 800, false);// fenêtre de 1280*768 fullscreen =false !!
              container.setTargetFrameRate(60);
              container.start();
         }                       //on démarre le container
