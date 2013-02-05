@@ -29,7 +29,10 @@ public class ProjectWars extends StateBasedGame{
         try {
             AppGameContainer container = new AppGameContainer(new ProjectWars());
              container.setDisplayMode(1280, 768, false);// fenêtre de 1280*768 fullscreen =false !!
-             container.setTargetFrameRate(60);
+             container.setVSync(true);  
+             container.setMultiSample(64);  
+             container.setTargetFrameRate(60);  
+             container.setVerbose(true);  
              container.start();
         }                       //on démarre le container
         catch (SlickException e) {e.printStackTrace();}  // l'exception de base de slick !!
