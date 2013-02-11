@@ -1,7 +1,6 @@
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -13,99 +12,167 @@ public class GameState extends BasicGameState{
 	
 	private Image barre1;
 	private Image barre2;
+	private Image fond;
+	private Image selec;
 	private int selection;
-	private Input input;
+	private boolean solo;
+	private boolean multi;
+	private boolean editeur;
+	private boolean options;
+	private boolean aide;
+	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
 	
     public static final int ID = 1;
+    
     @Override
     public int getID() {return ID;}
 
+    
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         barre1 = new Image ("images/menu/10.png");	//chargement de la barre de base
-        barre2 = new Image ("images/menu/11.png");	//chargement de la barre de selection
+        barre2 = new Image ("images/menu/13.png");	//chargement de la barre de selection
+       // fond = new Image ("images/menu/fond.png");
+        selec = new Image ("images/menu/14.png");
         selection = 1;
-        input = container.getInput();
+        solo = false;
+        multi = false;
+        editeur = false;
+        options = false;
+        aide = false;
     }
 
+    
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+    	//fond.draw(0,0);
+    	//barre1.draw(200,130);//barre campagne selectioné
+		//barre1.draw(200,268);//barre multiplayer
+		//barre1.draw(200,406);//barre options
+		//barre1.draw(200,544);//barre quitter
+		//barre1.draw(200,682);
     	switch(selection){
     	case 1 :
-    			barre2.draw(150,150);//barre campagne selectioné
-    			barre1.draw(150,300);//barre multiplayer
-    			barre1.draw(150,450);//barre options
-    			barre1.draw(150,600);//barre quitter
-    			break;
+    		selec.draw(152,190);
+    		break;
     	case 2 :
-    			barre1.draw(150,150); 
-				barre2.draw(150,300);
-				barre1.draw(150,450);
-    			barre1.draw(150,600);
-    			break;
+    		selec.draw(152,328);
+    		break;
     	case 3 :
-	    		barre1.draw(150,150);
-				barre1.draw(150,300);
-				barre2.draw(150,450);
-				barre1.draw(150,600);
-				break;
+    		selec.draw(152,466);
+			break;
     	case 4 :
-	    		barre1.draw(150,150); 
-				barre1.draw(150,300);
-				barre1.draw(150,450);
-				barre2.draw(150,600);
-    			break;
+    		selec.draw(152,604);
+    		break;
+    	case 5 :
+    		selec.draw(152,742);
+    		break;
+    	case 6 :
+    		selec.draw(100,742);
+    		break;
     	default :
-    			barre2.draw(150,150);
-				barre1.draw(150,300);
-				barre1.draw(150,450);
-    			barre1.draw(150,600);
-    			break;
+    		break;
     	}
 
-        g.drawString("Campagne", 240, 170);
-        g.drawString("Multijoueur", 240, 320);
-        g.drawString("Options", 240, 470);
-        g.drawString("Quitter", 240, 620);
+        g.drawString("Campagne", 270, 150);
+        g.drawString("Multijoueur", 270, 300);
+        g.drawString("Editeur", 270, 450);
+        g.drawString("Options", 270, 600);
+        g.drawString("Quitter", 270, 750);
+        g.drawString("?", 100, 750);
+        
+        //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
+        int u = 0;
+        for(int i=0; i<touches.length; i++)
+        {  	
+        	g.drawString("i : "+touches[i], 10+u, 60);
+        	u = u+70;
+        }
     }
 
+    
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-    	 if (input.isKeyPressed(Input.KEY_DOWN))
-         {
-            if(selection == 4){
-            	selection=1;
-            }
-            else{
-            	selection++;
-            }
-         }
-    	 if (input.isKeyPressed(Input.KEY_UP))
-         {
-            if(selection == 1){
-            	selection=4;
-            }
-            else{
-            	selection--;
-            }
-         }
-    	 if (input.isKeyPressed(Input.KEY_ENTER))
-         {
-    		 switch(selection){
-    	    	case 1 :
-    	    			
-    	    			break;
-    	    	case 2 :
-    	    			
-    	    			break;
-    	    	case 3 :
-    	    			
-    					break;
-    	    	case 4 :
-    	    			System.exit(0);
-    	    			break;
-    	    	default :
-    	    			
-    	    			break;
-    	    	}
-         }
-    }
+    	Entree entree = new Entree(container);
+    	touches = entree.getTouches();		//recupere les touches
+    	
+    	if(touches[4] == 1)//appuis sur S
+    	{
+    		if(selection == 5){
+    			selection=1;
+    		}
+    		else{
+    			selection++;
+    		}
+    	}
+    	if(touches[1] == 1)//appuis sur Z
+    	{
+    		if(selection == 1){
+    			selection=5;
+    		}
+    		else{
+    			selection--;
+    		}
+    	}
+    	if(touches[3] == 1)//appuis sur Q
+    	{
+    		selection=6;
+    	}
+    	if(touches[5] == 1)//appuis sur D
+    	{
+    		selection=5;
+    	}
+    	if(touches[6] == 1)//appuis sur espace
+    	{
+    		switch(selection){
+    		case 1 :
+    			solo = true;//on passe dans le menu solo
+    			break;
+    		case 2 :
+    			multi = true;//on passe dans le menu multi
+    			break;
+    		case 3 :
+				editeur = true;//on passe dans l'editeur
+    			break;
+    		case 4 :
+    			options = true;//on passe dans le menu option
+    			break;
+    		case 5 :
+    			System.exit(0);
+    			break;
+    		case 6 :
+    			aide = true;//on passe dans le menu aide
+    			break;
+    		default :
 
+    			break;
+    		}
+    	}
+    	if(entree.moa(150, 150, 250, 58))//moa verifie si le pointeur est sur un rectangle
+    	{
+    		selection=1;
+    	}
+    	if(entree.moa(150, 300, 250, 58))
+    	{
+    		selection=2;
+    	}
+    	if(entree.moa(150, 450, 250, 58))
+    	{
+    		selection=3;
+    	}
+    	if(entree.moa(150, 600, 250, 58))
+    	{
+    		selection=4;
+    	}
+    	if(entree.moa(150, 750, 250, 58))
+    	{
+    		selection=5;
+    		
+    		if(touches[8]==1)
+    		{
+    			System.exit(0);
+    		}
+    	}
+    	if(entree.moa(100, 750, 10, 10))
+    	{
+    		selection=6;
+    	}
+    }
 }
