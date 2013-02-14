@@ -17,18 +17,27 @@ public class MenuOption {
 	private Image fGaucheRed;
 	private Image fDroite;
 	private Image fDroiteRed;
+	private boolean pleinecran;
+	private int volume;
+	private int volumeFx;
+	private int volumeMusic;
 	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
 	
 	void initMenuOption(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
 		this.menu = 4;
 		this.selection = 1;
+		this.fleche = 0;
 		this.barre1 = menuImage.getSprite("10.png");		//chargement de la barre de base
 		this.barre2 = menuImage.getSprite("11.png"); 		//chargement de la barre de selection
 		this.fGauche = menuImage.getSprite("12.png");		//chargement de la fleche gauche
-		this.fGaucheRed = menuImage.getSprite("14.png");	//chargement de la fleche gauche rouge
 		this.fDroite = menuImage.getSprite("13.png");		//chargement de la fleche droite
+		this.fGaucheRed = menuImage.getSprite("14.png");	//chargement de la fleche gauche rouge
 		this.fDroiteRed = menuImage.getSprite("15.png");	//chargement de la fleche droite rouge
+		this.pleinecran = true;
+		this.volume = 0;
+		this.volumeFx = 0;
+		this.volumeMusic = 0;
 	}
 
 	void renderMenuOption(GameContainer container, StateBasedGame game, Graphics g)
@@ -121,7 +130,7 @@ public class MenuOption {
     		break;
     	}
     	
-		//affiche le texte
+		//affiche le texte boite
         g.drawString("Resolution", 280, 145);
         g.drawString("plein ecran", 280, 245);
         g.drawString("Volume general", 280, 345);
@@ -129,6 +138,16 @@ public class MenuOption {
         g.drawString("Volume musique", 280, 545);
         g.drawString("Valider", 280, 645);
         g.drawString("Annuler", 580, 645);
+        
+        //affiche le texte qui change
+        if(this.pleinecran)
+        {
+        	g.drawString("OUI", 620, 245);
+        }
+        else
+        {
+        	g.drawString("NON", 620, 245);
+        }
         
         
         
@@ -250,11 +269,31 @@ public class MenuOption {
     	{
     		this.fleche=3;
     		this.selection=2;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.pleinecran)
+    			{
+    				this.pleinecran = false;
+    			}
+    			else{
+    				this.pleinecran = true;
+    			}
+    		}
     	}
     	if(entree.moa(750, 230, 50, 50))
     	{
     		this.fleche=4;
     		this.selection=2;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.pleinecran)
+    			{
+    				this.pleinecran = false;
+    			}
+    			else{
+    				this.pleinecran = true;
+    			}
+    		}
     	}
     	if(entree.moa(500, 330, 50, 50))
     	{
