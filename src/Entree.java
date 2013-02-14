@@ -19,7 +19,7 @@ public class Entree {
 	}
 	
 	public void clavier(){										//recupere les touches du clavier
-		if (input.isKeyPressed(Input.KEY_A))
+		if (this.input.isKeyPressed(Input.KEY_A))
         {
 			touches[0] = 1;
         }

@@ -17,6 +17,8 @@ public class MenuOption {
 	private Image fGaucheRed;
 	private Image fDroite;
 	private Image fDroiteRed;
+	private int resWidth;
+	private int resHeight;
 	private boolean pleinecran;
 	private int volume;
 	private int volumeFx;
@@ -34,6 +36,8 @@ public class MenuOption {
 		this.fDroite = menuImage.getSprite("13.png");		//chargement de la fleche droite
 		this.fGaucheRed = menuImage.getSprite("14.png");	//chargement de la fleche gauche rouge
 		this.fDroiteRed = menuImage.getSprite("15.png");	//chargement de la fleche droite rouge
+		this.resWidth = 0;
+		this.resHeight = 0;
 		this.pleinecran = true;
 		this.volume = 0;
 		this.volumeFx = 0;
@@ -140,6 +144,7 @@ public class MenuOption {
         g.drawString("Annuler", 580, 645);
         
         //affiche le texte qui change
+        g.drawString(this.resWidth+" x "+this.resHeight, 620, 145);
         if(this.pleinecran)
         {
         	g.drawString("OUI", 620, 245);
@@ -148,8 +153,9 @@ public class MenuOption {
         {
         	g.drawString("NON", 620, 245);
         }
-        
-        
+        g.drawString(""+this.volume, 620, 345);
+        g.drawString(""+this.volumeFx, 620, 445);
+        g.drawString(""+this.volumeMusic, 620, 545);
         
         //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
         int u = 0;
@@ -167,7 +173,8 @@ public class MenuOption {
     	touches = entree.getTouches();		
     	
     	//test sur les touches
-    	if(this.touches[4] == 1)//appuis sur S
+    	//appuis sur S
+    	if(this.touches[4] == 1)
     	{
     		if(this.selection == 7){
     			this.selection=1;
@@ -178,7 +185,9 @@ public class MenuOption {
     			this.fleche=0;
     		}
     	}
-    	if(this.touches[1] == 1)//appuis sur Z
+    	
+    	//appuis sur Z
+    	if(this.touches[1] == 1)
     	{
     		if(this.selection == 1){
     			this.selection=7;
@@ -189,15 +198,21 @@ public class MenuOption {
     			this.fleche=0;
     		}
     	}
-    	if(this.touches[3] == 1)//appuis sur Q
+    	
+    	//appuis sur Q
+    	if(this.touches[3] == 1)
     	{
     		this.fleche--;
     	}
-    	if(this.touches[5] == 1)//appuis sur D
+    	
+    	//appuis sur D
+    	if(this.touches[5] == 1)
     	{
     		this.fleche++;
     	}
-    	if(this.touches[6] == 1)//appuis sur espace
+    	
+    	//appuis sur espace
+    	if(this.touches[6] == 1)
     	{
     		switch(this.selection){
     		case 1 :
@@ -299,31 +314,73 @@ public class MenuOption {
     	{
     		this.fleche=5;
     		this.selection=3;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.volume > 0)
+    			{
+    				this.volume--;
+    			}
+    		}
     	}
     	if(entree.moa(750, 330, 50, 50))
     	{
     		this.fleche=6;
     		this.selection=3;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.volume < 100)
+    			{
+    				this.volume++;
+    			}
+    		}
     	}
     	if(entree.moa(500, 430, 50, 50))
     	{
     		this.fleche=7;
     		this.selection=4;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.volumeFx > 0)
+    			{
+    				this.volumeFx--;
+    			}
+    		}
     	}
     	if(entree.moa(750, 430, 50, 50))
     	{
     		this.fleche=8;
     		this.selection=4;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.volumeFx < 100)
+    			{
+    				this.volumeFx++;
+    			}
+    		}
     	}
     	if(entree.moa(500, 530, 50, 50))
     	{
     		this.fleche=9;
     		this.selection=5;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.volumeMusic > 0)
+    			{
+    				this.volumeMusic--;
+    			}
+    		}
     	}
     	if(entree.moa(750, 530, 50, 50))
     	{
     		this.fleche=10;
     		this.selection=5;
+    		if(this.touches[6] == 1)
+    		{
+    			if(this.volumeMusic < 100)
+    			{
+    				this.volumeMusic++;
+    			}
+    		}
     	}
 	}
 	
