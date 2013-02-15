@@ -37,7 +37,6 @@ public class MenuBase {
 		this.barre1.draw(200,430);//barre options
 		this.barre1.draw(200,530);//barre quitter
 		
-
 		//affiche la barre selectionné
     	switch(this.selection){
     	case 1 :
@@ -69,8 +68,7 @@ public class MenuBase {
         g.drawString("Options", 280, 445);
         g.drawString("Quitter", 280, 545);
         g.drawString("?", 100, 750);
-        
-      
+              
     	//affiche la boite pour quitter
         if(quitter)
         {	
