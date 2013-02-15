@@ -23,7 +23,6 @@ public class Partie extends BasicGameState {
 	private int screenY;
 	private int selectionX;
 	private int selectionY;
-	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
 	
 	private int stateID;
 
@@ -98,17 +97,25 @@ public class Partie extends BasicGameState {
 	
 	public void afficherCasePointer(HashMap<String, Integer> touches)
 	{
+		//selectionnne la case ou est le pointeur	
+    	for(int i=0; i<this.map.getWidth(); i++)
+    	{
+    		for(int u=0; u<this.map.getHeight(); u++)
         	{
-    			if(entree_clavier.moa(i * this.map.getTileWidth(), u * this.map.getTileHeight(), this.map.getTileWidth(), this.map.getTileHeight()))
+    			if(entree_clavier.moa(i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth()), u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight()), this.map.getTileWidth(), this.map.getTileHeight()))
             	{
-            		this.selectionX = i * this.map.getTileWidth();
-            		this.selectionY = u * this.map.getTileHeight();
+    				this.selectionX = i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth());
+                	this.selectionY = u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight());
 		
-		
-		if(touches[1] == 1)//appuis sur Z
+            		//if(touches.get("") == 1 || touches[8] == 1) //appuis sur espace ou click gauche
+                	//{
+            			
+                	//}
+            	}
         	}
     	}
 	}
+
 	
 	public void scroll(HashMap<String, Integer> touches)
 	{
@@ -120,11 +127,6 @@ public class Partie extends BasicGameState {
 				this.screenY = 0;
 			else
 				this.screenY = this.screenY+Constantes.SCROLL_SPEED;
-    	{
-			if((-this.screenY + 40 + container.getHeight()) > this.mapHeight)
-				this.screenY = -this.mapHeight + container.getHeight();
-			else
-				this.screenY = this.screenY-40;
 		}
 		if(touches.get("S") >= 1)//appuis sur S
 		{
@@ -148,23 +150,7 @@ public class Partie extends BasicGameState {
 				this.screenX = this.screenX-Constantes.SCROLL_SPEED;
 		}
     	
-    	//selectionnne la case ou est le pointeur	
-    	for(int i=0; i<this.map.getWidth(); i++)
-    	{
-    		for(int u=0; u<this.map.getHeight(); u++)
-        	{
-    			if(entree_clavier.moa(i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth()), u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight()), this.map.getTileWidth(), this.map.getTileHeight()))
-            	{
-    				this.selectionX = i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth());
-                	this.selectionY = u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight());
-		
-            		if(touches[6] == 1 || touches[8] == 1) //appuis sur espace ou click gauche
-                	{
-            			
-                	}
-            	}
-        	}
-    	}
+    	
 	}
 
 
