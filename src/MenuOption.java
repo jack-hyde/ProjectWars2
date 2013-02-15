@@ -9,6 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MenuOption {
 	
 	private int menu;
+	private int sousMenu;
 	private int selection;
 	private int fleche;
 	private Image barre1;
@@ -28,6 +29,7 @@ public class MenuOption {
 	void initMenuOption(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
 		this.menu = 4;
+		this.sousMenu = 1;
 		this.selection = 1;
 		this.fleche = 0;
 		this.barre1 = menuImage.getSprite("10.png");		//chargement de la barre de base
@@ -211,8 +213,8 @@ public class MenuOption {
     		this.fleche++;
     	}
     	
-    	//appuis sur espace
-    	if(this.touches[6] == 1)
+    	//appuis sur espace ou click gauche
+    	if(this.touches[6] == 1 || this.touches[8] == 1)
     	{
     		switch(this.selection){
     		case 1 :
@@ -284,7 +286,7 @@ public class MenuOption {
     	{
     		this.fleche=3;
     		this.selection=2;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.pleinecran)
     			{
@@ -299,7 +301,7 @@ public class MenuOption {
     	{
     		this.fleche=4;
     		this.selection=2;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.pleinecran)
     			{
@@ -314,7 +316,7 @@ public class MenuOption {
     	{
     		this.fleche=5;
     		this.selection=3;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.volume > 0)
     			{
@@ -326,7 +328,7 @@ public class MenuOption {
     	{
     		this.fleche=6;
     		this.selection=3;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.volume < 100)
     			{
@@ -338,7 +340,7 @@ public class MenuOption {
     	{
     		this.fleche=7;
     		this.selection=4;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.volumeFx > 0)
     			{
@@ -350,7 +352,7 @@ public class MenuOption {
     	{
     		this.fleche=8;
     		this.selection=4;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.volumeFx < 100)
     			{
@@ -362,7 +364,7 @@ public class MenuOption {
     	{
     		this.fleche=9;
     		this.selection=5;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.volumeMusic > 0)
     			{
@@ -374,7 +376,7 @@ public class MenuOption {
     	{
     		this.fleche=10;
     		this.selection=5;
-    		if(this.touches[6] == 1)
+    		if(this.touches[6] == 1 || this.touches[8] == 1)
     		{
     			if(this.volumeMusic < 100)
     			{
@@ -388,6 +390,10 @@ public class MenuOption {
 	{
 		return this.menu;
 	}
-		
+	
+	void setMenu(int menubis)
+	{
+		this.menu = menubis;
+	}
 	
 }

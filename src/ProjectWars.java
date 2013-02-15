@@ -20,7 +20,7 @@ public class ProjectWars extends StateBasedGame{
 		}
 
 		jeu = new GameState();//le jeu en lui même !!
-                container.setShowFPS(true);//on ne veut pas voir le FPS ?? mettre alors "false" !
+        container.setShowFPS(true);//on ne veut pas voir le FPS ?? mettre alors "false" !
 		addState(jeu);	//on ajoute le GameState au conteneur !
 	}
 

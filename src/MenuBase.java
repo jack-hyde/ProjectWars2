@@ -9,20 +9,24 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MenuBase {
 	
 	private int menu;
+	private boolean quitter;
 	private Image barre1;
 	private Image barre2;
+	private Image boite;
 	private int selection;
 	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
 	
 	void initMenuBase(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
 		this.menu = 0;
+		this.quitter = false;
 		this.selection = 1;
 		this.barre1 = menuImage.getSprite("10.png");	//chargement de la barre de base
 		this.barre2 = menuImage.getSprite("11.png");	//chargement de la barre de selection
+		this.boite = menuImage.getSprite("16.png");		//chargement de la boite de dialogue
 	}
 
-	void renderMenuBase(GameContainer container, StateBasedGame game, Graphics g)
+	void renderMenuBase(GameContainer container, StateBasedGame game, Graphics g)//il faut afficher les objets dans le bon ordre fond > boites > texte ou sinon le texte est couvert par les images ect..
 	{
 		this.barre1.draw(200,130);//barre campagne 
 		this.barre1.draw(200,230);//barre multiplayer
@@ -30,6 +34,7 @@ public class MenuBase {
 		this.barre1.draw(200,430);//barre options
 		this.barre1.draw(200,530);//barre quitter
 		
+
 		//affiche la barre selectionné
     	switch(this.selection){
     	case 1 :
@@ -53,7 +58,7 @@ public class MenuBase {
     	default :
     		break;
     	}
-    	
+        
     	//affiche le texte
         g.drawString("Campagne", 280, 145);
         g.drawString("Multijoueur", 280, 245);
@@ -61,6 +66,29 @@ public class MenuBase {
         g.drawString("Options", 280, 445);
         g.drawString("Quitter", 280, 545);
         g.drawString("?", 100, 750);
+        
+      
+    	//affiche la boite pour quitter
+        if(quitter)
+        {	
+        	this.boite.draw(500,350);//barre oui
+        	this.barre1.draw(520,400);//barre oui
+    		this.barre1.draw(800,400);//barre non
+        	switch(selection)
+        	{
+        	case 7 :
+        		this.barre2.draw(520,400);
+        		break;
+        	case 8 :
+        		this.barre2.draw(800,400);
+        		break;
+        	default :
+        		break;
+        	}
+    		g.drawString("Voulez vous quitter ?", 660, 360);
+    		g.drawString("OUI", 620, 415);
+            g.drawString("NON", 900, 415);
+        }
         
         //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
         int u = 0;
@@ -104,7 +132,7 @@ public class MenuBase {
     	{
     		this.selection=5;
     	}
-    	if(this.touches[6] == 1)//appuis sur espace
+    	if(this.touches[6] == 1 || this.touches[8] == 1)//appuis sur espace ou click gauche
     	{
     		switch(this.selection){
     		case 1 :
@@ -121,7 +149,7 @@ public class MenuBase {
     			this.menu = 4;
     			break;
     		case 5 :
-    			System.exit(0);
+    			this.quitter = true;
     			break;
     		case 6 :
     			//on passe dans le menu aide
@@ -156,10 +184,36 @@ public class MenuBase {
     	{
     		this.selection=6;
     	}
+    	
+    	//moa pour boite quitter
+    	if (quitter)
+    	{
+    		if(entree.moa(520, 400, 250, 50))
+        	{
+        		this.selection = 7;
+        		if(this.touches[6] == 1 || this.touches[8] == 1)//appuis sur espace ou click gauche
+            	{
+        			System.exit(0);
+            	}
+        	}
+        	if(entree.moa(800, 400, 250, 50))
+        	{
+        		this.selection = 8;
+        		if(this.touches[6] == 1 || this.touches[8] == 1)//appuis sur espace ou click gauche
+            	{
+        			this.quitter = false;
+            	}
+        	}
+    	}
 	}
 	
 	int getMenu()
 	{
 		return this.menu;
+	}
+	
+	void setMenu(int menubis)
+	{
+		this.menu = menubis;
 	}
 }
