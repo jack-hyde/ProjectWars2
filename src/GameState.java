@@ -28,10 +28,8 @@ public class GameState extends BasicGameState{
     {
     	this.menu = 0;
     	XMLPackedSheet menuImage = new XMLPackedSheet("images/menu/menu.png", "images/menu/menu.xml");		//charge le tileSet menu
-
-
-    	this.menu = 0;
-    	XMLPackedSheet menuImage = new XMLPackedSheet("images/menu/menu.png", "images/menu/menu.xml");		//charge le tileSet menu
+    	menuBase.initMenuBase(container, game, menuImage);
+        menuOption.initMenuOption(container, game, menuImage);
     }
     
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException // choisi quel menu a afficher
@@ -60,13 +58,13 @@ public class GameState extends BasicGameState{
     	case 4 :menuOption.setMenu(menu);
     			this.menuOption.updateMenuOption(container, game, delta);
     			this.menu = menuOption.getMenu();
-    			game.enterState(ProjectWars.GAMEPLAYSTATE);
     			break;
     	case 3 :
     			break;
         case 2 :
         		break;
         case 1 :
+        	game.enterState(ProjectWars.GAMEPLAYSTATE);
         		break;
         case 0 :menuBase.setMenu(menu);
         		this.menuBase.updateMenuBase(container, game, delta);
