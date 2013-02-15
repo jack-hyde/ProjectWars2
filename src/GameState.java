@@ -24,7 +24,7 @@ public class GameState extends BasicGameState{
     	this.menu = 0;
     	XMLPackedSheet menuImage = new XMLPackedSheet("images/menu/menu.png", "images/menu/menu.xml");		//charge le tileSet menu
     	menuBase.initMenuBase(container, game, menuImage);
-    	menuOption.initMenuOption(container, game, menuImage);   	
+    	menuOption.initMenuOption(container, game, menuImage);
     }
 
     
@@ -36,7 +36,7 @@ public class GameState extends BasicGameState{
     	case 3 :
     			break;
         case 2 :
-     	   		break; 
+     	   		break;
         case 1 :
      	   		break;
         case 0 :this.menuBase.renderMenuBase(container, game, g);
@@ -51,7 +51,7 @@ public class GameState extends BasicGameState{
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException //choisi quel test faire
     {
     	switch(this.menu){
-    	case 4 :menuOption.setMenu(menu);
+    	case 4 :this.menuOption.setMenu(menu);
     			this.menuOption.updateMenuOption(container, game, delta);
     			this.menu = menuOption.getMenu();
     			break;
@@ -61,7 +61,7 @@ public class GameState extends BasicGameState{
         		break;
         case 1 :
         		break;
-        case 0 :menuBase.setMenu(menu);
+        case 0 :this.menuBase.setMenu(menu);
         		this.menuBase.updateMenuBase(container, game, delta);
         		this.menu = menuBase.getMenu();   		
         		break;
