@@ -8,6 +8,9 @@ public class ProjectWars extends StateBasedGame{
     private GameState jeu;
     private AppGameContainer container;
 
+    public static final int MAINMENUSTATE          = 0;
+    public static final int GAMEPLAYSTATE          = 1;
+    
    public ProjectWars() {
 		super("Mon premier jeu");
 	}
@@ -19,9 +22,10 @@ public class ProjectWars extends StateBasedGame{
 			this.container = (AppGameContainer) container;// on stocke le conteneur du jeu !
 		}
 
-		jeu = new GameState();//le jeu en lui même !!
         container.setShowFPS(true);//on ne veut pas voir le FPS ?? mettre alors "false" !
-		addState(jeu);	//on ajoute le GameState au conteneur !
+        
+		this.addState(new GameState(MAINMENUSTATE)); //RENOMMER LA CLASS EN MENU
+        this.addState(new Partie(GAMEPLAYSTATE));
 	}
 
 

@@ -134,7 +134,7 @@ public class MenuBase {
     	{
     		switch(this.selection){
     		case 1 :
-    			//on passe dans le menu solo
+    			this.menu=1;
     			break;
     		case 2 :
     			//on passe dans le menu multi
