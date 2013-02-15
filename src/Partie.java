@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -26,6 +27,7 @@ public class Partie extends BasicGameState {
 	
 	private int stateID;
 
+	private Entree entree_clavier;
     
 	public Partie(int id) throws SlickException
 	{
@@ -65,9 +67,9 @@ public class Partie extends BasicGameState {
 		
 		this.mapWidth = map.getWidth() * map.getTileWidth();
 	    this.mapHeight = map.getHeight() * map.getTileHeight();
-		
-	    System.out.println(this.mapWidth);
-	    System.out.println(this.mapHeight);	    
+
+	    entree_clavier =  new Entree(container);
+	    //szDebug.afficheHashMap(entree_clavier.getTouches());
 	}
 
 
@@ -86,39 +88,65 @@ public class Partie extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException {
+		entree_clavier.check();
+		HashMap<String, Integer> touches = entree_clavier.getTouches();	
 		
-		Entree entree_clavier = new Entree(container);
-		touches = entree_clavier.getTouches();	
+		this.scroll(touches);
+    	this.afficherCasePointer(touches);
+    	
+	}
+	
+	public void afficherCasePointer(HashMap<String, Integer> touches)
+	{
+        	{
+    			if(entree_clavier.moa(i * this.map.getTileWidth(), u * this.map.getTileHeight(), this.map.getTileWidth(), this.map.getTileHeight()))
+            	{
+            		this.selectionX = i * this.map.getTileWidth();
+            		this.selectionY = u * this.map.getTileHeight();
 		
 		
 		if(touches[1] == 1)//appuis sur Z
-    	{
-    		if((this.screenY + 40) >= 0) //pour que le scroll ne depasse pas la carte (pareil en dessous) screenX et Y ont des valeur negative
+        	}
+    	}
+	}
+	
+	public void scroll(HashMap<String, Integer> touches)
+	{
+		
+
+		if(touches.get("Z") >= 1)//appuis sur Z
+		{
+			if((this.screenY + Constantes.SCROLL_SPEED) >= 0) //pour que le scroll ne depasse pas la carte (pareil en dessous) screenX et Y on des valeur negative
 				this.screenY = 0;
 			else
-				this.screenY = this.screenY+40;
-    	}
-		if(touches[4] == 1)//appuis sur S
+				this.screenY = this.screenY+Constantes.SCROLL_SPEED;
     	{
 			if((-this.screenY + 40 + container.getHeight()) > this.mapHeight)
 				this.screenY = -this.mapHeight + container.getHeight();
 			else
 				this.screenY = this.screenY-40;
-    	}
-    	if(touches[3] == 1)//appuis sur Q
-    	{
-    		if((this.screenX + 40) > 0)
+		}
+		if(touches.get("S") >= 1)//appuis sur S
+		{
+			if((-this.screenY + Constantes.SCROLL_SPEED + container.getHeight()) > this.mapHeight)
+				this.screenY = -this.mapHeight + container.getHeight();
+			else
+				this.screenY = this.screenY-Constantes.SCROLL_SPEED;
+		}
+		if(touches.get("Q")>= 1)//appuis sur Q
+		{
+			if((this.screenX + Constantes.SCROLL_SPEED) > 0)
 				this.screenX = 0;
 			else
-				this.screenX = this.screenX+40;
-    	}
-    	if(touches[5] == 1)//appuis sur D
-    	{
-    		if((-this.screenX + 40 + container.getWidth()) > this.mapWidth)
+				this.screenX = this.screenX+Constantes.SCROLL_SPEED;
+		}
+		if(touches.get("D")>= 1)//appuis sur D
+		{
+			if((-this.screenX + Constantes.SCROLL_SPEED + container.getWidth()) > this.mapWidth)
 				this.screenX = -this.mapWidth + container.getWidth();
 			else
-				this.screenX = this.screenX-40;
-    	}
+				this.screenX = this.screenX-Constantes.SCROLL_SPEED;
+		}
     	
     	//selectionnne la case ou est le pointeur	
     	for(int i=0; i<this.map.getWidth(); i++)

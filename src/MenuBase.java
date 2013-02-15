@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -14,7 +16,7 @@ public class MenuBase {
 	private Image barre2;
 	private Image boite;
 	private int selection;
-	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
+	private Entree entree;
 	
 	void initMenuBase(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
@@ -24,6 +26,7 @@ public class MenuBase {
 		this.barre1 = menuImage.getSprite("10.png");	//chargement de la barre de base
 		this.barre2 = menuImage.getSprite("11.png");	//chargement de la barre de selection
 		this.boite = menuImage.getSprite("16.png");		//chargement de la boite de dialogue
+		this.entree =  new Entree(container);
 	}
 
 	void renderMenuBase(GameContainer container, StateBasedGame game, Graphics g)//il faut afficher les objets dans le bon ordre fond > boites > texte ou sinon le texte est couvert par les images ect..
@@ -90,21 +93,22 @@ public class MenuBase {
         
         //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
         int u = 0;
-        for(int i=0; i<touches.length; i++)
+       /* for(int i=0; i<touches.length; i++)
         {  	
         	g.drawString("i : "+touches[i], 10+u, 60);
         	u = u+70;
-        }
+        }*/
 	}
 	
 	void updateMenuBase(GameContainer container, StateBasedGame game, int delta)
 	{
 		//recupere les touches
-		Entree entree = new Entree(container);
-    	touches = entree.getTouches();		
+		
+		this.entree.check();
+		HashMap<String, Integer> touches = this.entree.getTouches();		
     	
     	//test sur les touches
-    	if(this.touches[4] == 1)//appuis sur S
+    	if(touches.get("S") == 1)//appuis sur S
     	{
     		if(this.selection == 5){
     			this.selection=1;
@@ -113,7 +117,7 @@ public class MenuBase {
     			this.selection++;
     		}
     	}
-    	if(this.touches[1] == 1)//appuis sur Z
+    	if(touches.get("Z") == 1)//appuis sur Z
     	{
     		if(this.selection == 1){
     			this.selection=5;
@@ -122,15 +126,15 @@ public class MenuBase {
     			this.selection--;
     		}
     	}
-    	if(this.touches[3] == 1)//appuis sur Q
+    	if(touches.get("Q") == 1)//appuis sur Q
     	{
     		this.selection=6;
     	}
-    	if(touches[5] == 1)//appuis sur D
+    	if(touches.get("D") == 1)//appuis sur D
     	{
     		this.selection=5;
     	}
-    	if(this.touches[6] == 1 || this.touches[8] == 1)//appuis sur espace ou click gauche
+    	if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)//appuis sur espace ou click gauche
     	{
     		switch(this.selection){
     		case 1 :
@@ -189,7 +193,7 @@ public class MenuBase {
     		if(entree.moa(520, 400, 250, 50))
         	{
         		this.selection = 7;
-        		if(this.touches[6] == 1 || this.touches[8] == 1)//appuis sur espace ou click gauche
+        		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)//appuis sur espace ou click gauche
             	{
         			System.exit(0);
             	}
@@ -197,7 +201,7 @@ public class MenuBase {
         	if(entree.moa(800, 400, 250, 50))
         	{
         		this.selection = 8;
-        		if(this.touches[6] == 1 || this.touches[8] == 1)//appuis sur espace ou click gauche
+        		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)//appuis sur espace ou click gauche
             	{
         			this.quitter = false;
             	}
