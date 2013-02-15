@@ -19,7 +19,7 @@ public class Entree {
 	}
 	
 	public void clavier(){										//recupere les touches du clavier
-		if (input.isKeyPressed(Input.KEY_A))
+		if (this.input.isKeyPressed(Input.KEY_A))
         {
 			touches[0] = 1;
         }
@@ -54,18 +54,22 @@ public class Entree {
 	}
 	
 	public void clicksouris(){									//recupere les touches de la souris
-		if (input.isKeyPressed(Input.MOUSE_LEFT_BUTTON))
+		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
         {
 			touches[8] = 1;
         }
-		if (input.isKeyPressed(Input.MOUSE_RIGHT_BUTTON))
+		if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
         {
 			touches[9] = 1;
         }
-		if (input.isKeyPressed(Input.MOUSE_MIDDLE_BUTTON))
+		if (input.isMousePressed(Input.MOUSE_MIDDLE_BUTTON))
         {
 			touches[10] = 1;
         }
+	}
+	
+	public void rollsouris(){									//recupere la roulette de la souris
+		
 	}
 	
 	public void deplacementsouris(){							//...
@@ -73,8 +77,8 @@ public class Entree {
 		touches[12] = input.getAbsoluteMouseY();
 	} 
 	
-	public int pad(){											//recupere les touches du pad / la manette
-		return 1;
+	public void pad(){											//recupere les touches du pad / la manette
+		
 	}
 	
 	public boolean moa(int moaX, int moaY, int moaWidth, int moaHeight){                 //verifie si le pointeur est sur une zone. MOA = mouse over area
