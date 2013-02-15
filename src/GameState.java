@@ -22,11 +22,15 @@ public class GameState extends BasicGameState{
 	private boolean aide;
 	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
 	
-    public static final int ID = 1;
+    public int stateID;
     
     @Override
-    public int getID() {return ID;}
+    public int getID() {return stateID;}
 
+    public GameState(int id)
+    {
+    	this.stateID = id;
+    }
     
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         barre1 = new Image ("images/menu/10.png");	//chargement de la barre de base
@@ -39,6 +43,7 @@ public class GameState extends BasicGameState{
         editeur = false;
         options = false;
         aide = false;
+        
     }
 
     
@@ -123,7 +128,9 @@ public class GameState extends BasicGameState{
     	{
     		switch(selection){
     		case 1 :
-    			solo = true;//on passe dans le menu solo
+    			solo = true;
+    			System.out.println("test");//on passe dans le menu solo
+    			game.enterState(ProjectWars.GAMEPLAYSTATE);
     			break;
     		case 2 :
     			multi = true;//on passe dans le menu multi
