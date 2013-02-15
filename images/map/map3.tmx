@@ -1,11 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="80" tileheight="80">
+<map version="1.0" orientation="orthogonal" width="30" height="20" tilewidth="80" tileheight="80">
  <tileset firstgid="1" name="tileset" tilewidth="80" tileheight="80">
-  <image source="../tileset.png" width="800" height="800"/>
+  <image source="tileset.png" width="800" height="800"/>
+  <tile id="0">
+   <properties>
+    <property name="defense" value="0"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="defense" value="0"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="defense" value="0"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="defense" value="4"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="defense" value="3"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="defense" value="3"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="defense" value="0"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="defense" value="2"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="defense" value="1"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="defense" value="0"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="defense" value="0"/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="Calque de Tile 1" width="30" height="30">
+ <layer name="Calque de Tile 1" width="30" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2VMQ7AIAhF0Y7M9f5HtQ5NWqOfWsXpv4RFhReiBpE+4YoI4gC5hRPkoHpq1LX2R3O0cybIu8ddXq3WvLz1/SRnb+s9PN1eXs8adw76J1YkGWdFv3+gl1566aX3m3dmLuyaJYQQUsh7morXEA4AAA==
+   H4sIAAAAAAAAC5VVQQ7DMAhjW8olEj1t/3/qOilIxDUkO1itUGoHx6EmIucmbDz1QgNU3xh8H/HjOgY0rPc6ckStBrxGNJRoPi48F8AeWtBkwPWo+6v18X7I3LOGOu410/Ua+wY96Ik3FXZ1kdP7skTXCPCsTO6+aqKrG7oxUyw72MPqfCufcf8rLi342F1hddfdyfUuXht76sPzvuiVcbBzV/Cw0o3PjDfLPKt34u8hc4aYLuNi864le0Eu1z0L3SMB8mS58zMz4fMDdd/yX1YavJ9Bq8vdHzyz6InKPCMr75rMd4/1i/ec6WYzK3KxdZj5uDbmHOdYnFc4s6KP1TzFnrFfzBb6zHLUCl3moa9l8zLqrvLk+MDes/tVzZu4tprJ2V3Z+WdW/9YvD2JRI2AJAAA=
   </data>
  </layer>
 </map>

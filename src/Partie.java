@@ -1,8 +1,9 @@
 import java.util.ArrayList;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tests.xml.Entity;
@@ -19,6 +20,9 @@ public class Partie extends BasicGameState {
 	private int mapHeight;
 	private int screenX;
 	private int screenY;
+	private int selectionX;
+	private int selectionY;
+	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
 	
 	private int stateID;
 
@@ -29,10 +33,10 @@ public class Partie extends BasicGameState {
 		this.joueur = new Joueur("Jacky");
 		this.adversaire = new Joueur("Tarlouze");
 		this.map  = new Map("images/map/map3.tmx");
-		
 		this.screenX = 0;
 		this.screenY = 0;
-		
+		this.selectionX = 0;
+		this.selectionY = 0;		
 	}
 
 	
@@ -58,20 +62,24 @@ public class Partie extends BasicGameState {
 			throws SlickException {
 		this.container = container;
 		
+		
 		this.mapWidth = map.getWidth() * map.getTileWidth();
 	    this.mapHeight = map.getHeight() * map.getTileHeight();
 		
 	    System.out.println(this.mapWidth);
-	    System.out.println(this.mapHeight);
-	    
+	    System.out.println(this.mapHeight);	    
 	}
 
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		this.map.render(this.screenX,this.screenY);
+		this.map.render(this.screenX,this.screenY); //render(int x, int y, int sx, int sy, int width, int height)  a faire pour eviter de charger toute la carte meme les parties que l'on ne voit pas
 		
+		//affiche le carré de selection
+		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight()); 
+		g.drawString("screenX"+this.screenX, 10, 60);
+		g.drawString("screenY"+this.screenY, 10, 80);
 	}
 
 
@@ -80,40 +88,55 @@ public class Partie extends BasicGameState {
 			throws SlickException {
 		
 		Entree entree_clavier = new Entree(container);
-		boolean scrollMap = false;
-		int[] touches = entree_clavier.getTouches();	
-		System.out.println(touches);
-		if(touches[4] == 1)//appuis sur S
+		touches = entree_clavier.getTouches();	
+		
+		
+		if(touches[1] == 1)//appuis sur Z
     	{
-			if((this.screenY - 10) < -this.mapHeight)
-				this.screenY = -this.mapHeight;
-			else
-				this.screenY = this.screenY-10;
-			
-			System.out.println("tessssst");
-			scrollMap = true;
-    		
-    	}
-    	if(touches[1] == 1)//appuis sur Z
-    	{
-    		if((this.screenY + 10) >= 0)
+    		if((this.screenY + 40) >= 0) //pour que le scroll ne depasse pas la carte (pareil en dessous) screenX et Y ont des valeur negative
 				this.screenY = 0;
 			else
-				this.screenY = this.screenY+10;
-    		
-    		scrollMap = true;
+				this.screenY = this.screenY+40;
+    	}
+		if(touches[4] == 1)//appuis sur S
+    	{
+			if((-this.screenY + 40 + container.getHeight()) > this.mapHeight)
+				this.screenY = -this.mapHeight + container.getHeight();
+			else
+				this.screenY = this.screenY-40;
     	}
     	if(touches[3] == 1)//appuis sur Q
     	{
-    		scrollMap = true;
+    		if((this.screenX + 40) > 0)
+				this.screenX = 0;
+			else
+				this.screenX = this.screenX+40;
     	}
     	if(touches[5] == 1)//appuis sur D
     	{
-    		scrollMap = true;
+    		if((-this.screenX + 40 + container.getWidth()) > this.mapWidth)
+				this.screenX = -this.mapWidth + container.getWidth();
+			else
+				this.screenX = this.screenX-40;
     	}
+    	
+    	//selectionnne la case ou est le pointeur	
+    	for(int i=0; i<this.map.getWidth(); i++)
+    	{
+    		for(int u=0; u<this.map.getHeight(); u++)
+        	{
+    			if(entree_clavier.moa(i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth()), u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight()), this.map.getTileWidth(), this.map.getTileHeight()))
+            	{
+    				this.selectionX = i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth());
+                	this.selectionY = u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight());
 		
-    	if(scrollMap)
-    		this.map.render(this.screenX,this.screenY);
+            		if(touches[6] == 1 || touches[8] == 1) //appuis sur espace ou click gauche
+                	{
+            			
+                	}
+            	}
+        	}
+    	}
 	}
 
 

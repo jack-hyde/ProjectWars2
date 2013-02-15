@@ -29,10 +29,13 @@ public class GameState extends BasicGameState{
     	this.menu = 0;
     	XMLPackedSheet menuImage = new XMLPackedSheet("images/menu/menu.png", "images/menu/menu.xml");		//charge le tileSet menu
     	menuBase.initMenuBase(container, game, menuImage);
+<<<<<<< HEAD
+    	menuOption.initMenuOption(container, game, menuImage);
+=======
         menuOption.initMenuOption(container, game, menuImage);
+>>>>>>> origin/HEAD
     }
     
-	
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException // choisi quel menu a afficher
     {
     	switch(this.menu){
@@ -52,7 +55,7 @@ public class GameState extends BasicGameState{
     	g.drawString("menu : "+menu, 100, 40);
     }
 
-   
+    
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException //choisi quel test faire
     {
     	switch(this.menu){
@@ -65,7 +68,7 @@ public class GameState extends BasicGameState{
         case 2 :
         		break;
         case 1 :
-        		game.enterState(ProjectWars.GAMEPLAYSTATE);
+        	game.enterState(ProjectWars.GAMEPLAYSTATE);
         		break;
         case 0 :this.menuBase.setMenu(menu);
         		this.menuBase.updateMenuBase(container, game, delta);

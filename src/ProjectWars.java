@@ -12,7 +12,7 @@ public class ProjectWars extends StateBasedGame{
     public static final int GAMEPLAYSTATE          = 1;
     
    public ProjectWars() {
-		super("Mon premier jeu");
+		super("Mon premier jeu...");
 	}
 
     @Override

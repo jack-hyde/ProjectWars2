@@ -13,9 +13,7 @@ public class Entree {
 																//si on change la valeur du tableau penser a le faire partout
 	public Entree(GameContainer container){
 		input = container.getInput();
-		clavier();
-		clicksouris();
-		deplacementsouris();
+		
 	}
 	
 	public void clavier(){										//recupere les touches du clavier
@@ -92,6 +90,9 @@ public class Entree {
 	}
 	
 	public int[] getTouches() {
+		clavier();
+		clicksouris();
+		deplacementsouris();
 		return touches;
 	}
 }
