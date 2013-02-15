@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tests.xml.Entity;
@@ -19,9 +22,12 @@ public class Partie extends BasicGameState {
 	private int mapHeight;
 	private int screenX;
 	private int screenY;
+	private int selectionX;
+	private int selectionY;
 	
 	private int stateID;
 
+	private Entree entree_clavier;
     
 	public Partie(int id) throws SlickException
 	{
@@ -29,9 +35,10 @@ public class Partie extends BasicGameState {
 		this.joueur = new Joueur("Jacky");
 		this.adversaire = new Joueur("Tarlouze");
 		this.map  = new Map("images/map/map3.tmx");
-		
 		this.screenX = 0;
 		this.screenY = 0;
+		this.selectionX = 0;
+		this.selectionY = 0;
 		
 	}
 
@@ -60,9 +67,9 @@ public class Partie extends BasicGameState {
 		
 		this.mapWidth = map.getWidth() * map.getTileWidth();
 	    this.mapHeight = map.getHeight() * map.getTileHeight();
-		
-	    System.out.println(this.mapWidth);
-	    System.out.println(this.mapHeight);
+
+	    entree_clavier =  new Entree(container);
+	    //szDebug.afficheHashMap(entree_clavier.getTouches());
 	    
 	}
 
@@ -72,48 +79,75 @@ public class Partie extends BasicGameState {
 			throws SlickException {
 		this.map.render(this.screenX,this.screenY);
 		
+		//affiche le carré de selection
+		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight()); 
 	}
 
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException {
+		entree_clavier.check();
+		HashMap<String, Integer> touches = entree_clavier.getTouches();	
 		
-		Entree entree_clavier = new Entree(container);
-		boolean scrollMap = false;
-		int[] touches = entree_clavier.getTouches();	
-		System.out.println(touches);
-		if(touches[4] == 1)//appuis sur S
+		this.scroll(touches);
+    	this.afficherCasePointer(touches);
+    	
+	}
+	
+	public void afficherCasePointer(HashMap<String, Integer> touches)
+	{
+		//selectionnne la case ou est le pointeur	
+    	for(int i=0; i<this.map.getWidth(); i++)
     	{
-			if((this.screenY - 10) < -this.mapHeight)
-				this.screenY = -this.mapHeight;
-			else
-				this.screenY = this.screenY-10;
-			
-			System.out.println("tessssst");
-			scrollMap = true;
-    		
+    		for(int u=0; u<this.map.getHeight(); u++)
+        	{
+    			if(entree_clavier.moa(i * this.map.getTileWidth(), u * this.map.getTileHeight(), this.map.getTileWidth(), this.map.getTileHeight()))
+            	{
+            		this.selectionX = i * this.map.getTileWidth();
+            		this.selectionY = u * this.map.getTileHeight();
+            		
+            		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
+                	{
+            			
+                	}
+            	}
+        	}
     	}
-    	if(touches[1] == 1)//appuis sur Z
-    	{
-    		if((this.screenY + 10) >= 0)
+	}
+	
+	public void scroll(HashMap<String, Integer> touches)
+	{
+		
+
+		if(touches.get("Z") >= 1)//appuis sur Z
+		{
+			if((this.screenY + Constantes.SCROLL_SPEED) >= 0) //pour que le scroll ne depasse pas la carte (pareil en dessous) screenX et Y on des valeur negative
 				this.screenY = 0;
 			else
-				this.screenY = this.screenY+10;
-    		
-    		scrollMap = true;
-    	}
-    	if(touches[3] == 1)//appuis sur Q
-    	{
-    		scrollMap = true;
-    	}
-    	if(touches[5] == 1)//appuis sur D
-    	{
-    		scrollMap = true;
-    	}
-		
-    	if(scrollMap)
-    		this.map.render(this.screenX,this.screenY);
+				this.screenY = this.screenY+Constantes.SCROLL_SPEED;
+		}
+		if(touches.get("S") >= 1)//appuis sur S
+		{
+			if((-this.screenY + Constantes.SCROLL_SPEED + container.getHeight()) > this.mapHeight)
+				this.screenY = -this.mapHeight + container.getHeight();
+			else
+				this.screenY = this.screenY-Constantes.SCROLL_SPEED;
+		}
+		if(touches.get("Q")>= 1)//appuis sur Q
+		{
+			if((this.screenX + Constantes.SCROLL_SPEED) > 0)
+				this.screenX = 0;
+			else
+				this.screenX = this.screenX+Constantes.SCROLL_SPEED;
+		}
+		if(touches.get("D")>= 1)//appuis sur D
+		{
+			if((-this.screenX + Constantes.SCROLL_SPEED + container.getWidth()) > this.mapWidth)
+				this.screenX = -this.mapWidth + container.getWidth();
+			else
+				this.screenX = this.screenX-Constantes.SCROLL_SPEED;
+		}
 	}
 
 

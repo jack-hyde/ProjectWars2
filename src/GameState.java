@@ -22,7 +22,7 @@ public class GameState extends BasicGameState{
     public GameState(int id)
     {
     	this.stateID = id;
-}
+    }
 
 	public void init(GameContainer container, StateBasedGame game) throws SlickException 
     {

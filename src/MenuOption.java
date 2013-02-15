@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -24,8 +26,7 @@ public class MenuOption {
 	private int volume;
 	private int volumeFx;
 	private int volumeMusic;
-	private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0}; //13
-	
+	private Entree entree;
 	void initMenuOption(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
 		this.menu = 4;
@@ -44,6 +45,7 @@ public class MenuOption {
 		this.volume = 0;
 		this.volumeFx = 0;
 		this.volumeMusic = 0;
+		this.entree = new Entree(container);
 	}
 
 	void renderMenuOption(GameContainer container, StateBasedGame game, Graphics g)
@@ -160,23 +162,23 @@ public class MenuOption {
         g.drawString(""+this.volumeMusic, 620, 545);
         
         //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
-        int u = 0;
+       /* int u = 0;
         for(int i=0; i<touches.length; i++)
         {  	
         	g.drawString("i : "+touches[i], 10+u, 60);
         	u = u+70;
-        }
+        }*/
 	}
 
 	void updateMenuOption(GameContainer container, StateBasedGame game, int delta)
 	{
 		//recupere les touches
-		Entree entree = new Entree(container);
-    	touches = entree.getTouches();		
+		this.entree.check();
+		HashMap<String, Integer> touches = this.entree.getTouches();		
     	
     	//test sur les touches
     	//appuis sur S
-    	if(this.touches[4] == 1)
+    	if(touches.get("S") == 1)
     	{
     		if(this.selection == 7){
     			this.selection=1;
@@ -189,7 +191,7 @@ public class MenuOption {
     	}
     	
     	//appuis sur Z
-    	if(this.touches[1] == 1)
+    	if(touches.get("Z") == 1)
     	{
     		if(this.selection == 1){
     			this.selection=7;
@@ -202,19 +204,19 @@ public class MenuOption {
     	}
     	
     	//appuis sur Q
-    	if(this.touches[3] == 1)
+    	if(touches.get("Q") == 1)
     	{
     		this.fleche--;
     	}
     	
     	//appuis sur D
-    	if(this.touches[5] == 1)
+    	if(touches.get("D") == 1)
     	{
     		this.fleche++;
     	}
     	
     	//appuis sur espace ou click gauche
-    	if(this.touches[6] == 1 || this.touches[8] == 1)
+    	if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     	{
     		switch(this.selection){
     		case 1 :
@@ -286,7 +288,7 @@ public class MenuOption {
     	{
     		this.fleche=3;
     		this.selection=2;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.pleinecran)
     			{
@@ -301,7 +303,7 @@ public class MenuOption {
     	{
     		this.fleche=4;
     		this.selection=2;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.pleinecran)
     			{
@@ -316,7 +318,7 @@ public class MenuOption {
     	{
     		this.fleche=5;
     		this.selection=3;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.volume > 0)
     			{
@@ -328,7 +330,7 @@ public class MenuOption {
     	{
     		this.fleche=6;
     		this.selection=3;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.volume < 100)
     			{
@@ -340,7 +342,7 @@ public class MenuOption {
     	{
     		this.fleche=7;
     		this.selection=4;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.volumeFx > 0)
     			{
@@ -352,7 +354,7 @@ public class MenuOption {
     	{
     		this.fleche=8;
     		this.selection=4;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.volumeFx < 100)
     			{
@@ -364,7 +366,7 @@ public class MenuOption {
     	{
     		this.fleche=9;
     		this.selection=5;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.volumeMusic > 0)
     			{
@@ -376,7 +378,7 @@ public class MenuOption {
     	{
     		this.fleche=10;
     		this.selection=5;
-    		if(this.touches[6] == 1 || this.touches[8] == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
     		{
     			if(this.volumeMusic < 100)
     			{
