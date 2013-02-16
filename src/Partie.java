@@ -104,13 +104,13 @@ public class Partie extends BasicGameState {
         	{
     			if(entree_clavier.moa(i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth()), u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight()), this.map.getTileWidth(), this.map.getTileHeight()))
             	{
-    				this.selectionX = i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth());
-                	this.selectionY = u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight());
+    				this.selectionX = i * this.map.getTileWidth();// + (-this.screenX % this.map.getTileWidth());
+                	this.selectionY = u * this.map.getTileHeight();// + (-this.screenY % this.map.getTileHeight());
 		
-            		//if(touches.get("") == 1 || touches[8] == 1) //appuis sur espace ou click gauche
-                	//{
+            		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1) //appuis sur espace ou click gauche
+                	{
             			
-                	//}
+                	}
             	}
         	}
     	}
