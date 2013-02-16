@@ -24,8 +24,9 @@ public class Partie extends BasicGameState {
 	private int screenY;
 	private int selectionX;
 	private int selectionY;
-	private int x;
-	private int y;
+	private int caseX;
+	private int caseY;
+	private Case caseSelection;
 	
 	private int stateID;
 
@@ -34,17 +35,27 @@ public class Partie extends BasicGameState {
 	public Partie(int id) throws SlickException
 	{
 		this.stateID = id;
-		this.joueur = new Joueur("Jacky");
-		this.adversaire = new Joueur("Tarlouze");
-		this.map  = new Map("images/map/map3.tmx");
+		
 		this.screenX = 0;
 		this.screenY = 0;
 		this.selectionX = 0;
 		this.selectionY = 0;
-		this.x = 0;
-		this.y = 0;
+		this.caseX = -1;
+		this.caseY = -1;
 	}
 
+	//Fonction qui permet d'initialiser la carte au moment où on entre dans ce gamestate
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException 
+	{
+		this.joueur = new Joueur("Jacky");
+		this.adversaire = new Joueur("Tarlouze");
+		this.map  = new Map("images/map/map3.tmx");
+
+		this.mapWidth = map.getWidth() * map.getTileWidth();
+	    this.mapHeight = map.getHeight() * map.getTileHeight();
+	    
+	    this.entree_clavier =  new Entree(container);
+	}
 	
 	public Joueur getJoueur() {
 		return joueur;
@@ -68,12 +79,7 @@ public class Partie extends BasicGameState {
 			throws SlickException {
 		this.container = container;
 		
-		
-		this.mapWidth = map.getWidth() * map.getTileWidth();
-	    this.mapHeight = map.getHeight() * map.getTileHeight();
-
-	    entree_clavier =  new Entree(container);
-	    //szDebug.afficheHashMap(entree_clavier.getTouches());
+	    //Debug.afficheHashMap(entree_clavier.getTouches());
 	}
 
 
@@ -85,13 +91,13 @@ public class Partie extends BasicGameState {
 		//affiche le carré de selection
 		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight()); 
 		
-		//valeurs a supprimer
+		//valeurs
 		g.drawString("screenX "+this.screenX, 10, 60);
 		g.drawString("screenY "+this.screenY, 10, 80);
 		
-		//case selectionné a supprimer
-		g.drawString("case X "+this.x, 10, 100);
-		g.drawString("case Y "+this.y, 10, 120);
+		//case selectionné
+		g.drawString("case X "+this.caseX, 10, 100);
+		g.drawString("case Y "+this.caseY, 10, 120);
 		g.drawString("width "+this.map.getWidth(), 10, 140);
 		g.drawString("width "+this.map.getHeight(), 10, 160);
 	}
@@ -100,8 +106,8 @@ public class Partie extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException {
-		entree_clavier.check();
-		HashMap<String, Integer> touches = entree_clavier.getTouches();	
+		this.entree_clavier.check();
+		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
 		
 		this.scroll(touches);
     	this.afficherCasePointer(touches);
@@ -119,12 +125,19 @@ public class Partie extends BasicGameState {
             	{
     				this.selectionX = x * this.map.getTileWidth() + this.screenX;
                 	this.selectionY = y * this.map.getTileHeight() + this.screenY;
-                	this.x = x;
-                	this.y = y;
+                	
 		
             		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1) //appuis sur espace ou click gauche
                 	{
-            			
+            			this.caseX = x;
+                    	this.caseY = y;
+                    	
+                    	this.caseSelection = this.map.recupUneCase(x, y);
+                    	if(this.caseSelection != null)
+                    	{
+                    		System.out.println("La case selectionnée ["+this.caseSelection.getX()+","+this.caseSelection.getY()+"] => DEFENSE : "+this.caseSelection.getDefense());
+                    	}
+                    	
                 	}
             	}
         	}
