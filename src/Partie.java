@@ -32,15 +32,25 @@ public class Partie extends BasicGameState {
 	public Partie(int id) throws SlickException
 	{
 		this.stateID = id;
-		this.joueur = new Joueur("Jacky");
-		this.adversaire = new Joueur("Tarlouze");
-		this.map  = new Map("images/map/map3.tmx");
+		
 		this.screenX = 0;
 		this.screenY = 0;
 		this.selectionX = 0;
 		this.selectionY = 0;		
 	}
 
+	//Fonction qui permet d'initialiser la carte au moment où on entre dans ce gamestate
+	public void enter(GameContainer container, StateBasedGame game) throws SlickException 
+	{
+		this.joueur = new Joueur("Jacky");
+		this.adversaire = new Joueur("Tarlouze");
+		this.map  = new Map("images/map/map3.tmx");
+
+		this.mapWidth = map.getWidth() * map.getTileWidth();
+	    this.mapHeight = map.getHeight() * map.getTileHeight();
+	    
+	    this.entree_clavier =  new Entree(container);
+	}
 	
 	public Joueur getJoueur() {
 		return joueur;
@@ -64,12 +74,7 @@ public class Partie extends BasicGameState {
 			throws SlickException {
 		this.container = container;
 		
-		
-		this.mapWidth = map.getWidth() * map.getTileWidth();
-	    this.mapHeight = map.getHeight() * map.getTileHeight();
-
-	    entree_clavier =  new Entree(container);
-	    //szDebug.afficheHashMap(entree_clavier.getTouches());
+	    //Debug.afficheHashMap(entree_clavier.getTouches());
 	}
 
 
