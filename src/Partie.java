@@ -85,11 +85,11 @@ public class Partie extends BasicGameState {
 		//affiche le carré de selection
 		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight()); 
 		
-		//valeurs
+		//valeurs a supprimer
 		g.drawString("screenX "+this.screenX, 10, 60);
 		g.drawString("screenY "+this.screenY, 10, 80);
 		
-		//case selectionné
+		//case selectionné a supprimer
 		g.drawString("case X "+this.x, 10, 100);
 		g.drawString("case Y "+this.y, 10, 120);
 		g.drawString("width "+this.map.getWidth(), 10, 140);
