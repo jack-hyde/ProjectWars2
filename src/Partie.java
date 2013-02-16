@@ -24,6 +24,8 @@ public class Partie extends BasicGameState {
 	private int screenY;
 	private int selectionX;
 	private int selectionY;
+	private int x;
+	private int y;
 	
 	private int stateID;
 
@@ -36,7 +38,9 @@ public class Partie extends BasicGameState {
 		this.screenX = 0;
 		this.screenY = 0;
 		this.selectionX = 0;
-		this.selectionY = 0;		
+		this.selectionY = 0;
+		this.x = 0;
+		this.y = 0;
 	}
 
 	//Fonction qui permet d'initialiser la carte au moment où on entre dans ce gamestate
@@ -85,8 +89,16 @@ public class Partie extends BasicGameState {
 		
 		//affiche le carré de selection
 		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight()); 
-		g.drawString("screenX"+this.screenX, 10, 60);
-		g.drawString("screenY"+this.screenY, 10, 80);
+		
+		//valeurs
+		g.drawString("screenX "+this.screenX, 10, 60);
+		g.drawString("screenY "+this.screenY, 10, 80);
+		
+		//case selectionné
+		g.drawString("case X "+this.x, 10, 100);
+		g.drawString("case Y "+this.y, 10, 120);
+		g.drawString("width "+this.map.getWidth(), 10, 140);
+		g.drawString("width "+this.map.getHeight(), 10, 160);
 	}
 
 
@@ -104,14 +116,16 @@ public class Partie extends BasicGameState {
 	public void afficherCasePointer(HashMap<String, Integer> touches)
 	{
 		//selectionnne la case ou est le pointeur	
-    	for(int i=0; i<this.map.getWidth(); i++)
+    	for(int x=0; x<this.map.getWidth(); x++)
     	{
-    		for(int u=0; u<this.map.getHeight(); u++)
+    		for(int y=0; y<this.map.getHeight(); y++)
         	{
-    			if(entree_clavier.moa(i * this.map.getTileWidth() + (-this.screenX % this.map.getTileWidth()), u * this.map.getTileHeight() + (-this.screenY % this.map.getTileHeight()), this.map.getTileWidth(), this.map.getTileHeight()))
+    			if(entree_clavier.moa(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
             	{
-    				this.selectionX = i * this.map.getTileWidth();// + (-this.screenX % this.map.getTileWidth());
-                	this.selectionY = u * this.map.getTileHeight();// + (-this.screenY % this.map.getTileHeight());
+    				this.selectionX = x * this.map.getTileWidth() + this.screenX;
+                	this.selectionY = y * this.map.getTileHeight() + this.screenY;
+                	this.x = x;
+                	this.y = y;
 		
             		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1) //appuis sur espace ou click gauche
                 	{
@@ -125,8 +139,6 @@ public class Partie extends BasicGameState {
 	
 	public void scroll(HashMap<String, Integer> touches)
 	{
-		
-
 		if(touches.get("Z") >= 1)//appuis sur Z
 		{
 			if((this.screenY + Constantes.SCROLL_SPEED) >= 0) //pour que le scroll ne depasse pas la carte (pareil en dessous) screenX et Y on des valeur negative
