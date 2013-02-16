@@ -3,14 +3,15 @@ import java.util.HashMap;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tests.xml.Entity;
 
 
 public class Partie extends BasicGameState {
+
+	
+
 
 	private Joueur joueur;
 	private Joueur adversaire;
