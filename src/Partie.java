@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -86,10 +88,20 @@ public class Partie extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+		
 		this.map.render(this.screenX,this.screenY); //render(int x, int y, int sx, int sy, int width, int height)  a faire pour eviter de charger toute la carte meme les parties que l'on ne voit pas
 		
+		Graphics g2 = new Graphics();
+		Color blanct = new Color(255,255,255,100);
+		g2.setColor(blanct);
+		
 		//affiche le carré de selection
-		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight()); 
+		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight());
+		
+		//case selectionné blanc transparent
+		g2.fillRect(this.caseX * this.map.getTileWidth() + this.screenX, this.caseY * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
+		
+
 		
 		//valeurs
 		g.drawString("screenX "+this.screenX, 10, 60);
@@ -98,8 +110,7 @@ public class Partie extends BasicGameState {
 		//case selectionné
 		g.drawString("case X "+this.caseX, 10, 100);
 		g.drawString("case Y "+this.caseY, 10, 120);
-		g.drawString("width "+this.map.getWidth(), 10, 140);
-		g.drawString("width "+this.map.getHeight(), 10, 160);
+		
 	}
 
 
