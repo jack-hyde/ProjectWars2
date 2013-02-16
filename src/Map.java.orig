@@ -8,7 +8,7 @@ public class Map extends TiledMap{
 		System.out.println("ettee");
 		this.recupTiles();
 	}
-	
+	 
 	public void recupTiles()
 	{
 		for (int x = 0; x < this.width; x++)
@@ -16,8 +16,12 @@ public class Map extends TiledMap{
 		      for (int y = 0; y < this.height; y++)
 		      {
 		                int id = this.getTileId(x, y, 0);
+<<<<<<< HEAD
+		                //System.out.println(id);
+=======
 		                
 		                System.out.println("id : "+id+" x : "+x+" y: "+y);
+>>>>>>> ea33329df60c1ae7996b9f3d2d3bc534998624c0
 		                if (id != 0)
 		               { 
 		                	System.out.print("ID CASE (defense) : ");
