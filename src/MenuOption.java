@@ -27,6 +27,7 @@ public class MenuOption {
 	private int volumeFx;
 	private int volumeMusic;
 	private Entree entree;
+	
 	void initMenuOption(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
 		this.menu = 4;
@@ -330,7 +331,7 @@ public class MenuOption {
     	{
     		this.fleche=6;
     		this.selection=3;
-    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1)
+    		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") >= 1)
     		{
     			if(this.volume < 100)
     			{

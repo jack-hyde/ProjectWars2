@@ -10,7 +10,6 @@ import org.newdawn.slick.Input;
 public class Entree {
 	
 	private Input input;
-	//private int touches[] = {0,0,0,0,0,0,0,0,0,0,0,0,0};		//tableau ou seront stoké les touches 13
 	
 	HashMap<String, Integer> touches = new HashMap();
 	
@@ -80,21 +79,21 @@ public class Entree {
 	public void clicksouris(){									//recupere les touches de la souris
 		if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON))
 			touches.put("MOUSE_LEFT", Constantes.KEY_PRESSED);
-		else if(this.input.isKeyDown(Input.MOUSE_LEFT_BUTTON))
+		else if(this.input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON))
 			touches.put("MOUSE_LEFT", Constantes.KEY_DOWN);
 		else
 			touches.put("MOUSE_LEFT", Constantes.KEY_VOID);
 		
 		if (input.isMousePressed(Input.MOUSE_RIGHT_BUTTON))
 			touches.put("MOUSE_RIGHT", Constantes.KEY_PRESSED);
-		else if(this.input.isKeyDown(Input.MOUSE_RIGHT_BUTTON))
+		else if(this.input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
 			touches.put("MOUSE_RIGHT", Constantes.KEY_DOWN);
 		else
 			touches.put("MOUSE_RIGHT", Constantes.KEY_VOID);
 		
 		if (input.isMousePressed(Input.MOUSE_MIDDLE_BUTTON))
 			touches.put("MOUSE_MIDDLE", Constantes.KEY_PRESSED);
-		else if(this.input.isKeyDown(Input.MOUSE_MIDDLE_BUTTON))
+		else if(this.input.isMouseButtonDown(Input.MOUSE_MIDDLE_BUTTON))
 			touches.put("MOUSE_MIDDLE", Constantes.KEY_DOWN);
 		else
 			touches.put("MOUSE_MIDDLE", Constantes.KEY_VOID);
