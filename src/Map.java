@@ -5,7 +5,7 @@ public class Map extends TiledMap{
  
 	public Map(String ref) throws SlickException {
 		super(ref);//envoie à TiledMap l'adresse du fichier .tmx
-		
+		System.out.println("ettee");
 		this.recupTiles();
 	}
 	
@@ -16,10 +16,12 @@ public class Map extends TiledMap{
 		      for (int y = 0; y < this.height; y++)
 		      {
 		                int id = this.getTileId(x, y, 0);
-		                System.out.println(id);
+		                
+		                System.out.println("id : "+id+" x : "+x+" y: "+y);
 		                if (id != 0)
 		               { 
-		                	//System.out.println(this.getTileProperty(id, "defense", ""));
+		                	System.out.print("ID CASE (defense) : ");
+		                	System.out.println(this.getTileProperty(id, "defense", ""));
 		               }
 		       }
 		}
