@@ -21,7 +21,7 @@ public abstract class Unite {
 		this.name = name;
 	}
 
-	public abstract void deplacement(); //méthode de déplacement abstraite
+	public abstract void deplacement(int x, int y); //méthode de déplacement abstraite
 	
 	public abstract void drawImage();
 	

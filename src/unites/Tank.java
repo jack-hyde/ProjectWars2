@@ -38,9 +38,10 @@ public class Tank extends Unite {
 
 	}
 	@Override
-	public void deplacement() {
+	public void deplacement(int x, int y) {
 		// TODO Auto-generated method stub
-		
+		this.caseX = x;
+		this.caseY = y;
 	}
 
 }

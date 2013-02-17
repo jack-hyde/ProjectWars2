@@ -15,7 +15,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.tiled.Layer;
 
 import tools.Entree;
 import unites.*;
@@ -26,7 +25,6 @@ public class Partie extends BasicGameState {
 
 	
 
-	private int i;
 	private Joueur joueur;
 	private Joueur adversaire;
 	private Map map;
@@ -181,7 +179,6 @@ public class Partie extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException {
-		this.i++;
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
 		
@@ -212,17 +209,12 @@ public class Partie extends BasicGameState {
                     	this.caseSelection = this.map.recupUneCase(x, y);
                     	if(this.caseSelection != null)
                     	{
-                    		//Lorsqu'on clique sur une case, on regarde si il y a une unite de selectionné...
-                    		this.uniteSelection = null;
-                    		for(Unite unite : this.al_unites)
-                        	{
-                        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-                        		{
-                        			this.uniteSelection = unite;
-                        		}
-                        	}
+                    		
+                    		checkUniteEtDeplacement();
                     		
                     		System.out.println("La case selectionnÈe ["+this.caseSelection.getX()+","+this.caseSelection.getY()+"] => DEFENSE : "+this.caseSelection.getDefense());
+                    		
+                    		
                     	}
                     	
                 	}
@@ -231,6 +223,39 @@ public class Partie extends BasicGameState {
     	}
 	}
 
+	private void checkUniteEtDeplacement()
+	{
+		//Si on a déjà une unité de sélectionné, on peut la déplacer...
+		if(this.uniteSelection != null)
+		{
+			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unité sur la case où l'ont veut aller
+			for(Unite unite : this.al_unites)
+        	{
+        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+        		{
+        			uniteSurLaCase = true; //Il y a deja une unité sur cette case
+        			this.uniteSelection = unite;
+        		}
+        	}
+			if(uniteSurLaCase == false)
+			{
+				this.uniteSelection.deplacement(this.caseX, this.caseY);
+				this.uniteSelection = null;
+			}
+		}
+		else
+		{
+			for(Unite unite : this.al_unites)
+        	{
+        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+        		{
+        			this.uniteSelection = unite;
+        		}
+        	}
+		}
+		
+		
+	}
 	
 	public void scroll(HashMap<String, Integer> touches)
 	{
