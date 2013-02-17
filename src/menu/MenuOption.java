@@ -1,3 +1,4 @@
+package menu;
 import java.util.HashMap;
 
 import org.newdawn.slick.GameContainer;
@@ -6,6 +7,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.XMLPackedSheet;
 import org.newdawn.slick.state.StateBasedGame;
+
+import tools.Entree;
 
 
 public class MenuOption {
@@ -28,7 +31,7 @@ public class MenuOption {
 	private int volumeMusic;
 	private Entree entree;
 	
-	void initMenuOption(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
+	public void initMenuOption(GameContainer container, StateBasedGame game, XMLPackedSheet menuImage)throws SlickException
 	{
 		this.menu = 4;
 		this.sousMenu = 1;
@@ -49,7 +52,7 @@ public class MenuOption {
 		this.entree = new Entree(container);
 	}
 
-	void renderMenuOption(GameContainer container, StateBasedGame game, Graphics g)
+	public void renderMenuOption(GameContainer container, StateBasedGame game, Graphics g)
 	{
 		this.barre1.draw(200,130);//barre resolution
 		this.barre1.draw(200,230);//barre plein ecran
@@ -171,7 +174,7 @@ public class MenuOption {
         }*/
 	}
 
-	void updateMenuOption(GameContainer container, StateBasedGame game, int delta)
+	public void updateMenuOption(GameContainer container, StateBasedGame game, int delta)
 	{
 		//recupere les touches
 		this.entree.check();
@@ -389,12 +392,12 @@ public class MenuOption {
     	}
 	}
 	
-	int getMenu()
+	public int getMenu()
 	{
 		return this.menu;
 	}
 	
-	void setMenu(int menubis)
+	public void setMenu(int menubis)
 	{
 		this.menu = menubis;
 	}

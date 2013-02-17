@@ -1,3 +1,5 @@
+package game;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -50,14 +52,14 @@ public class Map extends TiledMap{
 		Iterator iterateur=listKeys.iterator();
 		while(iterateur.hasNext())
 		{
-			int key= (int) iterateur.next();
+			int key= (Integer) iterateur.next();
 			if(key == x)
 			{
 				Set listKeys2=this.allCases.get(key).keySet();
 				Iterator iterateur2=listKeys2.iterator();
 				while(iterateur2.hasNext())
 				{
-					int key2= (int) iterateur2.next();
+					int key2= (Integer) iterateur2.next();
 					if(key2 == y)
 					{
 						laCaseSelectionnee = this.allCases.get(key).get(key2);
