@@ -1,5 +1,4 @@
 package tools;
-import inc.Constantes;
 
 import java.util.HashMap;
 import org.newdawn.slick.GameContainer;

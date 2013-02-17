@@ -4,10 +4,11 @@ import game.Case;
 import game.Joueur;
 import game.Map;
 import game.Unite;
-import inc.Constantes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -16,7 +17,10 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import tools.Constantes;
+import tools.Debug;
 import tools.Entree;
+import tools.Fonction;
 import unites.*;
 
 
@@ -38,6 +42,7 @@ public class Partie extends BasicGameState {
 	private int caseX;
 	private int caseY;
 	private Case caseSelection;
+	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	
 	private int stateID;
 
@@ -121,6 +126,7 @@ public class Partie extends BasicGameState {
 		
 		Graphics g2 = new Graphics();
 		Color blanct = new Color(255,255,255,100);
+		Color blanct2 = new Color(255,255,255,50);
 		g2.setColor(blanct);
 		
 		//affiche le carrÈ de selection
@@ -140,7 +146,19 @@ public class Partie extends BasicGameState {
 		g.drawString("case Y "+this.caseY, 10, 120);
 		
 		if(this.uniteSelection != null)
+		{
+			//Debug.afficheHashMap(this.casesPosibiliteDeplacement);
 			g.drawString("Nom unité :"+this.uniteSelection.getName(), 10, 140);
+			
+			for(String s : this.casesPosibiliteDeplacement)
+			{
+				String str[] = s.split(":");
+				int x = Integer.parseInt(str[0]);
+				int y = Integer.parseInt(str[1]);
+				g2.setColor(blanct2);
+				g2.fillRect(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
+			}
+		}
 		
 		if(this.caseSelection != null)
 			g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 160);
@@ -210,7 +228,14 @@ public class Partie extends BasicGameState {
                     	if(this.caseSelection != null)
                     	{
                     		
-                    		checkUniteEtDeplacement();
+                    		boolean isSelect = checkUniteEtDeplacement();
+                    		//Si aucune unité n'est sélectionné, on vide les possibilités de déplacement
+                    		if(isSelect == false)
+                    		{
+                    			this.casesPosibiliteDeplacement.clear();
+                    			this.uniteSelection = null;
+
+                    		}
                     		
                     		System.out.println("La case selectionnÈe ["+this.caseSelection.getX()+","+this.caseSelection.getY()+"] => DEFENSE : "+this.caseSelection.getDefense());
                     		
@@ -223,37 +248,62 @@ public class Partie extends BasicGameState {
     	}
 	}
 
-	private void checkUniteEtDeplacement()
+	private boolean checkUniteEtDeplacement()
 	{
 		//Si on a déjà une unité de sélectionné, on peut la déplacer...
+		
+		boolean isSelect = false;
 		if(this.uniteSelection != null)
 		{
 			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unité sur la case où l'ont veut aller
-			for(Unite unite : this.al_unites)
+			for(Unite unite : this.al_unites) //On boucle sur toutes les unités de notre partie
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
         			uniteSurLaCase = true; //Il y a deja une unité sur cette case
-        			this.uniteSelection = unite;
+        			this.uniteSelection = unite; //On récupère donc l'unité qu'il y a sur cette case
+        			int rayon = unite.getRayonDeplacement();
+        			//On calcul toutes les coordonnées qui sont possible pour le déplacement de cette unité
+        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon);
+        			isSelect = true;
         		}
         	}
-			if(uniteSurLaCase == false)
+			if(uniteSurLaCase == false) //Si il n'y a pas d'unité sur la case, on déplace l'unité
 			{
-				this.uniteSelection.deplacement(this.caseX, this.caseY);
-				this.uniteSelection = null;
+				for(String s : this.casesPosibiliteDeplacement) //on parcourt toutes les possibilités de déplacement
+				{
+					String str[] = s.split(":"); //on split car l'enregistrement des possibilité est comme ça : X:Y
+					int x = Integer.parseInt(str[0]); //on récupère la valeur x et y
+					int y = Integer.parseInt(str[1]);
+					if(this.caseX == x && this.caseY == y) //Si la case sur laquelle on a cliquer correspond à l'une des valeur, on peut déplacer
+					{
+						this.uniteSelection.deplacement(this.caseX, this.caseY); //déplacement
+						this.casesPosibiliteDeplacement.clear(); //on délete les cases de possibilité de déplacement
+						isSelect = true;
+						//this.uniteSelection = null;
+						
+						break; //on sort de la boucle
+					}
+				}
 			}
 		}
-		else
+		else //S'il n'y a pas d'unité de selectionné, on va regarder si la case selectionné contient une unité
 		{
 			for(Unite unite : this.al_unites)
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
         			this.uniteSelection = unite;
+        			int rayon = unite.getRayonDeplacement();
+        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon);
+        			isSelect = true;
         		}
         	}
+			
+			
 		}
 		
+		return isSelect;
 		
 	}
 	

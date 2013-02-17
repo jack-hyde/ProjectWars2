@@ -14,9 +14,10 @@ public class Sniper extends Unite{
 		this.caseX=caseX;
 		this.caseY=caseY;
 		this.name="Sniper";
+		this.rayonDeplacement = 2;
 	}
 	
-	public Sniper(int attaque, int defense, int valeur, int vie, String name, int caseX, int caseY)
+	public Sniper(int attaque, int defense, int valeur, int vie, String name, int rayonDeplacement, int caseX, int caseY)
 	{
 		this.attaque = attaque;
 		this.defense = defense;
@@ -25,6 +26,7 @@ public class Sniper extends Unite{
 		this.caseX=caseX;
 		this.caseY=caseY;
 		this.name=name;
+		this.rayonDeplacement = rayonDeplacement;
 	}
 
 	@Override

@@ -13,6 +13,16 @@ public abstract class Unite {
 	
 	protected String name;
 	
+	protected int rayonDeplacement;
+	
+	public int getRayonDeplacement() {
+		return rayonDeplacement;
+	}
+
+	public void setRayonDeplacement(int rayonDeplacement) {
+		this.rayonDeplacement = rayonDeplacement;
+	}
+
 	public String getName() {
 		return name;
 	}

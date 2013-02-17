@@ -1,10 +1,5 @@
 package unites;
 
-
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-
-import inc.Constantes;
 import game.Unite;
 
 public class Tank extends Unite {
@@ -19,9 +14,10 @@ public class Tank extends Unite {
 		this.caseX=caseX;
 		this.caseY=caseY;
 		this.name="Tank";
+		this.rayonDeplacement= 5;
 	}
 	
-	public Tank(int attaque, int defense, int valeur, int vie, String name, int caseX, int caseY)
+	public Tank(int attaque, int defense, int valeur, int vie, String name, int rayonDeplacement, int caseX, int caseY)
 	{
 		this.attaque = attaque;
 		this.defense = defense;
@@ -30,6 +26,7 @@ public class Tank extends Unite {
 		this.caseX=caseX;
 		this.caseY=caseY;
 		this.name=name;
+		this.rayonDeplacement = rayonDeplacement;
 	}
 
 	
