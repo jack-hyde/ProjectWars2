@@ -93,14 +93,6 @@ public class MenuBase {
     		g.drawString("OUI", 620, 415);
             g.drawString("NON", 900, 415);
         }
-        
-        //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
-        int u = 0;
-       /* for(int i=0; i<touches.length; i++)
-        {  	
-        	g.drawString("i : "+touches[i], 10+u, 60);
-        	u = u+70;
-        }*/
 	}
 	
 	public void updateMenuBase(GameContainer container, StateBasedGame game, int delta)

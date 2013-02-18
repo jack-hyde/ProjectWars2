@@ -165,13 +165,6 @@ public class MenuOption {
         g.drawString(""+this.volumeFx, 620, 445);
         g.drawString(""+this.volumeMusic, 620, 545);
         
-        //touches appuyés et position de la souris en haut a gauche de l'ecran  a supprimer
-       /* int u = 0;
-        for(int i=0; i<touches.length; i++)
-        {  	
-        	g.drawString("i : "+touches[i], 10+u, 60);
-        	u = u+70;
-        }*/
 	}
 
 	public void updateMenuOption(GameContainer container, StateBasedGame game, int delta)
