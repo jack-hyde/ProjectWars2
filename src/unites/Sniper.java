@@ -5,8 +5,7 @@ import game.Unite;
 public class Sniper extends Unite{
 
 	public Sniper(int caseX, int caseY)
-	{
-		
+	{		
 		this.attaque = 100;
 		this.defense = 50;
 		this.valeur = 10;

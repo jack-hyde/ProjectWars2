@@ -8,7 +8,6 @@ public class Joueur {
 	public Joueur(String nomJoueur)
 	{
 		this.nomJoueur = nomJoueur;
-		
 	}
 
 	public int getNbUnite() {

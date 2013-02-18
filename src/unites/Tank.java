@@ -5,8 +5,7 @@ import game.Unite;
 public class Tank extends Unite {
 
 	public Tank(int caseX, int caseY)
-	{
-		
+	{		
 		this.attaque = 500;
 		this.defense = 350;
 		this.valeur = 80;
@@ -29,16 +28,17 @@ public class Tank extends Unite {
 		this.rayonDeplacement = rayonDeplacement;
 	}
 
-	
-	public void drawImage()
-	{
-
-	}
 	@Override
 	public void deplacement(int x, int y) {
 		// TODO Auto-generated method stub
 		this.caseX = x;
 		this.caseY = y;
+	}
+	
+	@Override
+	public void drawImage() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

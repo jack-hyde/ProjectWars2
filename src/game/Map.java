@@ -36,8 +36,7 @@ public class Map extends TiledMap{
 				
 				//on créer un tableau qui aura cette forme : tab[y] = Case
 				Case laCase = new Case(nbDefense, x, y); //On créer notre objet case
-				tabCase.put(y, laCase); //on ajoute la case dans le tableau tab[y]
-				
+				tabCase.put(y, laCase); //on ajoute la case dans le tableau tab[y]			
 			}
 			this.allCases.put(x, tabCase); //puis on ajoute le tout dans notre tableau complet
 		}
@@ -63,12 +62,10 @@ public class Map extends TiledMap{
 					if(key2 == y)
 					{
 						laCaseSelectionnee = this.allCases.get(key).get(key2);
-					}
-					
+					}			
 				}
 			}
 		}
-		
 		return laCaseSelectionnee;
 	}
 	

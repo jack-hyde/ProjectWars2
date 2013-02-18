@@ -6,8 +6,7 @@ public abstract class Unite {
 	protected int defense;
 	protected int attaque;
 	protected int valeur;
-	protected int vie;
-	
+	protected int vie;	
 	protected int caseX;
 	protected int caseY;
 	

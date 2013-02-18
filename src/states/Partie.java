@@ -27,7 +27,7 @@ import unites.*;
 
 public class Partie extends BasicGameState {
 
-	
+	private int stateID;
 
 	private Joueur joueur;
 	private Joueur adversaire;
@@ -44,8 +44,6 @@ public class Partie extends BasicGameState {
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	
-	private int stateID;
-
 	private Entree entree_clavier;
 	
 	private ArrayList<Unite> al_unites;
@@ -63,7 +61,7 @@ public class Partie extends BasicGameState {
 		this.caseY = -1;
 	}
 
-	//Fonction qui permet d'initialiser la carte au moment o˘ on entre dans ce gamestate
+	//Fonction qui permet d'initialiser la carte au moment o√π on entre dans ce gamestate
 	public void enter(GameContainer container, StateBasedGame game) throws SlickException 
 	{
 		this.joueur = new Joueur("Jacky");
@@ -75,7 +73,7 @@ public class Partie extends BasicGameState {
 	    
 	    this.entree_clavier =  new Entree(container);
 	    
-	    //Création des 2 tanks
+	    //Cr≈Ωation des 2 tanks
 	    Unite tank1 = new Tank(2, 3);
 	    Unite tank2 = new Tank(1, 2);
 	    Unite sniper1 = new Sniper(10,3);
@@ -92,22 +90,6 @@ public class Partie extends BasicGameState {
 	    System.out.println("Attaque tank : "+tank1.getAttaque());
 	}
 	
-	public Joueur getJoueur() {
-		return joueur;
-	}
-
-	public void setJoueur(Joueur joueur) {
-		this.joueur = joueur;
-	}
-
-	public Joueur getAdversaire() {
-		return adversaire;
-	}
-
-	public void setAdversaire(Joueur adversaire) {
-		this.adversaire = adversaire;
-	}
-
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -116,7 +98,6 @@ public class Partie extends BasicGameState {
 		
 	    //Debug.afficheHashMap(entree_clavier.getTouches());
 	}
-
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
@@ -129,26 +110,24 @@ public class Partie extends BasicGameState {
 		Color blanct2 = new Color(255,255,255,50);
 		g2.setColor(blanct);
 		
-		//affiche le carrÈ de selection
+		//affiche le carr√© de selection
 		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight());
 		
-		//case selectionnÈ blanc transparent
+		//case selectionn√© blanc transparent
 		g2.fillRect(this.caseX * this.map.getTileWidth() + this.screenX, this.caseY * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
-		
-
-		
+				
 		//valeurs
 		g.drawString("screenX "+this.screenX, 10, 60);
 		g.drawString("screenY "+this.screenY, 10, 80);
 		
-		//case selectionnÈ
+		//case selectionn√©
 		g.drawString("case X "+this.caseX, 10, 100);
 		g.drawString("case Y "+this.caseY, 10, 120);
 		
 		if(this.uniteSelection != null)
 		{
 			//Debug.afficheHashMap(this.casesPosibiliteDeplacement);
-			g.drawString("Nom unité :"+this.uniteSelection.getName(), 10, 140);
+			g.drawString("Nom unit√© : "+this.uniteSelection.getName(), 10, 140);
 			
 			for(String s : this.casesPosibiliteDeplacement)
 			{
@@ -158,41 +137,14 @@ public class Partie extends BasicGameState {
 				g2.setColor(blanct2);
 				g2.fillRect(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
 			}
-		}
-		
+		}		
 		if(this.caseSelection != null)
+		{
 			g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 160);
-		
-		drawAllUnits(); //Affichage des unités
-		
-		
+		}	
+		drawAllUnits(); //Affichage des unit≈Ωs	
 	}
 
-	//fonction d'affichage des unités (en private car elle ne peut pas etre appelé ailleur)
-	//Il faudra virer le g.fillRect et utiliser la fonction drawImage (présente dans chaque unité) pour afficher l'image de l'unité
-	private void drawAllUnits()
-	{
-		Graphics g2 = new Graphics();
-		Color ambre = new Color(173,57,14);
-		Color jaunepisse = new Color(240,195,0);
-		for (Unite unite : this.al_unites) {
-			int placementX = unite.getCaseX();
-			int placementY = unite.getCaseY();
-			
-			if(unite.getName() == "Tank")
-			{
-				g2.setColor(ambre);
-				
-				g2.fillRect(placementX * this.map.getTileWidth() + this.screenX + 15, placementY * this.map.getTileHeight() + this.screenY +15, this.map.getTileWidth()-30, this.map.getTileHeight()-30);
-			}
-			else if(unite.getName() == "Sniper")
-			{
-				g2.setColor(jaunepisse);
-				
-				g2.fillRect(placementX * this.map.getTileWidth() + this.screenX + 15, placementY * this.map.getTileHeight() + this.screenY +15, this.map.getTileWidth()-30, this.map.getTileHeight()-30);
-			}
-		}
-	}
 	
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
@@ -201,11 +153,37 @@ public class Partie extends BasicGameState {
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
 		
 		this.scroll(touches);
-    	this.afficherCasePointer(touches);
-    	
-    	
+    	this.afficherCasePointer(touches);	
 	}
 	
+	
+	//fonction d'affichage des unit≈Ωs (en private car elle ne peut pas etre appel≈Ω ailleur)
+	//Il faudra virer le g.fillRect et utiliser la fonction drawImage (pr≈Ωsente dans chaque unit≈Ω) pour afficher l'image de l'unit≈Ω
+	private void drawAllUnits()
+	{
+		Graphics g2 = new Graphics();
+		Color ambre = new Color(173,57,14);
+		Color jaunepisse = new Color(240,195,0);
+		for (Unite unite : this.al_unites) {
+			int placementX = unite.getCaseX();
+			int placementY = unite.getCaseY();
+
+			if(unite.getName() == "Tank")
+			{
+				g2.setColor(ambre);
+
+				g2.fillRect(placementX * this.map.getTileWidth() + this.screenX + 15, placementY * this.map.getTileHeight() + this.screenY +15, this.map.getTileWidth()-30, this.map.getTileHeight()-30);
+			}
+			else if(unite.getName() == "Sniper")
+			{
+				g2.setColor(jaunepisse);
+
+				g2.fillRect(placementX * this.map.getTileWidth() + this.screenX + 15, placementY * this.map.getTileHeight() + this.screenY +15, this.map.getTileWidth()-30, this.map.getTileHeight()-30);
+			}
+		}
+	}
+		
+		
 	public void afficherCasePointer(HashMap<String, Integer> touches)
 	{
 		//selectionnne la case ou est le pointeur	
@@ -216,8 +194,7 @@ public class Partie extends BasicGameState {
     			if(entree_clavier.moa(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
             	{
     				this.selectionX = x * this.map.getTileWidth() + this.screenX;
-                	this.selectionY = y * this.map.getTileHeight() + this.screenY;
-                	
+                	this.selectionY = y * this.map.getTileHeight() + this.screenY;               	
 		
             		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1) //appuis sur espace ou click gauche
                 	{
@@ -227,58 +204,55 @@ public class Partie extends BasicGameState {
                     	this.caseSelection = this.map.recupUneCase(x, y);
                     	if(this.caseSelection != null)
                     	{
-                    		
                     		boolean isSelect = checkUniteEtDeplacement();
-                    		//Si aucune unité n'est sélectionné, on vide les possibilités de déplacement
+                    		//Si aucune unit≈Ω n'est s≈Ωlectionn≈Ω, on vide les possibilit≈Ωs de d≈Ωplacement
                     		if(isSelect == false)
                     		{
                     			this.casesPosibiliteDeplacement.clear();
                     			this.uniteSelection = null;
-
                     		}
                     		
-                    		System.out.println("La case selectionnÈe ["+this.caseSelection.getX()+","+this.caseSelection.getY()+"] => DEFENSE : "+this.caseSelection.getDefense());
-                    		
-                    		
-                    	}
-                    	
+                    		System.out.println("La case selectionn√©e ["+this.caseSelection.getX()+","+this.caseSelection.getY()+"] => DEFENSE : "+this.caseSelection.getDefense());
+                    			
+                    	}                   	
                 	}
             	}
         	}
     	}
 	}
 
+	
 	private boolean checkUniteEtDeplacement()
 	{
-		//Si on a déjà une unité de sélectionné, on peut la déplacer...
+		//Si on a d≈ΩjÀÜ une unit≈Ω de s≈Ωlectionn≈Ω, on peut la deplacer...
 		
 		boolean isSelect = false;
 		if(this.uniteSelection != null)
 		{
-			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unité sur la case où l'ont veut aller
-			for(Unite unite : this.al_unites) //On boucle sur toutes les unités de notre partie
+			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
+			for(Unite unite : this.al_unites) //On boucle sur toutes les unites de notre partie
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
-        			uniteSurLaCase = true; //Il y a deja une unité sur cette case
-        			this.uniteSelection = unite; //On récupère donc l'unité qu'il y a sur cette case
+        			uniteSurLaCase = true; //Il y a deja une unit≈Ω sur cette case
+        			this.uniteSelection = unite; //On r≈ΩcupÔøΩre donc l'unite qu'il y a sur cette case
         			int rayon = unite.getRayonDeplacement();
-        			//On calcul toutes les coordonnées qui sont possible pour le déplacement de cette unité
+        			//On calcul toutes les coordonn≈Ωes qui sont possible pour le d≈Ωplacement de cette unite
         			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon);
         			isSelect = true;
         		}
         	}
-			if(uniteSurLaCase == false) //Si il n'y a pas d'unité sur la case, on déplace l'unité
+			if(uniteSurLaCase == false) //Si il n'y a pas d'unite sur la case, on deplace l'unite
 			{
-				for(String s : this.casesPosibiliteDeplacement) //on parcourt toutes les possibilités de déplacement
+				for(String s : this.casesPosibiliteDeplacement) //on parcourt toutes les possibilites de deplacement
 				{
-					String str[] = s.split(":"); //on split car l'enregistrement des possibilité est comme ça : X:Y
-					int x = Integer.parseInt(str[0]); //on récupère la valeur x et y
+					String str[] = s.split(":"); //on split car l'enregistrement des possibilite est comme ca : X:Y
+					int x = Integer.parseInt(str[0]); //on r≈ΩcupÔøΩre la valeur x et y
 					int y = Integer.parseInt(str[1]);
-					if(this.caseX == x && this.caseY == y) //Si la case sur laquelle on a cliquer correspond à l'une des valeur, on peut déplacer
+					if(this.caseX == x && this.caseY == y) //Si la case sur laquelle on a cliquer correspond a l'une des valeur, on peut deplacer
 					{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //déplacement
-						this.casesPosibiliteDeplacement.clear(); //on délete les cases de possibilité de déplacement
+						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 						isSelect = true;
 						//this.uniteSelection = null;
 						
@@ -287,7 +261,7 @@ public class Partie extends BasicGameState {
 				}
 			}
 		}
-		else //S'il n'y a pas d'unité de selectionné, on va regarder si la case selectionné contient une unité
+		else //S'il n'y a pas d'unit≈Ω de selectionn≈Ω, on va regarder si la case selectionne contient une unite
 		{
 			for(Unite unite : this.al_unites)
         	{
@@ -299,12 +273,8 @@ public class Partie extends BasicGameState {
         			isSelect = true;
         		}
         	}
-			
-			
-		}
-		
-		return isSelect;
-		
+		}		
+		return isSelect;	
 	}
 	
 	public void scroll(HashMap<String, Integer> touches)
@@ -337,11 +307,24 @@ public class Partie extends BasicGameState {
 			else
 				this.screenX = this.screenX-Constantes.SCROLL_SPEED;
 		}
-    	
-    	
 	}
 
+	public Joueur getJoueur() {
+		return joueur;
+	}
 
+	public void setJoueur(Joueur joueur) {
+		this.joueur = joueur;
+	}
+
+	public Joueur getAdversaire() {
+		return adversaire;
+	}
+
+	public void setAdversaire(Joueur adversaire) {
+		this.adversaire = adversaire;
+	}
+	
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub

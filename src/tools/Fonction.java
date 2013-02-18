@@ -17,9 +17,7 @@ public abstract class Fonction {
     				coordValides.add(x+":"+y);
     			}
         	}
-    	}
-		
-		return coordValides;
-		
+    	}		
+		return coordValides;		
 	}
 }
