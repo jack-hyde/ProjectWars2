@@ -26,7 +26,7 @@ public class Debug {
 	
 	public static void centerTexte(String string, int boiteX, int boiteY, int boiteWidth, int boiteHeight, Graphics g) //centre le texte dans une boite
 	{
-		int taillePoliceWidth = 5;	//valeurs a changer suivant la taille de la poloce
+		int taillePoliceWidth = 4;	//valeurs a changer suivant la taille de la police valeurs paire 
 		int taillePoliceHeight = 8;	
 		
 		int tailleString = string.length();

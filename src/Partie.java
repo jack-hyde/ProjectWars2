@@ -122,12 +122,13 @@ public class Partie extends BasicGameState {
 		
 		this.scroll(touches);
     	this.afficherCasePointer(touches);
+    	//this.deplacementSouris(touches);
     	
 	}
 	
-	public void afficherCasePointer(HashMap<String, Integer> touches)
+	public void afficherCasePointer(HashMap<String, Integer> touches)//selectionnne la case ou est le pointeur	
 	{
-		//selectionnne la case ou est le pointeur	
+		
     	for(int x=0; x<this.map.getWidth(); x++)
     	{
     		for(int y=0; y<this.map.getHeight(); y++)
@@ -155,6 +156,31 @@ public class Partie extends BasicGameState {
     	}
 	}
 
+	public void deplacementSouris(HashMap<String, Integer> touches)//scroll avec le click droit ne marche pas
+	{
+		int mouseXAvant = 0;
+		int mouseYAvant = 0;
+		int mouseXApres = 0;
+		int mouseYApres = 0;
+		
+		if(touches.get("MOUSE_RIGHT") == 1)
+		{
+			mouseXAvant = touches.get("MOUSE_X");
+			mouseYAvant = touches.get("MOUSE_Y");
+		}
+		if(touches.get("MOUSE_RIGHT") > 1)
+		{
+			mouseXApres = touches.get("MOUSE_X");
+			mouseYApres = touches.get("MOUSE_Y");
+		}
+		if(touches.get("MOUSE_RIGHT") == 0)
+		{
+			mouseXAvant = 0;
+			mouseYAvant = 0;
+		}
+		this.screenX = this.screenX + mouseXApres - mouseXAvant;
+		this.screenY = this.screenX + mouseYApres - mouseYAvant;
+	}
 	
 	public void scroll(HashMap<String, Integer> touches)
 	{
