@@ -7,74 +7,103 @@ import java.util.Set;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 
+import tools.Debug;
+
+import cases.*;
+
 public class Map extends TiledMap{
  
-	private HashMap<Integer, HashMap<Integer, Case>> allCases; //Un tableau où sera stocker toutes les cases. Comme ceci : tab[x][y] = Case
+	private HashMap<String, Case> allCases; //Un tableau oï¿½ sera stocker toutes les cases. Comme ceci : tab[x][y] = Case
 
 	public Map(String ref) throws SlickException {
-		super(ref);//envoie à TiledMap l'adresse du fichier .tmx
-		this.allCases = new HashMap<Integer, HashMap<Integer, Case>>();
+		super(ref);//envoie ï¿½ TiledMap l'adresse du fichier .tmx
+		this.allCases = new HashMap<String, Case>();
 		this.recupTiles();
 	}
 
 	public void recupTiles()
 	{
+		Case laCase = null;
 		for (int x = 0; x < this.width; x++)
 		{
-			HashMap<Integer, Case> tabCase = new HashMap<Integer, Case>(); 
+			String coord = "";
 			for (int y = 0; y < this.height; y++)
 			{
-				int id = this.getTileId(x, y, 0); //on récupère l'id, uniquement pour voir s'il existe bien un tile
+				int id = this.getTileId(x, y, 0); //on rï¿½cupï¿½re l'id, uniquement pour voir s'il existe bien un tile
 				//System.out.println("id : "+id+" x : "+x+" y: "+y);
 				
-				int nbDefense = 0;
+				String strType = "";
 				if (id != 0)
 				{ 
-					String strDefense = this.getTileProperty(id, "defense", ""); //on récupère la valeur de la défense de la case (en String)
-					nbDefense = Integer.parseInt(strDefense); //on parse la valeur de la défense en Int
+					strType = this.getTileProperty(id, "type", ""); //on rï¿½cupï¿½re la valeur de la dï¿½fense de la case (en String)
+					
 				}
+				coord = x+":"+y;
+				if(strType.equals("route"))
+				{
+					laCase = new Route(x, y); //On crï¿½er notre objet case
+				}
+				else if(strType.equals("montagne"))
+				{
+					laCase = new Montagne(x, y); //On crï¿½er notre objet case
+				}
+				else if(strType.equals("plaine"))
+				{
+					laCase = new Plaine(x, y); //On crï¿½er notre objet case
+				}
+				else if(strType.equals("usine"))
+				{
+					laCase = new Usine(x, y); //On crï¿½er notre objet case
+				}
+				else if(strType.equals("batiment"))
+				{
+					laCase = new Batiment(x, y); //On crï¿½er notre objet case
+				}
+				else if(strType.equals("foret"))
+				{
+					laCase = new Foret(x, y); //On crï¿½er notre objet case
+				}		
 				
-				//on créer un tableau qui aura cette forme : tab[y] = Case
-				Case laCase = new Case(nbDefense, x, y); //On créer notre objet case
-				tabCase.put(y, laCase); //on ajoute la case dans le tableau tab[y]			
+				if(coord != "" && laCase != null)
+				{
+					this.allCases.put(coord, laCase); //puis on ajoute le tout dans notre tableau complet
+				}
 			}
-			this.allCases.put(x, tabCase); //puis on ajoute le tout dans notre tableau complet
+			
+			
+			
 		}
 		
 		//Debug.afficheHashMap(this.allCases);
 	}
 
-	public Case recupUneCase(int x, int y)
+	public Case recupUneCase(int xSelect, int ySelect)
 	{
 		Case laCaseSelectionnee = null;
 		Set listKeys=this.allCases.keySet();
 		Iterator iterateur=listKeys.iterator();
 		while(iterateur.hasNext())
 		{
-			int key= (Integer) iterateur.next();
-			if(key == x)
+			String key= (String) iterateur.next();
+			String str[] = key.split(":"); //on split car l'enregistrement des possibilite est comme ca : X:Y
+			int x = Integer.parseInt(str[0]); //on rÅ½cupï¿½re la valeur x et y
+			int y = Integer.parseInt(str[1]);
+			
+			if(xSelect == x && ySelect == y)
 			{
-				Set listKeys2=this.allCases.get(key).keySet();
-				Iterator iterateur2=listKeys2.iterator();
-				while(iterateur2.hasNext())
-				{
-					int key2= (Integer) iterateur2.next();
-					if(key2 == y)
-					{
-						laCaseSelectionnee = this.allCases.get(key).get(key2);
-					}			
-				}
+				
+				laCaseSelectionnee = this.allCases.get(key);
 			}
 		}
 		return laCaseSelectionnee;
 	}
 	
 	
-	public HashMap<Integer, HashMap<Integer, Case>> getAllCases() {
+	public HashMap<String, Case> getAllCases() {
 		return allCases;
 	}
 
-	public void setAllCases(HashMap<Integer, HashMap<Integer, Case>> allCases) {
+	public void setAllCases(HashMap<String, Case> allCases) {
 		this.allCases = allCases;
 	}
 

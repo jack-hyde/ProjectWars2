@@ -4,12 +4,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-public class Debug {
-	
-	public Debug()
-	{
-		
-	}
+public abstract class Debug {
+
 	
 	public static void afficheHashMap(HashMap map)
 	{
