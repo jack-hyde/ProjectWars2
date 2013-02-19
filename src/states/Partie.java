@@ -41,6 +41,7 @@ public class Partie extends BasicGameState {
 	private int selectionY;
 	private int caseX;
 	private int caseY;
+	private int i = 0;
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	
@@ -143,12 +144,14 @@ public class Partie extends BasicGameState {
 			g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 160);
 		}	
 		drawAllUnits(); //Affichage des unitŽs	
+		g.drawString("temps"+this.i, 10, 200);
 	}
 
 	
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException {
+		i++;
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
 		
