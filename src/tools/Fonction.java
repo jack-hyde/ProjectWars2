@@ -12,7 +12,7 @@ public abstract class Fonction {
     	{
     		for(int y=0; y< yMax; y++)
         	{
-    			if(x <= caseX+rayon && x >= caseX-rayon && y <= caseY+rayon && y >= caseY-rayon)
+    			if(x <= caseX+rayon && x >= caseX-rayon && y <= caseY+rayon && y >= caseY-rayon && Math.abs(x-caseX)+Math.abs(y-caseY) <= rayon)
     			{
     				coordValides.add(x+":"+y);
     			}

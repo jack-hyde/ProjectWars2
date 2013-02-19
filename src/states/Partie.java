@@ -67,6 +67,8 @@ public class Partie extends BasicGameState {
 		this.joueur = new Joueur("Jacky");
 		this.adversaire = new Joueur("Tarlouze");
 		this.map  = new Map("images/map/map3.tmx");
+		
+		
 
 		this.mapWidth = map.getWidth() * map.getTileWidth();
 	    this.mapHeight = map.getHeight() * map.getTileHeight();

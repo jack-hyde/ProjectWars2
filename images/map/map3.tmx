@@ -5,56 +5,67 @@
   <tile id="0">
    <properties>
     <property name="defense" value="0"/>
+    <property name="type" value="route"/>
    </properties>
   </tile>
   <tile id="1">
    <properties>
     <property name="defense" value="0"/>
+    <property name="type" value="route"/>
    </properties>
   </tile>
   <tile id="2">
    <properties>
     <property name="defense" value="0"/>
+    <property name="type" value="route"/>
    </properties>
   </tile>
   <tile id="3">
    <properties>
     <property name="defense" value="4"/>
+    <property name="type" value="montagne"/>
    </properties>
   </tile>
   <tile id="4">
    <properties>
     <property name="defense" value="3"/>
+    <property name="type" value="usine"/>
    </properties>
   </tile>
   <tile id="5">
    <properties>
     <property name="defense" value="3"/>
+    <property name="type" value="batiment"/>
    </properties>
   </tile>
   <tile id="10">
    <properties>
     <property name="defense" value="0"/>
+    <property name="type" value="route"/>
    </properties>
   </tile>
   <tile id="13">
    <properties>
     <property name="defense" value="2"/>
+    <property name="type" value="foret"/>
    </properties>
   </tile>
   <tile id="14">
    <properties>
     <property name="defense" value="1"/>
+    <property name="type" value="plaine"/>
    </properties>
   </tile>
   <tile id="20">
    <properties>
     <property name="defense" value="0"/>
+    <property name="type" value="route"/>
    </properties>
   </tile>
   <tile id="21">
    <properties>
     <property name="defense" value="0"/>
+    <property name="type" value="route"/>
    </properties>
   </tile>
  </tileset>

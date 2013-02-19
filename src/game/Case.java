@@ -1,18 +1,37 @@
 package game;
 
-public class Case {
+public abstract class Case {
 
-	private int defense;
-	private int x;
-	private int y;
+	protected int defense;
+	protected int attaque;
+	protected boolean estOccupe;
+	protected String typeJoueur;
+
+	protected int x;
+	protected int y;
 	
-	public Case(int defense, int x, int y)
-	{
-		this.defense = defense;
-		this.x = x;
-		this.y = y;
-	}
+	public abstract void methode();
+	public abstract void special();
 
+	public String getTypeJoueur() {
+		return typeJoueur;
+	}
+	public void setTypeJoueur(String typeJoueur) {
+		this.typeJoueur = typeJoueur;
+	}
+	
+	public int getAttaque() {
+		return attaque;
+	}
+	public void setAttaque(int attaque) {
+		this.attaque = attaque;
+	}
+	public boolean isEstOccupe() {
+		return estOccupe;
+	}
+	public void setEstOccupe(boolean estOccupe) {
+		this.estOccupe = estOccupe;
+	}
 	public int getDefense() {
 		return defense;
 	}

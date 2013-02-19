@@ -4,19 +4,15 @@ import java.util.Iterator;
 import java.util.Set;
 
 
-public class Debug {
-	
-	public Debug()
-	{
-		
-	}
+public abstract class Debug {
+
 	
 	public static void afficheHashMap(HashMap map)
 	{
 		// Afficher le contenu du MAP
-		Set listKeys=map.keySet();  // Obtenir la liste des clés
+		Set listKeys=map.keySet();  // Obtenir la liste des clï¿½s
 		Iterator iterateur=listKeys.iterator();
-		// Parcourir les clés et afficher les entrées de chaque clé;
+		// Parcourir les clï¿½s et afficher les entrï¿½es de chaque clï¿½;
 		while(iterateur.hasNext())
 		{
 			Object key= iterateur.next();
