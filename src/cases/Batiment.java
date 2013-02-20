@@ -8,7 +8,7 @@ public class Batiment extends Case{
 	{
 		this.x = x;
 		this.y = y;
-		this.typeCase = "Batiment";
+		this.typeCase = "batiment";
 		this.defense = 50;
 		this.attaque = 20;
 		

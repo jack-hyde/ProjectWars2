@@ -10,10 +10,20 @@ public abstract class Unite {
 	protected int attaque;
 	protected int valeur;
 	protected int rayonDeplacement;
+	protected String nomEquipe;
 	
+
 	public abstract void deplacement(int x, int y); //m�thode de d�placement abstraite
 	
 	public abstract void drawImage();
+	
+	public String getNomEquipe() {
+		return nomEquipe;
+	}
+
+	public void setNomEquipe(String nomEquipe) {
+		this.nomEquipe = nomEquipe;
+	}
 	
 	public int getRayonDeplacement() {
 		return rayonDeplacement;
