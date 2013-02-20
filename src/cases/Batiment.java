@@ -8,8 +8,10 @@ public class Batiment extends Case{
 	{
 		this.x = x;
 		this.y = y;
+		this.typeCase = "Batiment";
 		this.defense = 50;
 		this.attaque = 20;
+		
 	}
 	
 	public Batiment(int x, int y, int defense, int attaque)

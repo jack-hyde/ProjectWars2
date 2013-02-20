@@ -3,11 +3,8 @@ package game;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
-
-import tools.Debug;
 
 import cases.*;
 
@@ -35,8 +32,7 @@ public class Map extends TiledMap{
 				String strType = "";
 				if (id != 0)
 				{ 
-					strType = this.getTileProperty(id, "type", ""); //on r�cup�re la valeur de la d�fense de la case (en String)
-					
+					strType = this.getTileProperty(id, "type", ""); //on r�cup�re la valeur de la d�fense de la case (en String)				
 				}
 				coord = x+":"+y;
 				if(strType.equals("route"))
@@ -68,10 +64,7 @@ public class Map extends TiledMap{
 				{
 					this.allCases.put(coord, laCase); //puis on ajoute le tout dans notre tableau complet
 				}
-			}
-			
-			
-			
+			}	
 		}
 		
 		//Debug.afficheHashMap(this.allCases);
@@ -90,8 +83,7 @@ public class Map extends TiledMap{
 			int y = Integer.parseInt(str[1]);
 			
 			if(xSelect == x && ySelect == y)
-			{
-				
+			{		
 				laCaseSelectionnee = this.allCases.get(key);
 			}
 		}
@@ -100,7 +92,7 @@ public class Map extends TiledMap{
 	
 	
 	public HashMap<String, Case> getAllCases() {
-		return allCases;
+		return this.allCases;
 	}
 
 	public void setAllCases(HashMap<String, Case> allCases) {

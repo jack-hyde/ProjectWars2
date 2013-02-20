@@ -8,6 +8,7 @@ public class Route extends Case{
 	{
 		this.x = x;
 		this.y = y;
+		this.typeCase = "route";
 		this.defense = 0;
 		this.attaque = 50;
 	}

@@ -8,6 +8,7 @@ public class Usine extends Case{
 	{
 		this.x = x;
 		this.y = y;
+		this.typeCase = "usine";
 		this.defense = 50;
 		this.attaque = 20;
 	}

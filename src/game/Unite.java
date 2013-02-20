@@ -1,39 +1,32 @@
 package game;
 
-
 public abstract class Unite {
 
+	protected int caseX;
+	protected int caseY;
+	protected String name;
+	protected int vie;
 	protected int defense;
 	protected int attaque;
 	protected int valeur;
-	protected int vie;	
-	protected int caseX;
-	protected int caseY;
-	
-	protected String name;
-	
 	protected int rayonDeplacement;
+	
+	public abstract void deplacement(int x, int y); //mï¿½thode de dï¿½placement abstraite
+	
+	public abstract void drawImage();
 	
 	public int getRayonDeplacement() {
 		return rayonDeplacement;
 	}
-
 	public void setRayonDeplacement(int rayonDeplacement) {
 		this.rayonDeplacement = rayonDeplacement;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public abstract void deplacement(int x, int y); //mŽthode de dŽplacement abstraite
-	
-	public abstract void drawImage();
-	
 	public int getDefense() {
 		return defense;
 	}
@@ -58,7 +51,6 @@ public abstract class Unite {
 	public void setVie(int vie) {
 		this.vie = vie;
 	}
-	
 	public int getCaseX() {
 		return caseX;
 	}

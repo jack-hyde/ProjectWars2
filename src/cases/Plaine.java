@@ -8,6 +8,7 @@ public class Plaine extends Case{
 	{
 		this.x = x;
 		this.y = y;
+		this.typeCase = "plaine";
 		this.defense = 20;
 		this.attaque = 50;
 	}
