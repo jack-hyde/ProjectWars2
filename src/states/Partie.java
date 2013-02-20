@@ -243,7 +243,7 @@ public class Partie extends BasicGameState {
         			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
         			int rayon = unite.getRayonDeplacement();
         			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
-        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon);
+        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon, this.map);
         			isSelect = true;
         		}
         	}
@@ -274,7 +274,7 @@ public class Partie extends BasicGameState {
         		{
         			this.uniteSelection = unite;
         			int rayon = unite.getRayonDeplacement();
-        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon);
+        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon, this.map);
         			isSelect = true;
         		}
         	}
