@@ -41,7 +41,6 @@ public class Partie extends BasicGameState {
 	private int selectionY;
 	private int caseX;
 	private int caseY;
-	private int i = 0;
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	
@@ -49,6 +48,7 @@ public class Partie extends BasicGameState {
 	
 	private ArrayList<Unite> al_unites;
 	private Unite uniteSelection;
+	private Unite uniteAdversaireSelection;
     
 	public Partie(int id) throws SlickException
 	{
@@ -76,21 +76,33 @@ public class Partie extends BasicGameState {
 	    
 	    this.entree_clavier =  new Entree(container);
 	    
-	    //CrŽation des 2 tanks
+	    //Initialisation des unités du joueur
 	    Unite tank1 = new Tank(2, 3);
 	    Unite tank2 = new Tank(1, 2);
 	    Unite sniper1 = new Sniper(10,3);
 	    Unite sniper2 = new Sniper(10, 4);
-
-	    //Ajout des 2 tanks dans un arraylist pour les "stocker" dans l'objet Partie
+	    //Insertion des unités du joueur dans son tableau d'unite
+	    this.joueur.addUnite(tank1);
+	    this.joueur.addUnite(tank2);
+	    this.joueur.addUnite(sniper1);
+	    this.joueur.addUnite(sniper2);
+	    
+	    //Initialisation des unités de l'adversaire
+	    Unite tankAdversaire = new Tank(15, 3);
+	    Unite sniperAdversaire = new Sniper(15, 4);
+	  //Insertion des unités de l'adversaire dans son tableau d'unite
+	    this.adversaire.addUnite(tankAdversaire);
+	    this.adversaire.addUnite(sniperAdversaire);
+	    
+	    //Ajout de toutes les unités dans un tableau global pour que la partie puisse connaitre toutes les unites
 	    this.al_unites = new ArrayList<Unite>();
 	    this.al_unites.add(tank1);
 	    this.al_unites.add(tank2);
 	    this.al_unites.add(sniper1);
 	    this.al_unites.add(sniper2);
+	    this.al_unites.add(tankAdversaire);
+	    this.al_unites.add(sniperAdversaire);
 	    
-	    //Affichage de l'attaque du tank1
-	    System.out.println("Attaque tank : "+tank1.getAttaque());
 	}
 	
 
@@ -127,10 +139,17 @@ public class Partie extends BasicGameState {
 		g.drawString("case X "+this.caseX, 10, 100);
 		g.drawString("case Y "+this.caseY, 10, 120);
 		
+		
+		if(this.caseSelection != null)
+		{
+			g.drawString("Coef Defense de la case :"+this.caseSelection.getDefense(), 10, 140);
+			g.drawString("Coef Attaque de la case :"+this.caseSelection.getAttaque(), 10, 160);
+		}	
+		
 		if(this.uniteSelection != null)
 		{
 			//Debug.afficheHashMap(this.casesPosibiliteDeplacement);
-			g.drawString("Nom unité : "+this.uniteSelection.getName(), 10, 140);
+			g.drawString("MON UNITE : "+this.uniteSelection.getName()+" [AT:"+this.uniteSelection.getAttaque()+"|DEF:"+this.uniteSelection.getDefense()+"]", 10, 180);
 			
 			for(String s : this.casesPosibiliteDeplacement)
 			{
@@ -141,19 +160,18 @@ public class Partie extends BasicGameState {
 				g2.fillRect(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
 			}
 		}		
-		if(this.caseSelection != null)
+		if(this.uniteAdversaireSelection != null)
 		{
-			g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 160);
-		}	
+			g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 10, 200);
+		}
+		
 		drawAllUnits(); //Affichage des unitŽs	
-		g.drawString("temps"+this.i, 10, 200);
 	}
 
 	
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
 			throws SlickException {
-		i++;
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
 		
@@ -209,6 +227,7 @@ public class Partie extends BasicGameState {
                     	this.caseSelection = this.map.recupUneCase(x, y);
                     	if(this.caseSelection != null)
                     	{
+                    		this.uniteAdversaireSelection = null; //raz du l'unité adversaire selectionné
                     		boolean isSelect = checkUniteEtDeplacement();
                     		//Si aucune unitŽ n'est sŽlectionnŽ, on vide les possibilitŽs de dŽplacement
                     		if(isSelect == false)
@@ -231,11 +250,11 @@ public class Partie extends BasicGameState {
 	{
 		//Si on a dŽjˆ une unitŽ de sŽlectionnŽ, on peut la deplacer...
 		
-		boolean isSelect = false;
+		boolean isSelect = false; //variable qui va permettre de voir si une unité DU JOUEUR est sélectionné
 		if(this.uniteSelection != null)
 		{
 			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
-			for(Unite unite : this.al_unites) //On boucle sur toutes les unites de notre partie
+			for(Unite unite : this.joueur.getAl_unitesDuJoueur())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -247,7 +266,19 @@ public class Partie extends BasicGameState {
         			isSelect = true;
         		}
         	}
-			if(uniteSurLaCase == false) //Si il n'y a pas d'unite sur la case, on deplace l'unite
+			if(uniteSurLaCase == false) //Si aucune unité du joueur n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
+			{
+				for(Unite unite : this.adversaire.getAl_unitesDuJoueur())
+	        	{
+	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+	        		{
+	        			this.uniteAdversaireSelection = unite;
+	        			uniteSurLaCase = true;
+	        		}
+	        	}
+			}
+			
+			if(uniteSurLaCase == false) //Si il n'y a pas d'unite du joueur ni de l'adversaire sur la case, on deplace l'unite
 			{
 				for(String s : this.casesPosibiliteDeplacement) //on parcourt toutes les possibilites de deplacement
 				{
@@ -268,7 +299,9 @@ public class Partie extends BasicGameState {
 		}
 		else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
 		{
-			for(Unite unite : this.al_unites)
+			//Première boucle pour voir si il y a une unité appartenant au joueur sur cette case
+			boolean uniteAuJoueur = false;
+			for(Unite unite : this.joueur.getAl_unitesDuJoueur())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -276,8 +309,19 @@ public class Partie extends BasicGameState {
         			int rayon = unite.getRayonDeplacement();
         			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon);
         			isSelect = true;
+        			uniteAuJoueur = true;
         		}
         	}
+			if(uniteAuJoueur == false) //Si l'unité n'appartient pas au joueur, on va simplement récupérer les informations de cette unité
+			{
+				for(Unite unite : this.adversaire.getAl_unitesDuJoueur())
+	        	{
+	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+	        		{
+	        			this.uniteAdversaireSelection = unite;
+	        		}
+	        	}
+			}
 		}		
 		return isSelect;	
 	}
