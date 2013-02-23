@@ -4,7 +4,7 @@ import game.Unite;
 
 public class Tank extends Unite {
 
-	public Tank(int caseX, int caseY)
+	public Tank(int caseX, int caseY, String nomEquipe)
 	{		
 		this.attaque = 500;
 		this.defense = 350;
@@ -14,9 +14,10 @@ public class Tank extends Unite {
 		this.caseY=caseY;
 		this.name="Tank";
 		this.rayonDeplacement= 5;
+		this.nomEquipe = nomEquipe;
 	}
 	
-	public Tank(int attaque, int defense, int valeur, int vie, String name, int rayonDeplacement, int caseX, int caseY)
+	public Tank(int attaque, int defense, int valeur, int vie, String name, int rayonDeplacement, int caseX, int caseY, String nomEquipe)
 	{
 		this.attaque = attaque;
 		this.defense = defense;
@@ -26,6 +27,7 @@ public class Tank extends Unite {
 		this.caseY=caseY;
 		this.name=name;
 		this.rayonDeplacement = rayonDeplacement;
+		this.nomEquipe = nomEquipe;
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import game.Unite;
 
 public class Sniper extends Unite{
 
-	public Sniper(int caseX, int caseY)
+	public Sniper(int caseX, int caseY, String nomEquipe)
 	{	
 		this.caseX=caseX;
 		this.caseY=caseY;
@@ -14,9 +14,10 @@ public class Sniper extends Unite{
 		this.defense = 50;
 		this.valeur = 10;
 		this.rayonDeplacement = 2;
+		this.nomEquipe = nomEquipe;
 	}
 	
-	public Sniper(int attaque, int defense, int valeur, int vie, String name, int rayonDeplacement, int caseX, int caseY)
+	public Sniper(int attaque, int defense, int valeur, int vie, String name, int rayonDeplacement, int caseX, int caseY, String nomEquipe)
 	{
 		this.caseX=caseX;
 		this.caseY=caseY;
@@ -26,6 +27,7 @@ public class Sniper extends Unite{
 		this.defense = defense;
 		this.valeur = valeur;
 		this.rayonDeplacement = rayonDeplacement;
+		this.nomEquipe = nomEquipe;
 	}
 
 	@Override

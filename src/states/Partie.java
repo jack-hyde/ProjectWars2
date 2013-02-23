@@ -1,8 +1,10 @@
 package states;
 
+import game.Equipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -24,8 +26,8 @@ public class Partie extends BasicGameState {
 
 	private int stateID;
 
-	private Joueur joueur;
-	private Joueur adversaire;
+	private Equipe joueur;
+	private Equipe adversaire;
 	private Map map;
 	private GameContainer container;
 	private int mapWidth;
@@ -63,8 +65,8 @@ public class Partie extends BasicGameState {
 	//Fonction qui permet d'initialiser la carte au moment où on entre dans ce gamestate
 	public void enter(GameContainer container, StateBasedGame game) throws SlickException 
 	{
-		this.joueur = new Joueur("Jacky");
-		this.adversaire = new Joueur("Tarlouze");
+		this.joueur = new Equipe("Jacky");
+		this.adversaire = new Equipe("la tarlouze");
 		this.map  = new Map("images/map/map3.tmx");
 
 		this.mapWidth = map.getWidth() * map.getTileWidth();
@@ -73,10 +75,10 @@ public class Partie extends BasicGameState {
 	    this.entree_clavier =  new Entree(container);
 	    
 	    //Initialisation des unités du joueur
-	    Unite tank1 = new Tank(15, 10);
-	    Unite tank2 = new Tank(1, 2);
-	    Unite sniper1 = new Sniper(10,3);
-	    Unite sniper2 = new Sniper(10, 4);
+	    Unite tank1 = new Tank(2, 3, this.joueur.getNomEquipe());
+	    Unite tank2 = new Tank(1, 2, this.joueur.getNomEquipe());
+	    Unite sniper1 = new Sniper(10,3, this.joueur.getNomEquipe());
+	    Unite sniper2 = new Sniper(10, 4, this.joueur.getNomEquipe());
 	    //Insertion des unités du joueur dans son tableau d'unite
 	    this.joueur.addUnite(tank1);
 	    this.joueur.addUnite(tank2);
@@ -84,8 +86,8 @@ public class Partie extends BasicGameState {
 	    this.joueur.addUnite(sniper2);
 	    
 	    //Initialisation des unités de l'adversaire
-	    Unite tankAdversaire = new Tank(15, 3);
-	    Unite sniperAdversaire = new Sniper(15, 4);
+	    Unite tankAdversaire = new Tank(15, 3, this.adversaire.getNomEquipe());
+	    Unite sniperAdversaire = new Sniper(15, 4, this.adversaire.getNomEquipe());
 	    
 	    //Insertion des unités de l'adversaire dans son tableau d'unite
 	    this.adversaire.addUnite(tankAdversaire);
@@ -99,6 +101,8 @@ public class Partie extends BasicGameState {
 	    this.al_unites.add(sniper2);
 	    this.al_unites.add(tankAdversaire);
 	    this.al_unites.add(sniperAdversaire);
+	    this.majDesCasesOccupes();
+	    
 	}	
 
 	@Override
@@ -271,7 +275,7 @@ public class Partie extends BasicGameState {
 		if(this.uniteSelection != null)
 		{
 			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
-			for(Unite unite : this.joueur.getAl_unitesDuJoueur())
+			for(Unite unite : this.joueur.getAl_unitesEquipe())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -285,7 +289,7 @@ public class Partie extends BasicGameState {
         	}
 			if(uniteSurLaCase == false) //Si aucune unité du joueur n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
 			{
-				for(Unite unite : this.adversaire.getAl_unitesDuJoueur())
+				for(Unite unite : this.adversaire.getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
@@ -305,6 +309,7 @@ public class Partie extends BasicGameState {
 					if(this.caseX == x && this.caseY == y) //Si la case sur laquelle on a cliquer correspond a l'une des valeur, on peut deplacer
 					{
 						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
 						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 						isSelect = true;
 						//this.uniteSelection = null;
@@ -318,7 +323,7 @@ public class Partie extends BasicGameState {
 		{
 			//Première boucle pour voir si il y a une unité appartenant au joueur sur cette case
 			boolean uniteAuJoueur = false;
-			for(Unite unite : this.joueur.getAl_unitesDuJoueur())
+			for(Unite unite : this.joueur.getAl_unitesEquipe())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -331,7 +336,7 @@ public class Partie extends BasicGameState {
         	}
 			if(uniteAuJoueur == false) //Si l'unité n'appartient pas au joueur, on va simplement récupérer les informations de cette unité
 			{
-				for(Unite unite : this.adversaire.getAl_unitesDuJoueur())
+				for(Unite unite : this.adversaire.getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
@@ -431,22 +436,32 @@ public class Partie extends BasicGameState {
 		}
 	}
 
-	public Joueur getJoueur() {
-		return joueur;
-	}
+	public void majDesCasesOccupes()
+	{
+		for(Entry<String, Case> entry : this.map.getAllCases().entrySet()) //parcourt de toutes les cases de la map
+		{
+			String key = entry.getKey();
+			Case laCase = entry.getValue();
+			
+			String str[] = key.split(":");
+			int x = Integer.parseInt(str[0]);
+			int y = Integer.parseInt(str[1]);
+			
+			laCase.setEstOccupe(false); //on dit que la case n'est pas occupé avant de faire le test (raz)
+			
+			for(Unite unite : this.al_unites) //on parcourt les unités et s'il y en a une présente sur une case on récupère le nom de l'équipe
+			{
+				if(unite.getCaseX() == x && unite.getCaseY() == y)
+				{
+					laCase.setEstOccupe(true);
+					laCase.setEquipe(unite.getNomEquipe());
+					System.out.println("La case "+laCase.getX()+":"+laCase.getY()+" est occupée par "+unite.getNomEquipe());
+				}
 
-	public void setJoueur(Joueur joueur) {
-		this.joueur = joueur;
+			}
+			
+		}
 	}
-
-	public Joueur getAdversaire() {
-		return adversaire;
-	}
-
-	public void setAdversaire(Joueur adversaire) {
-		this.adversaire = adversaire;
-	}
-	
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
