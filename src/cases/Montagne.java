@@ -8,6 +8,7 @@ public class Montagne extends Case{
 	{
 		this.x = x;
 		this.y = y;
+		this.typeCase = "montagne";
 		this.defense = 70;
 		this.attaque = 40;
 	}

@@ -1,24 +1,19 @@
 package states;
 
-import game.Case;
-import game.Joueur;
-import game.Map;
-import game.Unite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-
+import game.Case;
+import game.Joueur;
+import game.Map;
+import game.Unite;
 import tools.Constantes;
-import tools.Debug;
 import tools.Entree;
 import tools.Fonction;
 import unites.*;
@@ -41,8 +36,10 @@ public class Partie extends BasicGameState {
 	private int selectionY;
 	private int caseX;
 	private int caseY;
+	private boolean afficherMenu;
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
+	private ArrayList<String> casesChemin = new ArrayList<String>();
 	
 	private Entree entree_clavier;
 	
@@ -60,6 +57,7 @@ public class Partie extends BasicGameState {
 		this.selectionY = 0;
 		this.caseX = -1;
 		this.caseY = -1;
+		this.afficherMenu = true;
 	}
 
 	//Fonction qui permet d'initialiser la carte au moment où on entre dans ce gamestate
@@ -68,8 +66,6 @@ public class Partie extends BasicGameState {
 		this.joueur = new Joueur("Jacky");
 		this.adversaire = new Joueur("Tarlouze");
 		this.map  = new Map("images/map/map3.tmx");
-		
-		
 
 		this.mapWidth = map.getWidth() * map.getTileWidth();
 	    this.mapHeight = map.getHeight() * map.getTileHeight();
@@ -77,7 +73,7 @@ public class Partie extends BasicGameState {
 	    this.entree_clavier =  new Entree(container);
 	    
 	    //Initialisation des unités du joueur
-	    Unite tank1 = new Tank(2, 3);
+	    Unite tank1 = new Tank(15, 10);
 	    Unite tank2 = new Tank(1, 2);
 	    Unite sniper1 = new Sniper(10,3);
 	    Unite sniper2 = new Sniper(10, 4);
@@ -90,7 +86,8 @@ public class Partie extends BasicGameState {
 	    //Initialisation des unités de l'adversaire
 	    Unite tankAdversaire = new Tank(15, 3);
 	    Unite sniperAdversaire = new Sniper(15, 4);
-	  //Insertion des unités de l'adversaire dans son tableau d'unite
+	    
+	    //Insertion des unités de l'adversaire dans son tableau d'unite
 	    this.adversaire.addUnite(tankAdversaire);
 	    this.adversaire.addUnite(sniperAdversaire);
 	    
@@ -102,9 +99,7 @@ public class Partie extends BasicGameState {
 	    this.al_unites.add(sniper2);
 	    this.al_unites.add(tankAdversaire);
 	    this.al_unites.add(sniperAdversaire);
-	    
-	}
-	
+	}	
 
 	@Override
 	public void init(GameContainer container, StateBasedGame game)
@@ -118,12 +113,16 @@ public class Partie extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		
-		this.map.render(this.screenX,this.screenY); //render(int x, int y, int sx, int sy, int width, int height)  a faire pour eviter de charger toute la carte meme les parties que l'on ne voit pas
+		this.map.render(this.screenX,this.screenY); //render(int x, int y, int sx, int sy, int width, int height)  a faire pour eviter de charger toute la carte meme les parties que l'on ne voit pas a faire aussi pour tout ce qu'il y a dans render
 		
 		Graphics g2 = new Graphics();
+		Graphics g3 = new Graphics();
 		Color blanct = new Color(255,255,255,100);
-		Color blanct2 = new Color(255,255,255,50);
+		Color blanct2 = new Color(84,152,235,150);
+		Color orange = new Color(255,128,64,255);
+		Color red = new Color(255,0,0,255);
 		g2.setColor(blanct);
+		g3.setColor(red);
 		
 		//affiche le carré de selection
 		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight());
@@ -134,23 +133,11 @@ public class Partie extends BasicGameState {
 		//valeurs
 		g.drawString("screenX "+this.screenX, 10, 60);
 		g.drawString("screenY "+this.screenY, 10, 80);
-		
-		//case selectionné
-		g.drawString("case X "+this.caseX, 10, 100);
-		g.drawString("case Y "+this.caseY, 10, 120);
-		
-		
-		if(this.caseSelection != null)
-		{
-			g.drawString("Coef Defense de la case :"+this.caseSelection.getDefense(), 10, 140);
-			g.drawString("Coef Attaque de la case :"+this.caseSelection.getAttaque(), 10, 160);
-		}	
+			
 		
 		if(this.uniteSelection != null)
 		{
 			//Debug.afficheHashMap(this.casesPosibiliteDeplacement);
-			g.drawString("MON UNITE : "+this.uniteSelection.getName()+" [AT:"+this.uniteSelection.getAttaque()+"|DEF:"+this.uniteSelection.getDefense()+"]", 10, 180);
-			
 			for(String s : this.casesPosibiliteDeplacement)
 			{
 				String str[] = s.split(":");
@@ -159,15 +146,43 @@ public class Partie extends BasicGameState {
 				g2.setColor(blanct2);
 				g2.fillRect(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
 			}
+			for(String s : this.casesChemin)
+			{
+				String str[] = s.split(":");
+				int x = Integer.parseInt(str[0]);
+				int y = Integer.parseInt(str[1]);
+				g3.fillRect(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth()/2, this.map.getTileHeight()/2);
+			}
+			
 		}		
-		if(this.uniteAdversaireSelection != null)
-		{
-			g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 10, 200);
-		}
 		
 		drawAllUnits(); //Affichage des unitŽs	
+		
+		if(afficherMenu) //un appuis sur E affiche le menu
+	    {
+	    	g2.setColor(orange);
+	    	g2.fillRect(0, container.getHeight() - 100 , 1300, 100);
+	    	g.drawString("case X "+this.caseX, 10, 710);
+			g.drawString("case Y "+this.caseY, 10, 725);
+			if(this.caseSelection != null)
+			{
+				g.drawString("Type de la case :"+this.caseSelection.getTypeCase(), 10, 740);
+				g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 755);
+				g.drawString("Attaque de la case :"+this.caseSelection.getAttaque(), 10, 770);
+				
+			}
+			if(this.uniteSelection != null)
+			{
+				g.drawString("MON UNITE : "+this.uniteSelection.getName()+" [AT:"+this.uniteSelection.getAttaque()+"|DEF:"+this.uniteSelection.getDefense()+"]", 300, 710);
+				g.drawString(""+uniteSelection.getCaseX(),100,100);
+			}
+			if(this.uniteAdversaireSelection != null)
+			{
+				g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 300, 710);
+			}
+			
+	    }
 	}
-
 	
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
@@ -176,9 +191,16 @@ public class Partie extends BasicGameState {
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
 		
 		this.scroll(touches);
-    	this.afficherCasePointer(touches);	
-	}
-	
+    	this.afficherCasePointer(touches);
+    	/*if(this.uniteSelection != null)
+		{
+    		afficherChemin();
+		}
+    	else
+    	{
+    		casesChemin.clear();
+    	}*/
+	}	
 	
 	//fonction d'affichage des unitŽs (en private car elle ne peut pas etre appelŽ ailleur)
 	//Il faudra virer le g.fillRect et utiliser la fonction drawImage (prŽsente dans chaque unitŽ) pour afficher l'image de l'unitŽ
@@ -204,8 +226,7 @@ public class Partie extends BasicGameState {
 				g2.fillRect(placementX * this.map.getTileWidth() + this.screenX + 15, placementY * this.map.getTileHeight() + this.screenY +15, this.map.getTileWidth()-30, this.map.getTileHeight()-30);
 			}
 		}
-	}
-		
+	}		
 		
 	public void afficherCasePointer(HashMap<String, Integer> touches)
 	{
@@ -234,17 +255,13 @@ public class Partie extends BasicGameState {
                     		{
                     			this.casesPosibiliteDeplacement.clear();
                     			this.uniteSelection = null;
-                    		}
-                    		
-                    		System.out.println("La case selectionnée ["+this.caseSelection.getX()+","+this.caseSelection.getY()+"] => DEFENSE : "+this.caseSelection.getDefense());
-                    			
+                    		}	
                     	}                   	
                 	}
             	}
         	}
     	}
 	}
-
 	
 	private boolean checkUniteEtDeplacement()
 	{
@@ -262,7 +279,7 @@ public class Partie extends BasicGameState {
         			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
         			int rayon = unite.getRayonDeplacement();
         			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
-        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon, this.map);
+        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.map);
         			isSelect = true;
         		}
         	}
@@ -307,7 +324,7 @@ public class Partie extends BasicGameState {
         		{
         			this.uniteSelection = unite;
         			int rayon = unite.getRayonDeplacement();
-        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, this.map.getWidth(), this.map.getHeight(), rayon, this.map);
+        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.map);
         			isSelect = true;
         			uniteAuJoueur = true;
         		}
@@ -324,6 +341,51 @@ public class Partie extends BasicGameState {
 			}
 		}		
 		return isSelect;	
+	}
+	
+	public void afficherChemin() //affiche le chemin pris ne marche pas totalement
+	{
+		int rayon = this.uniteSelection.getRayonDeplacement();
+		int xOld = this.uniteSelection.getCaseX();
+		int yOld = this.uniteSelection.getCaseY();
+
+		for(String s : this.casesPosibiliteDeplacement)
+		{
+			String str[] = s.split(":");
+			int x = Integer.parseInt(str[0]);
+			int y = Integer.parseInt(str[1]);
+
+			if(entree_clavier.moa(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
+			{	
+				if(rayon == this.uniteSelection.getRayonDeplacement())
+				{
+					if(Math.abs(this.uniteSelection.getCaseX()) - Math.abs(x) == 0 || Math.abs(this.uniteSelection.getCaseY()) - Math.abs(y) == 0)
+					{
+						casesChemin.add(x+":"+y);
+						xOld = this.uniteSelection.getCaseX();
+						yOld = this.uniteSelection.getCaseY();
+					}	
+					rayon--;
+				}
+				else
+				{
+					if(rayon > 0)
+					{
+						if(Math.abs(xOld) - Math.abs(x) == 0 || Math.abs(yOld) - Math.abs(y) == 0)
+						{
+							casesChemin.add(x+":"+y);
+							xOld = x;
+							yOld = y;
+						}	
+					}
+					rayon--;
+				}		
+			}
+			if(entree_clavier.moa(this.uniteSelection.getCaseX() * this.map.getTileWidth() + this.screenX, this.uniteSelection.getCaseY() * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
+			{
+				casesChemin.clear();
+			}
+    	}
 	}
 	
 	public void scroll(HashMap<String, Integer> touches)
@@ -355,6 +417,17 @@ public class Partie extends BasicGameState {
 				this.screenX = -this.mapWidth + container.getWidth();
 			else
 				this.screenX = this.screenX-Constantes.SCROLL_SPEED;
+		}
+		if(touches.get("E") == 1)//appuis sur E
+		{
+			if(afficherMenu)
+			{
+				afficherMenu = false;
+			}
+			else
+			{
+				afficherMenu = true;
+			}
 		}
 	}
 
