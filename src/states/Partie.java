@@ -12,7 +12,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import game.Case;
-import game.Joueur;
 import game.Map;
 import game.Unite;
 import tools.Constantes;
@@ -175,7 +174,7 @@ public class Partie extends BasicGameState {
 				g.drawString("Attaque de la case :"+this.caseSelection.getAttaque(), 10, 770);
 				
 			}
-			if(this.uniteSelection != null)
+			/*if(this.uniteSelection != null)
 			{
 				g.drawString("MON UNITE : "+this.uniteSelection.getName()+" [AT:"+this.uniteSelection.getAttaque()+"|DEF:"+this.uniteSelection.getDefense()+"]", 300, 710);
 				g.drawString(""+uniteSelection.getCaseX(),100,100);
@@ -183,7 +182,7 @@ public class Partie extends BasicGameState {
 			if(this.uniteAdversaireSelection != null)
 			{
 				g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 300, 710);
-			}
+			}*/
 			
 	    }
 	}
@@ -196,14 +195,14 @@ public class Partie extends BasicGameState {
 		
 		this.scroll(touches);
     	this.afficherCasePointer(touches);
-    	/*if(this.uniteSelection != null)
+    	if(this.uniteSelection != null)
 		{
     		afficherChemin();
 		}
     	else
     	{
     		casesChemin.clear();
-    	}*/
+    	}
 	}	
 	
 	//fonction d'affichage des unitŽs (en private car elle ne peut pas etre appelŽ ailleur)
