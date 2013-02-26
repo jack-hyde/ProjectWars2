@@ -2,6 +2,8 @@ package states;
 
 import game.Equipe;
 
+import ihm.IHMBas;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -12,7 +14,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import game.Case;
-import game.Joueur;
 import game.Map;
 import game.Unite;
 import tools.Constantes;
@@ -48,6 +49,8 @@ public class Partie extends BasicGameState {
 	private ArrayList<Unite> al_unites;
 	private Unite uniteSelection;
 	private Unite uniteAdversaireSelection;
+	
+	private IHMBas ihmBas;
     
 	public Partie(int id) throws SlickException
 	{
@@ -73,6 +76,8 @@ public class Partie extends BasicGameState {
 	    this.mapHeight = map.getHeight() * map.getTileHeight();
 	    
 	    this.entree_clavier =  new Entree(container);
+	    
+	    this.ihmBas = new IHMBas(container);
 	    
 	    //Initialisation des unités du joueur
 	    Unite tank1 = new Tank(2, 3, this.joueur.getNomEquipe());
@@ -119,14 +124,11 @@ public class Partie extends BasicGameState {
 		
 		this.map.render(this.screenX,this.screenY); //render(int x, int y, int sx, int sy, int width, int height)  a faire pour eviter de charger toute la carte meme les parties que l'on ne voit pas a faire aussi pour tout ce qu'il y a dans render
 		
-		Graphics g2 = new Graphics();
+		
 		Graphics g3 = new Graphics();
-		Color blanct = new Color(255,255,255,100);
-		Color blanct2 = new Color(84,152,235,150);
-		Color orange = new Color(255,128,64,255);
-		Color red = new Color(255,0,0,255);
-		g2.setColor(blanct);
-		g3.setColor(red);
+		Graphics g2 = new Graphics();
+		g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT);
+		g3.setColor(Constantes.COLOR_ROUGE);
 		
 		//affiche le carré de selection
 		g.drawRect(this.selectionX, this.selectionY,  this.map.getTileWidth(), this.map.getTileHeight());
@@ -147,7 +149,7 @@ public class Partie extends BasicGameState {
 				String str[] = s.split(":");
 				int x = Integer.parseInt(str[0]);
 				int y = Integer.parseInt(str[1]);
-				g2.setColor(blanct2);
+				g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT_2);
 				g2.fillRect(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight());
 			}
 			for(String s : this.casesChemin)
@@ -161,31 +163,8 @@ public class Partie extends BasicGameState {
 		}		
 		
 		drawAllUnits(); //Affichage des unitŽs	
+		this.ihmBas.majIHM(g, this.afficherMenu, this.caseX, this.caseY, this.caseSelection, this.uniteSelection, this.uniteAdversaireSelection);
 		
-		if(afficherMenu) //un appuis sur E affiche le menu
-	    {
-	    	g2.setColor(orange);
-	    	g2.fillRect(0, container.getHeight() - 100 , 1300, 100);
-	    	g.drawString("case X "+this.caseX, 10, 710);
-			g.drawString("case Y "+this.caseY, 10, 725);
-			if(this.caseSelection != null)
-			{
-				g.drawString("Type de la case :"+this.caseSelection.getTypeCase(), 10, 740);
-				g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 755);
-				g.drawString("Attaque de la case :"+this.caseSelection.getAttaque(), 10, 770);
-				
-			}
-			if(this.uniteSelection != null)
-			{
-				g.drawString("MON UNITE : "+this.uniteSelection.getName()+" [AT:"+this.uniteSelection.getAttaque()+"|DEF:"+this.uniteSelection.getDefense()+"]", 300, 710);
-				g.drawString(""+uniteSelection.getCaseX(),100,100);
-			}
-			if(this.uniteAdversaireSelection != null)
-			{
-				g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 300, 710);
-			}
-			
-	    }
 	}
 	
 	@Override
@@ -301,21 +280,12 @@ public class Partie extends BasicGameState {
 			
 			if(uniteSurLaCase == false) //Si il n'y a pas d'unite du joueur ni de l'adversaire sur la case, on deplace l'unite
 			{
-				for(String s : this.casesPosibiliteDeplacement) //on parcourt toutes les possibilites de deplacement
+				if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 				{
-					String str[] = s.split(":"); //on split car l'enregistrement des possibilite est comme ca : X:Y
-					int x = Integer.parseInt(str[0]); //on rŽcup�re la valeur x et y
-					int y = Integer.parseInt(str[1]);
-					if(this.caseX == x && this.caseY == y) //Si la case sur laquelle on a cliquer correspond a l'une des valeur, on peut deplacer
-					{
 						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
 						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
 						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 						isSelect = true;
-						//this.uniteSelection = null;
-						
-						break; //on sort de la boucle
-					}
 				}
 			}
 		}
@@ -425,13 +395,13 @@ public class Partie extends BasicGameState {
 		}
 		if(touches.get("E") == 1)//appuis sur E
 		{
-			if(afficherMenu)
+			if(this.afficherMenu)
 			{
-				afficherMenu = false;
+				this.afficherMenu = false;
 			}
 			else
 			{
-				afficherMenu = true;
+				this.afficherMenu = true;
 			}
 		}
 	}
