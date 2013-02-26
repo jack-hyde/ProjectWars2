@@ -3,6 +3,8 @@ package tools;
 import game.Map;
 import java.util.ArrayList;
 
+import org.newdawn.slick.Color;
+
 public abstract class Fonction {
 	//depart X / Y case sur laquelle est l'unité a deplacer, rayon son rayon de deplacement, map pour recuperer le type de la case et si il y a une unité sur cette case
 	//il faut aussi passer en parametre l'unité que l'on deplace
@@ -27,12 +29,9 @@ public abstract class Fonction {
 							cheminX = departX + x1;
 							cheminY = departY + y1;
 							boolean existe = false;
-							for(String s : coordValides)
+							if(coordValides.contains(cheminX+":"+cheminY))
 							{
-								if(s.equals(cheminX+":"+cheminY))
-								{
-									existe = true;
-								}  
+								existe = true;
 							}
 							if(existe == false)
 							{
@@ -68,12 +67,9 @@ public abstract class Fonction {
 								int cheminX2 = cheminX + x;
 								int cheminY2 = cheminY + y;
 								boolean existe = false;
-								for(String s : coordValides)
+								if(coordValides.contains(cheminX2+":"+cheminY2))
 								{
-									if(s.equals(cheminX2+":"+cheminY2))
-									{
-										existe = true;
-									}  
+									existe = true;
 								}
 								if(existe == false)
 								{
@@ -88,4 +84,5 @@ public abstract class Fonction {
 		}	
 		return coordValides;
 	}
+
 }

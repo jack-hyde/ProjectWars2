@@ -165,10 +165,33 @@ public class Partie extends BasicGameState {
 		drawAllUnits(); //Affichage des unitŽs	
 		this.ihmBas.majIHM(g, this.afficherMenu, this.caseX, this.caseY, this.caseSelection, this.uniteSelection, this.uniteAdversaireSelection);
 		
-			/*if(this.uniteSelection != null)
-			if(this.uniteSelection != null)
-			}*/
+<<<<<<< HEAD
+		if(afficherMenu) //un appuis sur E affiche le menu
+	    {
+	    	g2.setColor(orange);
+	    	g2.fillRect(0, container.getHeight() - 100 , 1300, 100);
+	    	g.drawString("case X "+this.caseX, 10, 710);
+			g.drawString("case Y "+this.caseY, 10, 725);
+			if(this.caseSelection != null)
+			{
+				g.drawString("Type de la case :"+this.caseSelection.getTypeCase(), 10, 740);
+				g.drawString("Defense de la case :"+this.caseSelection.getDefense(), 10, 755);
+				g.drawString("Attaque de la case :"+this.caseSelection.getAttaque(), 10, 770);
+				
 			}
+			/*if(this.uniteSelection != null)
+			{
+				g.drawString("MON UNITE : "+this.uniteSelection.getName()+" [AT:"+this.uniteSelection.getAttaque()+"|DEF:"+this.uniteSelection.getDefense()+"]", 300, 710);
+				g.drawString(""+uniteSelection.getCaseX(),100,100);
+			}
+			if(this.uniteAdversaireSelection != null)
+			{
+				g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 300, 710);
+			}*/
+			
+	    }
+=======
+>>>>>>> fe8903f6d90338dcb12c002aa89d02e1cbc1f5c4
 	}
 	
 	@Override

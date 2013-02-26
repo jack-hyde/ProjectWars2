@@ -2,6 +2,7 @@ package game;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
@@ -73,20 +74,8 @@ public class Map extends TiledMap{
 	public Case recupUneCase(int xSelect, int ySelect)
 	{
 		Case laCaseSelectionnee = null;
-		Set listKeys=this.allCases.keySet();
-		Iterator iterateur=listKeys.iterator();
-		while(iterateur.hasNext())
-		{
-			String key= (String) iterateur.next();
-			String str[] = key.split(":"); //on split car l'enregistrement des possibilite est comme ca : X:Y
-			int x = Integer.parseInt(str[0]); //on rŽcup�re la valeur x et y
-			int y = Integer.parseInt(str[1]);
-			
-			if(xSelect == x && ySelect == y)
-			{		
-				laCaseSelectionnee = this.allCases.get(key);
-			}
-		}
+		laCaseSelectionnee = this.allCases.get(xSelect+":"+ySelect);
+		
 		return laCaseSelectionnee;
 	}
 	
