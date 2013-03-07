@@ -29,7 +29,6 @@ public class Map extends TiledMap{
 			{
 				int id = this.getTileId(x, y, 0); //on r�cup�re l'id, uniquement pour voir s'il existe bien un tile
 				//System.out.println("id : "+id+" x : "+x+" y: "+y);
-				
 				String strType = "";
 				if (id != 0)
 				{ 

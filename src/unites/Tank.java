@@ -4,6 +4,18 @@ import game.Unite;
 
 public class Tank extends Unite {
 
+	public Tank()
+	{		
+		this.attaque = 500;
+		this.defense = 350;
+		this.valeur = 80;
+		this.vie = 700;
+		this.caseX=-1;
+		this.caseY=-1;
+		this.name="Tank";
+		this.rayonDeplacement= 5;
+	}
+	
 	public Tank(int caseX, int caseY, String nomEquipe)
 	{		
 		this.attaque = 500;

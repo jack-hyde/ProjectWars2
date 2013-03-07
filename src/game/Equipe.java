@@ -7,11 +7,21 @@ public class Equipe {
 	private int nbUnite;
 	private String nomEquipe;
 	private ArrayList<Unite> al_unitesEquipe;
+	private boolean ia;
 	
-	public Equipe(String nomEquipe)
+	public Equipe(String nomEquipe, boolean ia)
 	{
 		this.nomEquipe = nomEquipe;
 		this.al_unitesEquipe = new ArrayList<Unite>();
+		this.ia = ia;
+	}
+
+	public boolean isIa() {
+		return ia;
+	}
+
+	public void setIa(boolean ia) {
+		this.ia = ia;
 	}
 
 	public void addUnite(Unite unite)

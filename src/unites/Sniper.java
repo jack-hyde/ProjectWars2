@@ -4,6 +4,18 @@ import game.Unite;
 
 public class Sniper extends Unite{
 
+	public Sniper()
+	{	
+		this.caseX=-1;
+		this.caseY=-1;
+		this.name="Sniper";
+		this.vie = 20;
+		this.attaque = 100;
+		this.defense = 50;
+		this.valeur = 10;
+		this.rayonDeplacement = 2;
+	}
+	
 	public Sniper(int caseX, int caseY, String nomEquipe)
 	{	
 		this.caseX=caseX;

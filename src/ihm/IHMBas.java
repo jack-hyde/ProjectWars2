@@ -1,16 +1,23 @@
 package ihm;
 
 import game.Case;
+import game.Deploiement;
 import game.Unite;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.gui.AbstractComponent;
+import org.newdawn.slick.gui.ComponentListener;
+import org.newdawn.slick.gui.MouseOverArea;
 
+import states.Partie;
 import tools.Constantes;
 
 
-public class IHMBas{  
+public class IHMBas implements ComponentListener {  
 	  
 	private int caseX;
 	private int caseY;
@@ -23,6 +30,8 @@ public class IHMBas{
 	private Graphics g;
 	private Graphics g2;
 	private GameContainer container;
+	
+	private MouseOverArea deploiement; 
 	
 	public IHMBas(GameContainer c) throws SlickException {
 		
@@ -40,6 +49,10 @@ public class IHMBas{
 		this.g = new Graphics();
 		this.g2 = new Graphics();
 		
+		this.deploiement = new MouseOverArea(c, new Image("images/deploiement.png"), 1090, 700, this);   
+		this.deploiement.setNormalColor(new Color(1,1,1,0.8f)); 
+		this.deploiement.setMouseOverColor(new Color(1,1,1,0.9f));
+		
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -48,6 +61,7 @@ public class IHMBas{
 		
 		if(this.viewIHM)
 		{
+			
 			this.g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT_2);
 			
 			this.g2.setColor(Constantes.COLOR_ORANGE);
@@ -71,6 +85,8 @@ public class IHMBas{
 			{
 				this.g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 300, 710);
 			}
+			
+			this.deploiement.render(this.container, this.g);	
 		}
 	}
 
@@ -85,6 +101,17 @@ public class IHMBas{
 		this.g = g;
 		
 		this.drawIHM();
+	}
+	
+	@Override
+	public void componentActivated(AbstractComponent source) {
+		// TODO Auto-generated method stub
+		if(source.equals(this.deploiement))  
+		{
+			
+			Partie.setPhaseDeJeu(Constantes.PHASE_DEPLOIEMENT); 
+			Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM);
+		}
 	}
 	
 	public int getCaseX() {
@@ -134,6 +161,8 @@ public class IHMBas{
 	public void setUniteAdversaireSelection(Unite uniteAdversaireSelection) {
 		this.uniteAdversaireSelection = uniteAdversaireSelection;
 	}
+
+	
 
 
 
