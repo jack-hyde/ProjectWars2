@@ -164,12 +164,8 @@ public class Partie extends BasicGameState {
 		
 		drawAllUnits(); //Affichage des unitŽs	
 		this.ihmBas.majIHM(g, this.afficherMenu, this.caseX, this.caseY, this.caseSelection, this.uniteSelection, this.uniteAdversaireSelection);
-		
-			/*if(this.uniteSelection != null)
-			if(this.uniteSelection != null)
-			}*/
-			}
 	}
+	
 	
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int arg2)
@@ -325,46 +321,55 @@ public class Partie extends BasicGameState {
 	public void afficherChemin() //affiche le chemin pris ne marche pas totalement
 	{
 		int rayon = this.uniteSelection.getRayonDeplacement();
-		int xOld = this.uniteSelection.getCaseX();
-		int yOld = this.uniteSelection.getCaseY();
-
-		for(String s : this.casesPosibiliteDeplacement)
+		int cheminX = this.uniteSelection.getCaseX();
+		int cheminY = this.uniteSelection.getCaseY();
+		boolean endFor = false;
+		
+		if(this.casesChemin.size() != 0)// si un case chemin est en cours on le recupere
 		{
-			String str[] = s.split(":");
-			int x = Integer.parseInt(str[0]);
-			int y = Integer.parseInt(str[1]);
-
-			if(entree_clavier.moa(x * this.map.getTileWidth() + this.screenX, y * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
-			{	
-				if(rayon == this.uniteSelection.getRayonDeplacement())
-				{
-					if(Math.abs(this.uniteSelection.getCaseX()) - Math.abs(x) == 0 || Math.abs(this.uniteSelection.getCaseY()) - Math.abs(y) == 0)
-					{
-						casesChemin.add(x+":"+y);
-						xOld = this.uniteSelection.getCaseX();
-						yOld = this.uniteSelection.getCaseY();
-					}	
-					rayon--;
-				}
-				else
-				{
-					if(rayon > 0)
-					{
-						if(Math.abs(xOld) - Math.abs(x) == 0 || Math.abs(yOld) - Math.abs(y) == 0)
-						{
-							casesChemin.add(x+":"+y);
-							xOld = x;
-							yOld = y;
-						}	
-					}
-					rayon--;
-				}		
-			}
-			if(entree_clavier.moa(this.uniteSelection.getCaseX() * this.map.getTileWidth() + this.screenX, this.uniteSelection.getCaseY() * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
+			rayon = rayon - this.casesChemin.size();// on recupere aussi le nombre de deplacement restant
+			for(String s : this.casesChemin)
 			{
-				casesChemin.clear();
+				String str[] = s.split(":");
+				cheminX = Integer.parseInt(str[0]);
+				cheminY = Integer.parseInt(str[1]);
 			}
-    	}
+		}
+		if(rayon != 0)//si == 0 on ne peut pas aller plus loin
+		{
+			for(int x = -1; x<2; x++)// teste les cases autour
+			{
+				for(int y = -1; y<2; y++)
+				{
+					if(Math.abs(x) != Math.abs(y) && Math.abs(x) + Math.abs(y) != 0)//pour enlever les cases en diagonal et la case central
+					{
+						int cheminXbis = cheminX + x;
+						int cheminYbis = cheminY + y;
+						for(String s : this.casesPosibiliteDeplacement)
+						{
+							String str[] = s.split(":");
+							if(cheminXbis == Integer.parseInt(str[0]) && cheminYbis == Integer.parseInt(str[1]))
+							{	
+								if(entree_clavier.moa(cheminXbis * this.map.getTileWidth() + this.screenX, cheminYbis * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
+								{
+									this.casesChemin.add(cheminXbis+":"+cheminYbis);
+									//this.casesPosibiliteDeplacement.clear();
+									//this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(cheminXbis, cheminYbis, rayon - 1, this.map);
+									endFor = true;
+								}
+							}
+							if(endFor)break;
+						}
+					}
+					if(endFor)break;
+				}
+				if(endFor)break;
+			}
+		}
+		if(entree_clavier.moa(this.uniteSelection.getCaseX() * this.map.getTileWidth() + this.screenX, this.uniteSelection.getCaseY() * this.map.getTileHeight() + this.screenY, this.map.getTileWidth(), this.map.getTileHeight()))
+		{
+			this.casesChemin.clear();
+		}
 	}
 	
 	public void scroll(HashMap<String, Integer> touches)
