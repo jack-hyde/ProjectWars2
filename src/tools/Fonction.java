@@ -3,8 +3,6 @@ package tools;
 import game.Map;
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
-
 public abstract class Fonction {
 	//depart X / Y case sur laquelle est l'unité a deplacer, rayon son rayon de deplacement, map pour recuperer le type de la case et si il y a une unité sur cette case
 	//il faut aussi passer en parametre l'unité que l'on deplace

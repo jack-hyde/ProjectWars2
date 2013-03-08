@@ -1,8 +1,9 @@
 package ihm;
 
 import game.Case;
-import game.Deploiement;
 import game.Unite;
+
+import model.DeploiementModel;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -110,7 +111,7 @@ public class IHMBas implements ComponentListener {
 		{
 			
 			Partie.setPhaseDeJeu(Constantes.PHASE_DEPLOIEMENT); 
-			Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM);
+			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM);
 		}
 	}
 	

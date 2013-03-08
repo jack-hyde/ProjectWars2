@@ -1,30 +1,27 @@
 package states;
 
+import java.util.HashMap;
+
 import game.Equipe;
 
-import ihm.IHMBas;
+import model.BatailleIAModel;
+import model.BatailleModel;
+import model.DeploiementIAModel;
+import model.DeploiementModel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import game.Bataille;
-import game.BatailleIA;
-import game.Case;
-import game.Deploiement;
-import game.DeploiementIA;
 import game.Map;
-import game.Unite;
 import tools.Constantes;
 import tools.Entree;
-import tools.Fonction;
-import unites.*;
+import view.BatailleIAView;
+import view.BatailleView;
+import view.DeploiementIAView;
+import view.DeploiementView;
 
 
 
@@ -41,19 +38,20 @@ public class Partie extends BasicGameState {
 	private int screenX;
 	private int screenY;
 
-	
 	private Entree entree_clavier;
-
-	
 	
 	private static int phaseDeJeu;
 	private Equipe equipeEnCours;
 	
-	private Deploiement deploiementJ1;
-	private DeploiementIA deploiementIA;
+	private DeploiementModel modelDeploiementJ1;
+	private DeploiementIAModel modelDeploiementIA;
+	private BatailleModel modelBatailleJ1;
+	private BatailleIAModel modelBatailleIA;
 	
-	private Bataille batailleJ1;
-	private BatailleIA batailleIA;
+	private BatailleView viewBatailleJ1;
+	private BatailleIAView viewBatailleIA;
+	private DeploiementView viewDeploiementJ1;
+	private DeploiementIAView viewDeploiementIA;
 	
 	public Partie(int id) throws SlickException
 	{
@@ -79,15 +77,21 @@ public class Partie extends BasicGameState {
 	    
 	    
 	    
-	    this.deploiementJ1 = new Deploiement(this.j1, this);
-	    //Créer un déploiement IA. Si on veut jouer à 2 joueurs on créera un autre fichier "Partie". 
-	    //On va ensuite mettre un if dans render() et update() en fonction de si c'est au tour de l'ia ou pas. Peut etre ajouter le "equipe en cours" en variable de classe
-	    this.deploiementIA = new DeploiementIA(this.ia, this);
+	    this.modelDeploiementJ1 = new DeploiementModel(this);
+	    this.modelDeploiementIA = new DeploiementIAModel(this);
+	    this.modelBatailleIA = new BatailleIAModel(this);
+	    this.modelBatailleJ1 = new BatailleModel(this);
+	    
+	    this.viewDeploiementJ1 = new DeploiementView(this.modelDeploiementJ1, container.getGraphics());
+	    this.viewDeploiementIA = new DeploiementIAView(this.modelDeploiementIA, container.getGraphics());
+	    this.viewBatailleIA = new BatailleIAView(this.modelBatailleIA, container.getGraphics());
+	    this.viewBatailleJ1 = new BatailleView(this.modelBatailleJ1, container.getGraphics());
+	   
 
-	    this.equipeEnCours = this.j1; //le J1 commence
+	    this.equipeEnCours = this.j1; //le J1 commence, peut etre que cette variable sera inutile pour la suite
 	    
 	    Partie.phaseDeJeu = Constantes.PHASE_DEPLOIEMENT;
-	    Deploiement.phaseDeDeploiement = Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM;
+	    DeploiementModel.phaseDeDeploiement = Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM;
 	    
 	}	
 
@@ -116,9 +120,7 @@ public class Partie extends BasicGameState {
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
 	    			
-	    			DeploiementIA deploiement = this.deploiementIA;
-	    			
-	    			switch(Deploiement.phaseDeDeploiement)
+	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
 	    				case Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS: 
 	    					//fonctions possibles si on veut afficher quelque chose pendant la phase de deploiement de l'ia...
@@ -129,7 +131,6 @@ public class Partie extends BasicGameState {
 	    			}
 	    		
 	    		case Constantes.PHASE_BATAILLE : 
-	    			BatailleIA bataille = this.batailleIA;
 	    			
 	    			break;
 	    		default : break;
@@ -143,31 +144,29 @@ public class Partie extends BasicGameState {
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
-	    			Deploiement deploiement = this.deploiementJ1;
-	    			deploiement.afficherIHMBas(g);
+	    			this.viewDeploiementJ1.afficherIHMBas();
 	    			
-	    			switch(Deploiement.phaseDeDeploiement)
+	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
 	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM : 
-	    					deploiement.drawAllUnits();
-	    					deploiement.getIhmDeploiementUnite().render(); 
+	    					this.viewDeploiementJ1.drawAllUnits();
+	    					this.viewDeploiementJ1.afficherIHMDeploiementUnite(); 
 	    					
 	    					break;
 	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE : 
-	    					deploiement.render(g);
-	    					deploiement.drawAllUnits();
+	    					this.viewDeploiementJ1.render();
+	    					this.viewDeploiementJ1.drawAllUnits();
 	    					break;
 	    					
 	    				default : break;
 	    			}
 	    		
 	    		case Constantes.PHASE_BATAILLE :
-	    			Bataille bataille = this.batailleJ1;
-	    				switch(Bataille.phaseDeBataille)
+	    				switch(BatailleModel.phaseDeBataille)
 	    				{
 	    					case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
-	    						bataille.render(g);
+	    						this.viewBatailleJ1.render();
 	    				}
 	    			break;
 	    		default : break;
@@ -192,27 +191,25 @@ public class Partie extends BasicGameState {
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
-	    			DeploiementIA deploiement = this.deploiementIA;
 	    			
-	    			switch(Deploiement.phaseDeDeploiement)
+	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
 	    				case Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS: 
 	    					//ici les fonctions qui serviront à faire le deploiement de l'ia
 	    					
 	    					//On ajoute les unités du joueur et de l'ia dans notre tableau qui regroupe toutes les unités
 	    					
-	    					//Création des objets pour lancer la bataille
-	    					this.batailleIA = new BatailleIA(this.j1, this.ia, this);
-	    				    this.batailleJ1 = new Bataille(this.j1, this.ia, this);
-	    				    
+	    					//On ajoute toutes les unités dans nos models de bataille
+	    					this.modelBatailleIA.addAllUnites();
+	    					this.modelBatailleJ1.addAllUnites();
+	    					
 	    					Partie.setPhaseDeJeu(Constantes.PHASE_BATAILLE);
-	    					Bataille.setPhaseDeBataille(Constantes.PHASE_BATAILLE_DEPLACEMENT);
+	    					BatailleModel.setPhaseDeBataille(Constantes.PHASE_BATAILLE_DEPLACEMENT);
 	    					this.setEquipeEnCours(this.j1);
 	    					break;
 	    				
 	    				
 	    				case Constantes.PHASE_BATAILLE : 
-	    					BatailleIA bataille = this.batailleIA;
 	    					break;
 	    				default : break;
 	    			}
@@ -228,23 +225,22 @@ public class Partie extends BasicGameState {
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
 	    			
-	    			Deploiement deploiement = this.deploiementJ1;
-	    			deploiement.checkTouches(touches);
-	    			switch(Deploiement.phaseDeDeploiement)
+	    			this.modelDeploiementJ1.checkTouches(touches);
+	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
 	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM : 
 	    					scroll(touches);
 	    					break;
 	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE :
-	    					deploiement.placerUnite(touches); 
+	    					this.modelDeploiementJ1.placerUnite(touches); 
 	    					
 	    					scroll(touches);
 	    					break;
 
 	    				case Constantes.PHASE_DEPLOIEMENT_TERMINER : //la phase de déploiement pour le joueur est terminé, on va maintenant lancé le deploiement de l'IA automatiquement
 	    					this.equipeEnCours = this.ia;
-	    					Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS);
+	    					DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS);
 	    					break;
 	    					
 	    				default : break;
@@ -252,14 +248,13 @@ public class Partie extends BasicGameState {
 	    			
 	    		case Constantes.PHASE_BATAILLE : 
 	    			
-	    			Bataille bataille = this.batailleJ1;
 	    			
-	    			switch(Bataille.phaseDeBataille)
+	    			switch(BatailleModel.phaseDeBataille)
 	    			{
 	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
 	    					scroll(touches);
-	    					bataille.checkTouches(touches);
-	    					bataille.afficherCasePointer(touches);
+	    					this.modelBatailleJ1.checkTouches(touches);
+	    					this.modelBatailleJ1.afficherCasePointer(touches);
 	    					break;
 	    					
 	    				default : break;
@@ -411,16 +406,6 @@ public class Partie extends BasicGameState {
 		this.entree_clavier = entree_clavier;
 	}
 
-	
-
-	public Deploiement getDeploiementJ1() {
-		return deploiementJ1;
-	}
-
-	public void setDeploiementJ1(Deploiement deploiementJ1) {
-		this.deploiementJ1 = deploiementJ1;
-	}
-
 
 	public Equipe getEquipeEnCours() {
 		return equipeEnCours;
@@ -428,14 +413,6 @@ public class Partie extends BasicGameState {
 
 	public void setEquipeEnCours(Equipe equipeEnCours) {
 		this.equipeEnCours = equipeEnCours;
-	}
-
-	public DeploiementIA getDeploiementIA() {
-		return deploiementIA;
-	}
-
-	public void setDeploiementIA(DeploiementIA deploiementJ2) {
-		this.deploiementIA = deploiementJ2;
 	}
 
 	public static int getPhaseDeJeu() {

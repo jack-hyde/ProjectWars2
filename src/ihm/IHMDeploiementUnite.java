@@ -1,14 +1,12 @@
 package ihm;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import game.Case;
-import game.Deploiement;
 import game.Unite;
 
-import org.newdawn.slick.Color;
+import model.DeploiementModel;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -17,7 +15,6 @@ import org.newdawn.slick.gui.AbstractComponent;
 import org.newdawn.slick.gui.ComponentListener;
 import org.newdawn.slick.gui.MouseOverArea;
 
-import states.Partie;
 import tools.Constantes;
 
 
@@ -25,7 +22,7 @@ public class IHMDeploiementUnite implements ComponentListener {
 	 
 	private Graphics g;
 	
-	private Deploiement deploiement;
+	private DeploiementModel deploiement;
 	private GameContainer container;
 	
 	private HashMap<MouseOverArea, Unite> allMouseOverArea;
@@ -33,7 +30,7 @@ public class IHMDeploiementUnite implements ComponentListener {
 	
 	private MouseOverArea button_Start;
 	
-	public IHMDeploiementUnite(GameContainer c, Deploiement deploiement) throws SlickException {
+	public IHMDeploiementUnite(GameContainer c, DeploiementModel deploiement) throws SlickException {
 
 		this.container = c;
 		this.deploiement = deploiement;
@@ -109,7 +106,7 @@ public class IHMDeploiementUnite implements ComponentListener {
 		
 		if(source.equals(this.button_Start))  
 		{
-			Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_TERMINER);
+			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_TERMINER);
 
 		}
 		else
@@ -118,7 +115,7 @@ public class IHMDeploiementUnite implements ComponentListener {
 			
 			this.deploiement.setUniteSelect(unite_select);
 			this.deploiement.setValeur(this.deploiement.getValeur()+unite_select.getValeur());
-			Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE);
+			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE);
 			
 			this.flagRAZ = true; //on leve le flag qui va permettre de remettre à zero les unités possibles (créer de nouveaux objets) et également les mouseOverArea
 	

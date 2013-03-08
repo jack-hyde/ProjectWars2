@@ -78,7 +78,7 @@ public class MenuOption {
 		this.fDroite.draw(750,530);
 		
 		
-		//affiche la barre selectionné
+		//affiche la barre selectionnï¿½
 		switch(this.selection){
     	case 1 :
     		this.barre2.draw(200,130);
@@ -106,7 +106,7 @@ public class MenuOption {
     	}
     	
     	
-    	//affiche la fleche selectionné
+    	//affiche la fleche selectionnï¿½
 		switch(this.fleche){
     	case 1 :
     		this.fGaucheRed.draw(500,130);

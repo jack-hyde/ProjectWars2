@@ -1,33 +1,21 @@
-package game;
+package model;
 
-import ihm.IHMBas;
+import game.Case;
+import game.Unite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 import states.Partie;
-import tools.Constantes;
 import tools.Entree;
 import tools.Fonction;
 
-public class Bataille {
-
-	private Equipe j1;
-	private Equipe ia;
-	private Partie partie;
-	private GameContainer container;
-	public static int phaseDeBataille;
+public class BatailleModel extends PhaseModel{
 	
-	private int selectionX;
-	private int selectionY;
-	private int caseX;
-	private int caseY;
+	public static int phaseDeBataille;
 	
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
@@ -37,34 +25,26 @@ public class Bataille {
 	private Unite uniteSelection;
 	private Unite uniteJ2Selection;
 
-	private IHMBas ihmBas;
-	private boolean viewIHMBas;
+
 	
-	public Bataille(Equipe j1, Equipe ia, Partie partie) throws SlickException
+	public BatailleModel(Partie partie) throws SlickException
 	{
-		this.partie = partie;
-		this.container = partie.getContainer();
-		this.j1 = j1;
-		this.ia = ia;
-		this.selectionX = 0;
-		this.selectionY = 0;
-		this.caseX = -1;
-		this.caseY = -1;
-		
-		this.viewIHMBas = true;
-		this.ihmBas = new IHMBas(this.container);
+		super(partie);
 		
 		this.al_unites = new ArrayList<Unite>(); //où seront stockés l'ensembles des unités présentes sur la carte
 		
-		for(Unite unite : this.j1.getAl_unitesEquipe())
+	}
+	
+	public void addAllUnites()
+	{
+		for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
 		{
 			this.al_unites.add(unite);
 		}
-		for(Unite unite : this.ia.getAl_unitesEquipe())
+		for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
 		{
 			this.al_unites.add(unite);
 		}
-		
 	}
 
 	public void afficherCasePointer(HashMap<String, Integer> touches)
@@ -116,7 +96,7 @@ public class Bataille {
 		if(this.uniteSelection != null)
 		{
 			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
-			for(Unite unite : this.j1.getAl_unitesEquipe())
+			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -130,7 +110,7 @@ public class Bataille {
         	}
 			if(uniteSurLaCase == false) //Si aucune unité du j1 n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
 			{
-				for(Unite unite : this.ia.getAl_unitesEquipe())
+				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
@@ -155,7 +135,7 @@ public class Bataille {
 		{
 			//Première boucle pour voir si il y a une unité appartenant au j1 sur cette case
 			boolean uniteAuj1 = false;
-			for(Unite unite : this.j1.getAl_unitesEquipe())
+			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -168,7 +148,7 @@ public class Bataille {
         	}
 			if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
 			{
-				for(Unite unite : this.ia.getAl_unitesEquipe())
+				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
@@ -259,93 +239,12 @@ public class Bataille {
 				{
 					laCase.setEstOccupe(true);
 					laCase.setEquipe(unite.getNomEquipe());
-					System.out.println("La case "+laCase.getX()+":"+laCase.getY()+" est occupée par "+unite.getNomEquipe());
 				}
 
 			}
 			
 		}
 	}
-	
-	public void render(Graphics g)
-	{
-		int tileWidth = this.partie.getMap().getTileWidth();
-		int tileHeight = this.partie.getMap().getTileHeight();
-		int screenX = this.partie.getScreenX();
-		int screenY = this.partie.getScreenY();
-		
-		Graphics g3 = new Graphics();
-		Graphics g2 = new Graphics();
-		g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT);
-		g3.setColor(Constantes.COLOR_ROUGE);
-		
-		//affiche le carré de selection
-		g.drawRect(this.selectionX, this.selectionY,  tileWidth, tileHeight);
-		
-		//case selectionné blanc transparent
-		g2.fillRect(this.caseX * tileWidth + screenX, this.caseY * tileHeight + screenY, tileWidth, tileHeight);
-				
-		//valeurs
-		g.drawString("screenX "+screenX, 10, 60);
-		g.drawString("screenY "+screenY, 10, 80);
-			
-		
-		if(this.uniteSelection != null)
-		{
-			//Debug.afficheHashMap(this.casesPosibiliteDeplacement);
-			for(String s : this.casesPosibiliteDeplacement)
-			{
-				String str[] = s.split(":");
-				int x = Integer.parseInt(str[0]);
-				int y = Integer.parseInt(str[1]);
-				g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT_2);
-				g2.fillRect(x * tileWidth + screenX, y * tileHeight + screenY, tileWidth, tileHeight);
-			}
-			for(String s : this.casesChemin)
-			{
-				String str[] = s.split(":");
-				int x = Integer.parseInt(str[0]);
-				int y = Integer.parseInt(str[1]);
-				g3.fillRect(x * tileWidth + screenX, y * tileHeight + screenY, tileWidth/2, tileHeight/2);
-			}
-			
-		}		
-		
-		//drawAllUnits(); //Affichage des unitŽs	
-		this.ihmBas.majIHM(g, this.viewIHMBas, this.caseX, this.caseY, this.caseSelection, this.uniteSelection, this.uniteJ2Selection);
-	
-		this.drawAllUnits();
-	
-	}
-	
-	private void drawAllUnits()
-	{
-		int tileWidth = this.partie.getMap().getTileWidth();
-		int tileHeight = this.partie.getMap().getTileHeight();
-		int screenX = this.partie.getScreenX();
-		int screenY = this.partie.getScreenY();
-		
-		Graphics g2 = new Graphics();
-		Color ambre = new Color(173,57,14);
-		Color jaunepisse = new Color(240,195,0);
-		for (Unite unite : this.al_unites) {
-			int placementX = unite.getCaseX();
-			int placementY = unite.getCaseY();
-
-			if(unite.getName() == "Tank")
-			{
-				g2.setColor(ambre);
-
-				g2.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
-			}
-			else if(unite.getName() == "Sniper")
-			{
-				g2.setColor(jaunepisse);
-
-				g2.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
-			}
-		}
-	}		
 	
 	public void checkTouches(HashMap<String, Integer> touches)
 	{
@@ -362,28 +261,61 @@ public class Bataille {
 		}
 	}
 	
-	public Equipe getJ1() {
-		return j1;
-	}
-
-	public void setJ1(Equipe equipe) {
-		this.j1 = equipe;
-	}
-
-	public Partie getPartie() {
-		return partie;
-	}
-
-	public void setPartie(Partie partie) {
-		this.partie = partie;
-	}
-
 	public static int getPhaseDeBataille() {
 		return phaseDeBataille;
 	}
 
 	public static void setPhaseDeBataille(int phaseDeBataille) {
-		Bataille.phaseDeBataille = phaseDeBataille;
+		BatailleModel.phaseDeBataille = phaseDeBataille;
+	}
+
+	public Case getCaseSelection() {
+		return caseSelection;
+	}
+
+	public void setCaseSelection(Case caseSelection) {
+		this.caseSelection = caseSelection;
+	}
+
+	public ArrayList<String> getCasesPosibiliteDeplacement() {
+		return casesPosibiliteDeplacement;
+	}
+
+	public void setCasesPosibiliteDeplacement(
+			ArrayList<String> casesPosibiliteDeplacement) {
+		this.casesPosibiliteDeplacement = casesPosibiliteDeplacement;
+	}
+
+	public ArrayList<String> getCasesChemin() {
+		return casesChemin;
+	}
+
+	public void setCasesChemin(ArrayList<String> casesChemin) {
+		this.casesChemin = casesChemin;
+	}
+
+	public ArrayList<Unite> getAl_unites() {
+		return al_unites;
+	}
+
+	public void setAl_unites(ArrayList<Unite> al_unites) {
+		this.al_unites = al_unites;
+	}
+
+	public Unite getUniteSelection() {
+		return uniteSelection;
+	}
+
+	public void setUniteSelection(Unite uniteSelection) {
+		this.uniteSelection = uniteSelection;
+	}
+
+	public Unite getUniteJ2Selection() {
+		return uniteJ2Selection;
+	}
+
+	public void setUniteJ2Selection(Unite uniteJ2Selection) {
+		this.uniteJ2Selection = uniteJ2Selection;
 	}
 	
 	
