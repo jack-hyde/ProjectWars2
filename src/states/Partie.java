@@ -176,7 +176,7 @@ public class Partie extends BasicGameState {
 	}
 	
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int arg2)
+	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
@@ -224,57 +224,50 @@ public class Partie extends BasicGameState {
 			
 			
 			
-	    	switch(Partie.phaseDeJeu)
-	    	{
-	    		case Constantes.PHASE_DEPLOIEMENT :
-	    			
-	    			Deploiement deploiement = this.deploiementJ1;
-	    			deploiement.checkTouches(touches);
-	    			switch(Deploiement.phaseDeDeploiement)
-	    			{
-	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM : 
-	    					scroll(touches);
-	    					break;
-	    					
-	    				case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE :
-	    					deploiement.placerUnite(touches); 
-	    					
-	    					scroll(touches);
-	    					break;
-
-	    				case Constantes.PHASE_DEPLOIEMENT_TERMINER : //la phase de déploiement pour le joueur est terminé, on va maintenant lancé le deploiement de l'IA automatiquement
-	    					this.equipeEnCours = this.ia;
-	    					Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS);
-	    					break;
-	    					
-	    				default : break;
-	    			}
-	    			
-	    		case Constantes.PHASE_BATAILLE : 
-	    			
-	    			Bataille bataille = this.batailleJ1;
-	    			
-	    			switch(Bataille.phaseDeBataille)
-	    			{
-	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
-	    					scroll(touches);
-	    					bataille.checkTouches(touches);
-	    					bataille.afficherCasePointer(touches);
-	    					break;
-	    					
-	    				default : break;
-	    			}
-	    		default : break;
-	    	}
+			switch(Partie.phaseDeJeu)
+			{
+				case Constantes.PHASE_DEPLOIEMENT :
+	
+					Deploiement deploiement = this.deploiementJ1;
+					deploiement.checkTouches(touches);
+					switch(Deploiement.phaseDeDeploiement)
+					{
+					case Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM : 
+						scroll(touches);
+						break;
+	
+					case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE :
+						deploiement.placerUnite(touches); 
+	
+						scroll(touches);
+						break;
+	
+					case Constantes.PHASE_DEPLOIEMENT_TERMINER : //la phase de déploiement pour le joueur est terminé, on va maintenant lancé le deploiement de l'IA automatiquement
+						this.equipeEnCours = this.ia;
+						Deploiement.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS);
+						break;
+	
+					default : break;
+					}
+	
+				case Constantes.PHASE_BATAILLE : 
+	
+					Bataille bataille = this.batailleJ1;
+	
+					switch(Bataille.phaseDeBataille)
+					{
+					case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
+						scroll(touches);
+						bataille.checkTouchesEtTemps(touches, delta);
+						bataille.afficherCasePointer(touches);
+						bataille.afficherChemin();
+						break;
+	
+					default : break;
+					}
+				default : break;
+			}
 		}
-    	/*if(this.uniteSelection != null)
-		{
-    		afficherChemin();
-		}
-    	else
-    	{
-    		casesChemin.clear();
-    	}*/
 	}	
 	
 	//fonction d'affichage des unitŽs (en private car elle ne peut pas etre appelŽ ailleur)

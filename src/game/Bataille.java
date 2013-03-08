@@ -28,6 +28,7 @@ public class Bataille {
 	private int selectionY;
 	private int caseX;
 	private int caseY;
+	private int delta;
 	
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
@@ -144,7 +145,7 @@ public class Bataille {
 			{
 				if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 				{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+						this.uniteSelection.deplacement(this.caseX, this.caseY, this.casesChemin, this.delta); //deplacement
 						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
 						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 						isSelect = true;
@@ -179,66 +180,69 @@ public class Bataille {
 		}		
 		return isSelect;	
 	}
+	
 	public void afficherChemin() //affiche le chemin pris ne marche pas totalement
 	{
-		int rayon = this.uniteSelection.getRayonDeplacement();
-		int cheminX = this.uniteSelection.getCaseX();
-		int cheminY = this.uniteSelection.getCaseY();
-		boolean endFor = false;
-		
-		int tileWidth = this.partie.getMap().getTileWidth();
-		int tileHeight = this.partie.getMap().getTileHeight();
-		int screenX = this.partie.getScreenX();
-		int screenY = this.partie.getScreenY();
-		Entree entree_clavier = this.partie.getEntree_clavier();
-		
-		if(this.casesChemin.size() != 0)// si un case chemin est en cours on le recupere
+		if(this.uniteSelection != null)
 		{
-			rayon = rayon - this.casesChemin.size();// on recupere aussi le nombre de deplacement restant
-			for(String s : this.casesChemin)
+			int rayon = this.uniteSelection.getRayonDeplacement();
+			int cheminX = this.uniteSelection.getCaseX();
+			int cheminY = this.uniteSelection.getCaseY();
+			boolean endFor = false;
+			
+			int tileWidth = this.partie.getMap().getTileWidth();
+			int tileHeight = this.partie.getMap().getTileHeight();
+			int screenX = this.partie.getScreenX();
+			int screenY = this.partie.getScreenY();
+			Entree entree_clavier = this.partie.getEntree_clavier();
+			
+			if(this.casesChemin.size() != 0)// si un case chemin est en cours on le recupere
 			{
-				String str[] = s.split(":");
-				cheminX = Integer.parseInt(str[0]);
-				cheminY = Integer.parseInt(str[1]);
-			}
-		}
-		if(rayon != 0)//si == 0 on ne peut pas aller plus loin
-		{
-			for(int x = -1; x<2; x++)// teste les cases autour
-			{
-				for(int y = -1; y<2; y++)
+				rayon = rayon - this.casesChemin.size();// on recupere aussi le nombre de deplacement restant
+				for(String s : this.casesChemin)
 				{
-					if(Math.abs(x) != Math.abs(y) && Math.abs(x) + Math.abs(y) != 0)//pour enlever les cases en diagonal et la case central
+					String str[] = s.split(":");
+					cheminX = Integer.parseInt(str[0]);
+					cheminY = Integer.parseInt(str[1]);
+				}
+			}
+			if(rayon != 0)//si == 0 on ne peut pas aller plus loin
+			{
+				for(int x = -1; x<2; x++)// teste les cases autour
+				{
+					for(int y = -1; y<2; y++)
 					{
-						int cheminXbis = cheminX + x;
-						int cheminYbis = cheminY + y;
-						for(String s : this.casesPosibiliteDeplacement)
+						if(Math.abs(x) != Math.abs(y) && Math.abs(x) + Math.abs(y) != 0)//pour enlever les cases en diagonal et la case central
 						{
-							String str[] = s.split(":");
-							if(cheminXbis == Integer.parseInt(str[0]) && cheminYbis == Integer.parseInt(str[1]))
-							{	
-								if(entree_clavier.moa(cheminXbis * tileWidth + screenX, cheminYbis * tileHeight + screenY, tileWidth, tileHeight))
-								{
-									this.casesChemin.add(cheminXbis+":"+cheminYbis);
-									//this.casesPosibiliteDeplacement.clear();
-									//this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(cheminXbis, cheminYbis, rayon - 1, this.map);
-									endFor = true;
+							int cheminXbis = cheminX + x;
+							int cheminYbis = cheminY + y;
+							for(String s : this.casesPosibiliteDeplacement)
+							{
+								String str[] = s.split(":");
+								if(cheminXbis == Integer.parseInt(str[0]) && cheminYbis == Integer.parseInt(str[1]))
+								{	
+									if(entree_clavier.moa(cheminXbis * tileWidth + screenX, cheminYbis * tileHeight + screenY, tileWidth, tileHeight))
+									{
+										this.casesChemin.add(cheminXbis+":"+cheminYbis);
+										//this.casesPosibiliteDeplacement.clear();
+										//this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(cheminXbis, cheminYbis, rayon - 1, this.map);
+										endFor = true;
+									}
 								}
+								if(endFor)break;
 							}
-							if(endFor)break;
 						}
+						if(endFor)break;
 					}
 					if(endFor)break;
 				}
-				if(endFor)break;
+			}
+			if(entree_clavier.moa(this.uniteSelection.getCaseX() * tileWidth + screenX, this.uniteSelection.getCaseY() * tileHeight + screenY, tileWidth, tileHeight))
+			{
+				this.casesChemin.clear();
 			}
 		}
-		if(entree_clavier.moa(this.uniteSelection.getCaseX() * tileWidth + screenX, this.uniteSelection.getCaseY() * tileHeight + screenY, tileWidth, tileHeight))
-		{
-			this.casesChemin.clear();
-		}
 	}
-	
 	
 	public void majDesCasesOccupes()
 	{
@@ -347,8 +351,9 @@ public class Bataille {
 		}
 	}		
 	
-	public void checkTouches(HashMap<String, Integer> touches)
+	public void checkTouchesEtTemps(HashMap<String, Integer> touches, int delta)
 	{
+		this.delta = delta;
 		if(touches.get("E") == 1)//appuis sur E
 		{
 			if(this.viewIHMBas)

@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 public abstract class Unite {
 
 	protected int caseX;
@@ -11,9 +13,38 @@ public abstract class Unite {
 	protected int valeur;
 	protected int rayonDeplacement;
 	protected String nomEquipe;
+	protected int tempsPasse = 0;
 	
+	private static final int DELAY = 1000; // 1 second determine la vitesse de deplacement
+	
+	public boolean deplacement(int x, int y, ArrayList<String> casesChemin, int delta)  //m�thode de d�placement abstraite
+	{
+		 // The time that has passed, reset to 0 after +-1 sec
+		
+		tempsPasse = tempsPasse + delta;
+		System.out.println(tempsPasse);
+		if (tempsPasse >= DELAY) 
+		{
+			for(int i = 0; i < casesChemin.size(); i++)
+			{
+				tempsPasse = 0;
+				String s = casesChemin.get(i);
+				String str[] = s.split(":");
+				x = Integer.parseInt(str[0]);
+				y = Integer.parseInt(str[1]);
+				this.caseX = x;
+				this.caseY = y;
+				return true; //retourne vrai si le deplacement est fini
+			}
+		}
+		return false;
+	}
 
-	public abstract void deplacement(int x, int y); //m�thode de d�placement abstraite
+	
+	public abstract void vuedeplacement(); //m�thode de la vue du d�placement abstraite
+	{
+		
+	}
 	
 	public abstract void drawImage();
 	
