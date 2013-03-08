@@ -175,7 +175,7 @@ public class Partie extends BasicGameState {
 	}
 	
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int arg2)
+	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
@@ -253,7 +253,7 @@ public class Partie extends BasicGameState {
 	    			{
 	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
 	    					scroll(touches);
-	    					this.modelBatailleJ1.checkTouches(touches);
+	    					this.modelBatailleJ1.checkTouchesEtTemps(touches, delta);
 	    					this.modelBatailleJ1.afficherCasePointer(touches);
 	    					break;
 	    					

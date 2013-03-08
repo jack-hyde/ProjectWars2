@@ -124,7 +124,7 @@ public class BatailleModel extends PhaseModel{
 			{
 				if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 				{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+						this.uniteSelection.deplacement(this.caseX, this.caseY, this.casesChemin, this.delta); //deplacement
 						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
 						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 						isSelect = true;
@@ -246,8 +246,9 @@ public class BatailleModel extends PhaseModel{
 		}
 	}
 	
-	public void checkTouches(HashMap<String, Integer> touches)
+	public void checkTouchesEtTemps(HashMap<String, Integer> touches, int delta)
 	{
+		this.delta = delta;
 		if(touches.get("E") == 1)//appuis sur E
 		{
 			if(this.viewIHMBas)
