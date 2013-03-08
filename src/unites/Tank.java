@@ -1,5 +1,7 @@
 package unites;
 
+import java.util.ArrayList;
+
 import game.Unite;
 
 public class Tank extends Unite {
@@ -42,15 +44,15 @@ public class Tank extends Unite {
 		this.nomEquipe = nomEquipe;
 	}
 
-	@Override
-	public void deplacement(int x, int y) {
-		// TODO Auto-generated method stub
-		this.caseX = x;
-		this.caseY = y;
-	}
 	
 	@Override
 	public void drawImage() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void vuedeplacement() {
 		// TODO Auto-generated method stub
 		
 	}
