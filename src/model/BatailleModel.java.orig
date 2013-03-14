@@ -124,10 +124,17 @@ public class BatailleModel extends PhaseModel{
 				
 				if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 				{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+<<<<<<< HEAD
+					if(this.casesChemin.contains(this.caseX+":"+this.caseY))
 					{
 						this.deplacementEnCours = true;
 					}		
+=======
+						this.uniteSelection.deplacement(this.caseX, this.caseY, this.casesChemin, this.delta); //deplacement
+						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
+						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
+						isSelect = true;
+>>>>>>> 1f2425562fe7f935e8b693241b06319cab4eae2d
 				}
 			}
 		}

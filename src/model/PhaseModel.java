@@ -11,6 +11,7 @@ public abstract class PhaseModel {
 	protected int caseX;
 	protected int caseY;
 	protected boolean viewIHMBas; 
+	protected int delta;
 	
 	public PhaseModel(Partie partie)
 	{
@@ -24,6 +25,14 @@ public abstract class PhaseModel {
 
 	public void setViewIHMBas(boolean viewIHMBas) {
 		this.viewIHMBas = viewIHMBas;
+	}
+
+	public int getDelta() {
+		return delta;
+	}
+
+	public void setDelta(int delta) {
+		this.delta = delta;
 	}
 
 	public Partie getPartie() {
