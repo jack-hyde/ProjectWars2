@@ -2,14 +2,12 @@ package model;
 
 import game.Case;
 import game.Unite;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
 import org.newdawn.slick.SlickException;
-
 import states.Partie;
+import tools.Constantes;
 import tools.Entree;
 import tools.Fonction;
 
@@ -20,10 +18,14 @@ public class BatailleModel extends PhaseModel{
 	private Case caseSelection;
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	private ArrayList<String> casesChemin = new ArrayList<String>();
+	private int delta;
 
 	private ArrayList<Unite> al_unites;
 	private Unite uniteSelection;
 	private Unite uniteJ2Selection;
+	private boolean deplacementEnCours;
+	private int deplacement;
+	private int tempsPasse;
 
 
 	
@@ -32,6 +34,9 @@ public class BatailleModel extends PhaseModel{
 		super(partie);
 		
 		this.al_unites = new ArrayList<Unite>(); //où seront stockés l'ensembles des unités présentes sur la carte
+		deplacementEnCours = false;
+		tempsPasse = 0;
+		deplacement = 0;
 		
 	}
 	
@@ -71,17 +76,15 @@ public class BatailleModel extends PhaseModel{
                     	this.caseY = y;
                     	
                     	this.caseSelection = this.partie.getMap().recupUneCase(x, y);
-                    	if(this.caseSelection != null)
+                    	this.uniteJ2Selection = null; //raz du l'unité j2 selectionné
+                    	boolean isSelect = checkUniteEtDeplacement();
+                    	
+                    	//Si aucune unitŽ n'est sŽlectionnŽ, on vide les possibilitŽs de dŽplacement
+                    	if(isSelect == false)
                     	{
-                    		this.uniteJ2Selection = null; //raz du l'unité j2 selectionné
-                    		boolean isSelect = checkUniteEtDeplacement();
-                    		//Si aucune unitŽ n'est sŽlectionnŽ, on vide les possibilitŽs de dŽplacement
-                    		if(isSelect == false)
-                    		{
-                    			this.casesPosibiliteDeplacement.clear();
-                    			this.uniteSelection = null;
-                    		}	
-                    	}                   	
+                    		this.casesPosibiliteDeplacement.clear();
+                    		this.uniteSelection = null;
+                    	}	                  	
                 	}
             	}
         	}
@@ -108,7 +111,7 @@ public class BatailleModel extends PhaseModel{
         			isSelect = true;
         		}
         	}
-			if(uniteSurLaCase == false) //Si aucune unité du j1 n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
+			if(uniteSurLaCase == false) //Si il n'y a pas d'unite du j1 ni de l'j2 sur la case, on deplace l'unite
 			{
 				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
 	        	{
@@ -118,16 +121,13 @@ public class BatailleModel extends PhaseModel{
 	        			uniteSurLaCase = true;
 	        		}
 	        	}
-			}
-			
-			if(uniteSurLaCase == false) //Si il n'y a pas d'unite du j1 ni de l'j2 sur la case, on deplace l'unite
-			{
+				
 				if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 				{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
-						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
-						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
-						isSelect = true;
+					if(this.casesChemin.contains(this.caseX+":"+this.caseY))
+					{
+						this.deplacementEnCours = true;
+					}		
 				}
 			}
 		}
@@ -156,67 +156,122 @@ public class BatailleModel extends PhaseModel{
 	        		}
 	        	}
 			}
-		}		
+		}
+		
+		if(this.deplacementEnCours)
+		{
+			isSelect = true;
+		}
 		return isSelect;	
 	}
-	public void afficherChemin() //affiche le chemin pris ne marche pas totalement
+	
+	
+	public void deplacementEnCours()
 	{
-		int rayon = this.uniteSelection.getRayonDeplacement();
-		int cheminX = this.uniteSelection.getCaseX();
-		int cheminY = this.uniteSelection.getCaseY();
-		boolean endFor = false;
-		
-		int tileWidth = this.partie.getMap().getTileWidth();
-		int tileHeight = this.partie.getMap().getTileHeight();
-		int screenX = this.partie.getScreenX();
-		int screenY = this.partie.getScreenY();
-		Entree entree_clavier = this.partie.getEntree_clavier();
-		
-		if(this.casesChemin.size() != 0)// si un case chemin est en cours on le recupere
+		if(this.deplacementEnCours)
 		{
-			rayon = rayon - this.casesChemin.size();// on recupere aussi le nombre de deplacement restant
-			for(String s : this.casesChemin)
+			int x = 0;
+			int y = 0;
+			tempsPasse = tempsPasse + delta;
+			System.out.println(tempsPasse);
+			if(deplacement <= casesChemin.size()-1)
 			{
-				String str[] = s.split(":");
-				cheminX = Integer.parseInt(str[0]);
-				cheminY = Integer.parseInt(str[1]);
+				if (tempsPasse >= Constantes.DELAY) 
+				{
+					String str[] = casesChemin.get(deplacement).split(":");
+					x = Integer.parseInt(str[0]);
+					y = Integer.parseInt(str[1]);
+					this.uniteSelection.deplacement(x, y);
+					this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
+					this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
+					tempsPasse = 0;	
+					deplacement++;
+				}
+			}
+			else
+			{
+				deplacement = 0;
+				deplacementEnCours = false;
 			}
 		}
-		if(rayon != 0)//si == 0 on ne peut pas aller plus loin
+	}
+	
+	
+	public void afficherChemin() //affiche le chemin pris ne marche pas totalement
+	{
+		if(this.uniteSelection != null)
 		{
-			for(int x = -1; x<2; x++)// teste les cases autour
+			int rayon = this.uniteSelection.getRayonDeplacement();
+			int cheminX = this.uniteSelection.getCaseX();
+			int cheminY = this.uniteSelection.getCaseY();
+			boolean endFor = false;
+			
+			int tileWidth = this.partie.getMap().getTileWidth();
+			int tileHeight = this.partie.getMap().getTileHeight();
+			int screenX = this.partie.getScreenX();
+			int screenY = this.partie.getScreenY();
+			Entree entree_clavier = this.partie.getEntree_clavier();
+			
+			if(this.casesChemin.size() != 0)// si un case chemin est en cours on le recupere
 			{
-				for(int y = -1; y<2; y++)
+				rayon = rayon - this.casesChemin.size();// on recupere aussi le nombre de deplacement restant
+				for(String s : this.casesChemin)
 				{
-					if(Math.abs(x) != Math.abs(y) && Math.abs(x) + Math.abs(y) != 0)//pour enlever les cases en diagonal et la case central
+					String str[] = s.split(":");
+					cheminX = Integer.parseInt(str[0]);
+					cheminY = Integer.parseInt(str[1]);
+				}
+			}
+			if(rayon != 0)//si == 0 on ne peut pas aller plus loin
+			{
+				for(int x = -1; x<2; x++)// teste les cases autour
+				{
+					for(int y = -1; y<2; y++)
 					{
-						int cheminXbis = cheminX + x;
-						int cheminYbis = cheminY + y;
-						for(String s : this.casesPosibiliteDeplacement)
+						if(Math.abs(x) != Math.abs(y) && Math.abs(x) + Math.abs(y) != 0)//pour enlever les cases en diagonal et la case central
 						{
-							String str[] = s.split(":");
-							if(cheminXbis == Integer.parseInt(str[0]) && cheminYbis == Integer.parseInt(str[1]))
-							{	
-								if(entree_clavier.moa(cheminXbis * tileWidth + screenX, cheminYbis * tileHeight + screenY, tileWidth, tileHeight))
-								{
-									this.casesChemin.add(cheminXbis+":"+cheminYbis);
-									//this.casesPosibiliteDeplacement.clear();
-									//this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(cheminXbis, cheminYbis, rayon - 1, this.map);
-									endFor = true;
+							int cheminXbis = cheminX + x;
+							int cheminYbis = cheminY + y;
+							for(String s : this.casesPosibiliteDeplacement)
+							{
+								String str[] = s.split(":");
+								if(cheminXbis == Integer.parseInt(str[0]) && cheminYbis == Integer.parseInt(str[1]))
+								{	
+									if(entree_clavier.moa(cheminXbis * tileWidth + screenX, cheminYbis * tileHeight + screenY, tileWidth, tileHeight))
+									{
+										this.casesChemin.add(cheminXbis+":"+cheminYbis);
+										//this.casesPosibiliteDeplacement.clear();
+										//this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(cheminXbis, cheminYbis, rayon - 1, this.map);
+										endFor = true;
+									}
 								}
+								if(endFor)break;
 							}
-							if(endFor)break;
 						}
+						if(endFor)break;
 					}
 					if(endFor)break;
 				}
-				if(endFor)break;
 			}
-		}
-		if(entree_clavier.moa(this.uniteSelection.getCaseX() * tileWidth + screenX, this.uniteSelection.getCaseY() * tileHeight + screenY, tileWidth, tileHeight))
-		{
-			this.casesChemin.clear();
-		}
+			if(entree_clavier.moa(this.uniteSelection.getCaseX() * tileWidth + screenX, this.uniteSelection.getCaseY() * tileHeight + screenY, tileWidth, tileHeight))
+			{
+				this.casesChemin.clear();
+			}
+			for(String s : this.casesChemin)
+			{
+				String str[] = s.split(":");
+				if(entree_clavier.moa(Integer.parseInt(str[0]) * tileWidth + screenX, Integer.parseInt(str[1]) * tileHeight + screenY, tileWidth, tileHeight))
+				{	
+
+					int indexLast = this.casesChemin.size()-1;
+					
+					for(int index = this.casesChemin.indexOf(s) + 1; index  < this.casesChemin.size(); index++)
+					{
+						this.casesChemin.remove(index);
+					}
+				}
+			}
+		}	
 	}
 	
 	
@@ -240,14 +295,13 @@ public class BatailleModel extends PhaseModel{
 					laCase.setEstOccupe(true);
 					laCase.setEquipe(unite.getNomEquipe());
 				}
-
-			}
-			
+			}		
 		}
 	}
 	
-	public void checkTouches(HashMap<String, Integer> touches)
+	public void checkTouchesEtTemps(HashMap<String, Integer> touches, int delta)
 	{
+		this.delta = delta;
 		if(touches.get("E") == 1)//appuis sur E
 		{
 			if(this.viewIHMBas)

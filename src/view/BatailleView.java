@@ -104,5 +104,10 @@ public class BatailleView extends PhaseView{
 				g2.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
 			}
 		}
-	}		
+	}
+	
+	private void vueDeplacementEnCours()
+	{
+		
+	}
 }

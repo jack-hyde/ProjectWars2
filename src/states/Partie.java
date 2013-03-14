@@ -112,10 +112,7 @@ public class Partie extends BasicGameState {
 		
 		
 		if(this.equipeEnCours.isIa()) //on gère le cas pour voir si c'est au tour de l'ordi ou pas car il n'y aura pas les meme fonctions appelés
-		{
-			
-			
-	    	
+		{	
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
@@ -137,10 +134,7 @@ public class Partie extends BasicGameState {
 	    	}
 		}
 		else
-		{
-			
-			
-	    	
+		{	    	
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
@@ -175,7 +169,7 @@ public class Partie extends BasicGameState {
 	}
 	
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int arg2)
+	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
@@ -185,13 +179,9 @@ public class Partie extends BasicGameState {
     	
 		if(this.equipeEnCours.isIa())
 		{
-			
-			
-			
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
-	    			
 	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
 	    				case Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS: 
@@ -208,7 +198,6 @@ public class Partie extends BasicGameState {
 	    					this.setEquipeEnCours(this.j1);
 	    					break;
 	    				
-	    				
 	    				case Constantes.PHASE_BATAILLE : 
 	    					break;
 	    				default : break;
@@ -217,14 +206,10 @@ public class Partie extends BasicGameState {
 	    	}
 		}
 		else
-		{
-			
-			
-			
+		{	
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
-	    			
 	    			this.modelDeploiementJ1.checkTouches(touches);
 	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
@@ -234,7 +219,6 @@ public class Partie extends BasicGameState {
 	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE :
 	    					this.modelDeploiementJ1.placerUnite(touches); 
-	    					
 	    					scroll(touches);
 	    					break;
 
@@ -242,19 +226,19 @@ public class Partie extends BasicGameState {
 	    					this.equipeEnCours = this.ia;
 	    					DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS);
 	    					break;
-	    					
+	
 	    				default : break;
 	    			}
 	    			
 	    		case Constantes.PHASE_BATAILLE : 
-	    			
-	    			
 	    			switch(BatailleModel.phaseDeBataille)
 	    			{
 	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
 	    					scroll(touches);
-	    					this.modelBatailleJ1.checkTouches(touches);
+	    					this.modelBatailleJ1.checkTouchesEtTemps(touches, delta);
 	    					this.modelBatailleJ1.afficherCasePointer(touches);
+	    					this.modelBatailleJ1.afficherChemin();
+	    					this.modelBatailleJ1.deplacementEnCours();
 	    					break;
 	    					
 	    				default : break;
@@ -262,14 +246,6 @@ public class Partie extends BasicGameState {
 	    		default : break;
 	    	}
 		}
-    	/*if(this.uniteSelection != null)
-		{
-    		afficherChemin();
-		}
-    	else
-    	{
-    		casesChemin.clear();
-    	}*/
 	}	
 	
 	//fonction d'affichage des unitŽs (en private car elle ne peut pas etre appelŽ ailleur)
