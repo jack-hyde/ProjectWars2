@@ -91,7 +91,7 @@ public class Partie extends BasicGameState {
 	    this.equipeEnCours = this.j1; //le J1 commence, peut etre que cette variable sera inutile pour la suite
 	    
 	    Partie.phaseDeJeu = Constantes.PHASE_DEPLOIEMENT;
-	    DeploiementModel.phaseDeDeploiement = Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM;
+	    DeploiementModel.phaseDeDeploiement = Constantes.PHASE_DEPLOIEMENT_AFFICHER_CARTE;
 	    
 	}	
 
@@ -144,10 +144,15 @@ public class Partie extends BasicGameState {
 	    	switch(Partie.phaseDeJeu)
 	    	{
 	    		case Constantes.PHASE_DEPLOIEMENT :
-	    			this.viewDeploiementJ1.afficherIHMBas();
+	    			
 	    			
 	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
+	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHER_CARTE :
+	    					this.viewDeploiementJ1.interactionsCarte();
+	    					this.viewDeploiementJ1.drawAllUnits();
+	    					break;
+	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM : 
 	    					this.viewDeploiementJ1.drawAllUnits();
 	    					this.viewDeploiementJ1.afficherIHMDeploiementUnite(); 
@@ -155,13 +160,15 @@ public class Partie extends BasicGameState {
 	    					break;
 	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE : 
-	    					this.viewDeploiementJ1.render();
+	    					this.viewDeploiementJ1.interactionsCarte();
 	    					this.viewDeploiementJ1.drawAllUnits();
 	    					break;
 	    					
 	    				default : break;
 	    			}
-	    		
+	    			
+	    			this.viewDeploiementJ1.afficherIHMBas();
+	    			
 	    		case Constantes.PHASE_BATAILLE :
 	    				switch(BatailleModel.phaseDeBataille)
 	    				{
@@ -179,7 +186,7 @@ public class Partie extends BasicGameState {
 			throws SlickException {
 		this.entree_clavier.check();
 		HashMap<String, Integer> touches = this.entree_clavier.getTouches();	
-		
+		boolean clique = false; //variable pour détecter un clique (avec la fonction selectionCase)
 		//this.scroll(touches);
 		//this.afficherCasePointer(touches);
     	
@@ -228,16 +235,35 @@ public class Partie extends BasicGameState {
 	    			this.modelDeploiementJ1.checkTouches(touches);
 	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
+	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHER_CARTE :
+	    					scroll(touches);
+	    					clique = this.modelDeploiementJ1.selectionCase(touches);
+	    					if(clique)
+	    					{
+	    						this.modelDeploiementJ1.deplacementUnite();
+	    					}
+	    					break;
+	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM : 
 	    					scroll(touches);
 	    					break;
 	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE :
-	    					this.modelDeploiementJ1.placerUnite(touches); 
-	    					
 	    					scroll(touches);
+	    					clique = this.modelDeploiementJ1.selectionCase(touches);
+	    					if(clique)
+	    					{
+	    						this.modelDeploiementJ1.placerUnite();
+	    					}
+	    					 
+	    					
 	    					break;
-
+	    				
+	    				case Constantes.PHASE_DEPLOIEMENT_SUPPRIMER_UNITE :
+	    					this.modelDeploiementJ1.deleteUnite();
+	    					DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_AFFICHER_CARTE);
+	    					break;
+	    					
 	    				case Constantes.PHASE_DEPLOIEMENT_TERMINER : //la phase de déploiement pour le joueur est terminé, on va maintenant lancé le deploiement de l'IA automatiquement
 	    					this.equipeEnCours = this.ia;
 	    					DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS);
@@ -253,8 +279,13 @@ public class Partie extends BasicGameState {
 	    			{
 	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
 	    					scroll(touches);
+	    					clique = this.modelBatailleJ1.selectionCase(touches);
+	    					if(clique)
+	    					{
+	    						this.modelBatailleJ1.selectionUniteEtDeplacement();
+	    					}
 	    					this.modelBatailleJ1.checkTouchesEtTemps(touches, delta);
-	    					this.modelBatailleJ1.afficherCasePointer(touches);
+	    					
 	    					break;
 	    					
 	    				default : break;
@@ -275,8 +306,7 @@ public class Partie extends BasicGameState {
 	//fonction d'affichage des unitŽs (en private car elle ne peut pas etre appelŽ ailleur)
 	//Il faudra virer le g.fillRect et utiliser la fonction drawImage (prŽsente dans chaque unitŽ) pour afficher l'image de l'unitŽ
 	
-		
-	
+
 	
 	
 	

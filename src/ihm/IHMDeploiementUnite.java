@@ -7,6 +7,7 @@ import game.Unite;
 
 import model.DeploiementModel;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -26,21 +27,27 @@ public class IHMDeploiementUnite implements ComponentListener {
 	private GameContainer container;
 	
 	private HashMap<MouseOverArea, Unite> allMouseOverArea;
-	private boolean flagRAZ;
 	
-	private MouseOverArea button_Start;
+	 //Plus tard je me demanderai probablement pourquoi j'ai fait ce système de flagMoaUpdate et des fct raz qui vont avec...
+	//mais il ne faut pas toucher, je pense que c'est la meilleure solution. Cette variable est en static pour qu'on puisse y acceder depuis le model de deploiement.
+	public static boolean flagMoaUpdate = false;
+	
+	
+	
+	private MouseOverArea button_Close;
 	
 	public IHMDeploiementUnite(GameContainer c, DeploiementModel deploiement) throws SlickException {
 
 		this.container = c;
 		this.deploiement = deploiement;
-		this.flagRAZ = false;
 		
 		this.g=	this.container.getGraphics();
 		
+		this.button_Close = new MouseOverArea(this.container, new Image("images/close_ihm.png"), 870, 210, this);
+		this.button_Close.setNormalColor(new Color(1,1,1,0.8f)); 
+		this.button_Close.setMouseOverColor(new Color(1,1,1,0.9f));
 		this.allMouseOverArea = new HashMap<MouseOverArea, Unite>();
 		this.razMouseOverArea();
-		
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -55,23 +62,14 @@ public class IHMDeploiementUnite implements ComponentListener {
 			this.allMouseOverArea.put(moa, unite);
 			x=x+40;
 		}
-		if(this.deploiement.getValeur() > 50)
-		{
-			this.button_Start = new MouseOverArea(this.container, new Image("images/start_battle.png"), 700, 240+x, this);
-		}
-		else
-		{
-			this.button_Start = null;
-		}
 	}
 	
 	public void render() throws SlickException {
 		
-		if(this.flagRAZ == true)
+		if(IHMDeploiementUnite.flagMoaUpdate == true)
 		{
-			this.deploiement.razUnitesPossibles(); //RAZ des unités possibles, ce qui va permettre entre autre de créer de nouveau objet
 			this.razMouseOverArea(); //raz des mouseOverArea qui dépendent des unités possibles
-			this.flagRAZ = false;
+			IHMDeploiementUnite.flagMoaUpdate = false;
 		}
 		
 		this.g.setColor(Constantes.COLOR_ORANGE);
@@ -90,23 +88,23 @@ public class IHMDeploiementUnite implements ComponentListener {
 		
 		this.g.drawString("VALEUR : "+this.deploiement.getValeur()+"/"+this.deploiement.getValeurMax(), 410, 210+x);
 		
-		if(this.button_Start != null)
-		{
-			this.button_Start.render(this.container, this.g);
-		}
+		
 		for(Entry<MouseOverArea, Unite> entry : this.allMouseOverArea.entrySet())
 		{
 			entry.getKey().render(this.container, this.g);
 		}
+		
+		this.button_Close.render(this.container, this.g);
 		
 	}
 	
 	@Override
 	public void componentActivated(AbstractComponent source) {
 		
-		if(source.equals(this.button_Start))  
+		
+		if(source.equals(this.button_Close))  
 		{
-			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_TERMINER);
+			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_AFFICHER_CARTE);
 
 		}
 		else
@@ -114,10 +112,9 @@ public class IHMDeploiementUnite implements ComponentListener {
 			Unite unite_select = this.allMouseOverArea.get(source);
 			
 			this.deploiement.setUniteSelect(unite_select);
-			this.deploiement.setValeur(this.deploiement.getValeur()+unite_select.getValeur());
 			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_PLACEMENT_UNITE);
 			
-			this.flagRAZ = true; //on leve le flag qui va permettre de remettre à zero les unités possibles (créer de nouveaux objets) et également les mouseOverArea
+			IHMDeploiementUnite.flagMoaUpdate = true; //on leve le flag qui va permettre de remettre à zero les unités possibles (créer de nouveaux objets) et également les mouseOverArea
 	
 		}
 	}

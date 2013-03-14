@@ -17,7 +17,7 @@ public class BatailleModel extends PhaseModel{
 	
 	public static int phaseDeBataille;
 	
-	private Case caseSelection;
+	
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	private ArrayList<String> casesChemin = new ArrayList<String>();
 
@@ -47,117 +47,86 @@ public class BatailleModel extends PhaseModel{
 		}
 	}
 
-	public void afficherCasePointer(HashMap<String, Integer> touches)
-	{
-		//selectionnne la case ou est le pointeur	
-		int tileWidth = this.partie.getMap().getTileWidth();
-		int tileHeight = this.partie.getMap().getTileHeight();
-		int screenX = this.partie.getScreenX();
-		int screenY = this.partie.getScreenY();
-		Entree entree_clavier = this.partie.getEntree_clavier();
-		
-    	for(int x=0; x<this.partie.getMap().getWidth(); x++)
-    	{
-    		for(int y=0; y<this.partie.getMap().getHeight(); y++)
-        	{
-    			if(entree_clavier.moa(x * tileWidth + screenX, y * tileHeight + screenY, tileWidth, tileHeight))
-            	{
-    				this.selectionX = x * tileWidth + screenX;
-                	this.selectionY = y * tileHeight + screenY;               	
-		
-            		if(touches.get("SPACE") == 1 || touches.get("MOUSE_LEFT") == 1) //appuis sur espace ou click gauche
-                	{
-            			this.caseX = x;
-                    	this.caseY = y;
-                    	
-                    	this.caseSelection = this.partie.getMap().recupUneCase(x, y);
-                    	if(this.caseSelection != null)
-                    	{
-                    		this.uniteJ2Selection = null; //raz du l'unité j2 selectionné
-                    		boolean isSelect = checkUniteEtDeplacement();
-                    		//Si aucune unitŽ n'est sŽlectionnŽ, on vide les possibilitŽs de dŽplacement
-                    		if(isSelect == false)
-                    		{
-                    			this.casesPosibiliteDeplacement.clear();
-                    			this.uniteSelection = null;
-                    		}	
-                    	}                   	
-                	}
-            	}
-        	}
-    	}
-	}
-	
-	private boolean checkUniteEtDeplacement()
+	public void selectionUniteEtDeplacement()
 	{
 		//Si on a dŽjˆ une unitŽ de sŽlectionnŽ, on peut la deplacer...
-		
 		boolean isSelect = false; //variable qui va permettre de voir si une unité DU j1 est sélectionné
-		if(this.uniteSelection != null)
-		{
-			boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
-			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
-        	{
-        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-        		{
-        			uniteSurLaCase = true; //Il y a deja une unitŽ sur cette case
-        			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
-        			int rayon = unite.getRayonDeplacement();
-        			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
-        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
-        			isSelect = true;
-        		}
-        	}
-			if(uniteSurLaCase == false) //Si aucune unité du j1 n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
+		
+		if(this.caseSelection != null)
+    	{
+    		this.uniteJ2Selection = null; //raz du l'unité j2 selectionné
+			
+			if(this.uniteSelection != null)
 			{
-				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+				boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
+				for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
-	        			this.uniteJ2Selection = unite;
-	        			uniteSurLaCase = true;
+	        			uniteSurLaCase = true; //Il y a deja une unitŽ sur cette case
+	        			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
+	        			int rayon = unite.getRayonDeplacement();
+	        			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
+	        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
+	        			isSelect = true;
 	        		}
 	        	}
-			}
-			
-			if(uniteSurLaCase == false) //Si il n'y a pas d'unite du j1 ni de l'j2 sur la case, on deplace l'unite
-			{
-				if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
+				if(uniteSurLaCase == false) //Si aucune unité du j1 n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
 				{
-						this.uniteSelection.deplacement(this.caseX, this.caseY, this.casesChemin, this.delta); //deplacement
-						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
-						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
-						isSelect = true;
+					for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+		        	{
+		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+		        		{
+		        			this.uniteJ2Selection = unite;
+		        			uniteSurLaCase = true;
+		        		}
+		        	}
+				}
+				
+				if(uniteSurLaCase == false) //Si il n'y a pas d'unite du j1 ni de l'j2 sur la case, on deplace l'unite
+				{
+					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
+					{
+							this.uniteSelection.deplacement(this.caseX, this.caseY, this.casesChemin, this.delta); //deplacement
+							this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
+							this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
+							isSelect = true;
+					}
 				}
 			}
-		}
-		else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
-		{
-			//Première boucle pour voir si il y a une unité appartenant au j1 sur cette case
-			boolean uniteAuj1 = false;
-			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
-        	{
-        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-        		{
-        			this.uniteSelection = unite;
-        			int rayon = unite.getRayonDeplacement();
-        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
-        			isSelect = true;
-        			uniteAuj1 = true;
-        		}
-        	}
-			if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
+			else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
 			{
-				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+				//Première boucle pour voir si il y a une unité appartenant au j1 sur cette case
+				boolean uniteAuj1 = false;
+				for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
-	        			this.uniteJ2Selection = unite;
+	        			this.uniteSelection = unite;
+	        			int rayon = unite.getRayonDeplacement();
+	        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
+	        			isSelect = true;
+	        			uniteAuj1 = true;
 	        		}
 	        	}
+				if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
+				{
+					for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+		        	{
+		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+		        		{
+		        			this.uniteJ2Selection = unite;
+		        		}
+		        	}
+				}
 			}
+    	}
+		
+		if(isSelect == false)
+		{
+			this.casesPosibiliteDeplacement.clear();
+			this.uniteSelection = null;
 		}		
-		return isSelect;	
 	}
 	public void afficherChemin() //affiche le chemin pris ne marche pas totalement
 	{
@@ -270,13 +239,6 @@ public class BatailleModel extends PhaseModel{
 		BatailleModel.phaseDeBataille = phaseDeBataille;
 	}
 
-	public Case getCaseSelection() {
-		return caseSelection;
-	}
-
-	public void setCaseSelection(Case caseSelection) {
-		this.caseSelection = caseSelection;
-	}
 
 	public ArrayList<String> getCasesPosibiliteDeplacement() {
 		return casesPosibiliteDeplacement;

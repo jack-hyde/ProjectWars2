@@ -37,11 +37,7 @@ public class BatailleView extends PhaseView{
 		g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT);
 		g3.setColor(Constantes.COLOR_ROUGE);
 		
-		//affiche le carré de selection
-		this.g.drawRect(selectionX, selectionY,  tileWidth, tileHeight);
-		
-		//case selectionné blanc transparent
-		g2.fillRect(caseX * tileWidth + screenX, caseY * tileHeight + screenY, tileWidth, tileHeight);
+		this.afficherSelectionCase(selectionX, selectionY, tileWidth, tileHeight, screenX, screenY, caseX, caseY);
 				
 		//valeurs
 		this.g.drawString("screenX "+screenX, 10, 60);
@@ -70,10 +66,24 @@ public class BatailleView extends PhaseView{
 		}		
 		
 		//drawAllUnits(); //Affichage des unitŽs	
-		this.ihmBas.majIHM(g, this.model.isViewIHMBas(), caseX, caseY, this.model.getCaseSelection(), this.model.getUniteSelection(), this.model.getUniteJ2Selection());
+	
 	
 		this.drawAllUnits();
+		this.afficherIHMBas();
+	}
 	
+	public void afficherIHMBas()
+	{
+		//drawAllUnits(); //Affichage des unitŽs	
+		this.ihmBas.setCaseX(this.model.getCaseX());
+		this.ihmBas.setCaseY(this.model.getCaseY());
+		this.ihmBas.setViewIHM(this.model.isViewIHMBas());
+		this.ihmBas.setCaseSelection(this.model.getCaseSelection());
+		this.ihmBas.setUniteSelection(this.model.getUniteSelection());
+		this.ihmBas.setUniteAdversaireSelection(this.model.getUniteJ2Selection());
+		
+		this.ihmBas.drawIHM();
+			
 	}
 	
 	private void drawAllUnits()
@@ -104,5 +114,6 @@ public class BatailleView extends PhaseView{
 				g2.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
 			}
 		}
-	}		
+	}
+
 }

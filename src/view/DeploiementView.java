@@ -33,29 +33,42 @@ public class DeploiementView extends PhaseView {
 		int screenX = this.model.getPartie().getScreenX();
 		int screenY = this.model.getPartie().getScreenY();
 		
-		Graphics g2 = new Graphics();
-		Color ambre = new Color(173,57,14);
-		Color jaunepisse = new Color(240,195,0);
+		//Fonctions qui permet d'afficher tous les carrés où le placement des unités est possibles
+		int x;
+		int y;
+		this.g.setColor(Constantes.COLOR_BLEU_TRANSPARENT);
+		for(String s : this.model.getAl_casesPossibilitesDeploiement())
+		{
+			String str[] = s.split(":");
+			x = Integer.parseInt(str[0]);
+			y = Integer.parseInt(str[1]);
+			this.g.fillRect(x * tileWidth + screenX, y * tileHeight + screenY, tileWidth, tileHeight);
+		}
+		
+		int placementX;
+		int placementY;
 		for (Unite unite : this.model.getPartie().getEquipeEnCours().getAl_unitesEquipe()) {
-			int placementX = unite.getCaseX();
-			int placementY = unite.getCaseY();
+			placementX = unite.getCaseX();
+			placementY = unite.getCaseY();
 
 			if(unite.getName() == "Tank")
 			{
-				g2.setColor(ambre);
+				this.g.setColor(Constantes.COLOR_AMBRE);
 
-				g2.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
+				this.g.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
 			}
 			else if(unite.getName() == "Sniper")
 			{
-				g2.setColor(jaunepisse);
+				this.g.setColor(Constantes.COLOR_JAUNEPISSE);
 
-				g2.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
+				this.g.fillRect(placementX * tileWidth + screenX + 15, placementY * tileHeight + screenY +15, tileWidth-30, tileHeight-30);
 			}
 		}
+		
+		
 	}
 	
-	public void render()
+	public void interactionsCarte()
 	{
 		int tileWidth = this.model.getPartie().getMap().getTileWidth();
 		int tileHeight = this.model.getPartie().getMap().getTileHeight();
@@ -66,24 +79,20 @@ public class DeploiementView extends PhaseView {
 		int selectionX = this.model.getSelectionX();
 		int selectionY = this.model.getSelectionY();
 		
-		Graphics g3 = new Graphics();
-		Graphics g2 = new Graphics();
-		g2.setColor(Constantes.COLOR_BLANC_TRANSPARENT);
-		g3.setColor(Constantes.COLOR_ROUGE);
-		
-		//affiche le carré de selection
-		g.drawRect(selectionX, selectionY,  tileWidth, tileHeight);
-		
-		//case selectionné blanc transparent
-		g2.fillRect(caseX * tileWidth + screenX, caseY * tileHeight + screenY, tileWidth, tileHeight);
+		this.afficherSelectionCase(selectionX, selectionY, tileWidth, tileHeight, screenX, screenY, caseX, caseY);
 	}
 	
 	public void afficherIHMBas()
 	{
-		int caseY = this.model.getCaseY();
-		int caseX = this.model.getCaseX();
-		//drawAllUnits(); //Affichage des unitŽs	
-		this.ihmBas.majIHM(g, this.model.isViewIHMBas(), caseX, caseY, null, null, null);
+		this.ihmBas.setViewButtonStart(this.model.isViewButtonStart());
+		this.ihmBas.setCaseX(this.model.getCaseX());
+		this.ihmBas.setCaseY(this.model.getCaseY());
+		this.ihmBas.setViewIHM(this.model.isViewIHMBas());
+		this.ihmBas.setCaseSelection(this.model.getCaseSelection());
+		this.ihmBas.setUniteSelection(this.model.getUniteSelect());
+		this.ihmBas.setViewButtonSupprimerUnite(this.model.isViewButtonSupprimerUnite());
+		this.ihmBas.setMsgErrorDeploiement(this.model.getMsgError());
+		this.ihmBas.drawIHM();
 			
 	}
 	
