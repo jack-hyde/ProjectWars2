@@ -294,14 +294,6 @@ public class Partie extends BasicGameState {
 	    		default : break;
 	    	}
 		}
-    	/*if(this.uniteSelection != null)
-		{
-    		afficherChemin();
-		}
-    	else
-    	{
-    		casesChemin.clear();
-    	}*/
 	}	
 	
 	//fonction d'affichage des unitŽs (en private car elle ne peut pas etre appelŽ ailleur)

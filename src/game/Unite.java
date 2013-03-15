@@ -24,7 +24,7 @@ public abstract class Unite {
 	
 	private static final int DELAY = 1000; // 1 second determine la vitesse de deplacement
 	
-	public boolean deplacement(int x, int y, ArrayList<String> casesChemin, int delta)  //m�thode de d�placement abstraite
+	/*public boolean deplacement(int x, int y, ArrayList<String> casesChemin, int delta)  //m�thode de d�placement abstraite
 	{
 		 // The time that has passed, reset to 0 after +-1 sec
 		
@@ -45,7 +45,7 @@ public abstract class Unite {
 			}
 		}
 		return false;
-	}
+	}*/
 
 	
 	public abstract void deplacement(int x, int y);
