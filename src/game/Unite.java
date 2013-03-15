@@ -2,10 +2,15 @@ package game;
 
 import java.util.ArrayList;
 
+import tools.Constantes;
+
 public abstract class Unite {
 
 	protected int caseX;
 	protected int caseY;
+	protected int pixelX;
+	protected int pixelY;
+	protected int orientation;
 	protected String name;
 	protected int vie;
 	protected int defense;
@@ -13,6 +18,8 @@ public abstract class Unite {
 	protected int valeur;
 	protected int rayonDeplacement;
 	protected String nomEquipe;
+	
+	
 	protected int tempsPasse = 0;
 	
 	private static final int DELAY = 1000; // 1 second determine la vitesse de deplacement
@@ -39,6 +46,9 @@ public abstract class Unite {
 		}
 		return false;
 	}
+
+	
+	public abstract void deplacement(int x, int y);
 
 	
 	public abstract void vuedeplacement(); //m�thode de la vue du d�placement abstraite

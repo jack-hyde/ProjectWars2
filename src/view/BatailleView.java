@@ -116,4 +116,10 @@ public class BatailleView extends PhaseView{
 		}
 	}
 
+	
+	private void vueDeplacementEnCours()
+	{
+		
+	}
+
 }

@@ -285,7 +285,8 @@ public class Partie extends BasicGameState {
 	    						this.modelBatailleJ1.selectionUniteEtDeplacement();
 	    					}
 	    					this.modelBatailleJ1.checkTouchesEtTemps(touches, delta);
-	    					
+	    					this.modelBatailleJ1.afficherChemin();
+	    					this.modelBatailleJ1.deplacementEnCours();
 	    					break;
 	    					
 	    				default : break;

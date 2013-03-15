@@ -35,6 +35,11 @@ public interface Constantes {
 	public final static int PHASE_BATAILLE = 2;
 	public final static int PHASE_BATAILLE_DEPLACEMENT = 21;
 	
+
 	//Variables de dimenssions
 	public final static int IHM_BAS_HAUTEUR = 100;
+    
+	//vitesse unités
+	public final static int DELAY = 200; // 1 second determine la vitesse de deplacement de mise a jour du deplacement
+	public final static int SPEED_MOVE = 10; // determine le nombre de pixels entr chaque image
 }
