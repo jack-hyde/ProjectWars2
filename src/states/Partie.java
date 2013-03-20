@@ -202,12 +202,9 @@ public class Partie extends BasicGameState {
 	    			switch(DeploiementModel.phaseDeDeploiement)
 	    			{
 	    				case Constantes.PHASE_DEPLOIEMENT_IA_EN_COURS: 
-	    					//ici les fonctions qui serviront à faire le deploiement de l'ia
+	    					this.modelDeploiementIA.deploiement();
 	    					
-	    					//On ajoute les unités du joueur et de l'ia dans notre tableau qui regroupe toutes les unités
-	    					
-	    					//On ajoute toutes les unités dans nos models de bataille
-	    					this.modelBatailleIA.addAllUnites();
+	    					this.modelBatailleIA.addAllUnites(); 
 	    					this.modelBatailleJ1.addAllUnites();
 	    					
 	    					Partie.setPhaseDeJeu(Constantes.PHASE_BATAILLE);

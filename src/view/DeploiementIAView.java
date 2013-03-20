@@ -1,9 +1,12 @@
 package view;
 
+import game.Unite;
 import model.DeploiementIAModel;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+
+import tools.Constantes;
 
 public class DeploiementIAView extends PhaseView{
 
@@ -15,4 +18,5 @@ public class DeploiementIAView extends PhaseView{
 		
 		this.model = model;
 	}
+	
 }

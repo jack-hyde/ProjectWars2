@@ -44,7 +44,7 @@ public class BatailleView extends PhaseView{
 		this.g.drawString("screenY "+screenY, 10, 80);
 			
 		
-		if(this.model.getUniteSelection() != null)
+		if(this.model.getUniteSelection() != null && this.model.isDeplacementPossible())
 		{
 			//Debug.afficheHashMap(this.casesPosibiliteDeplacement);
 			for(String s : this.model.getCasesPosibiliteDeplacement())
@@ -81,6 +81,7 @@ public class BatailleView extends PhaseView{
 		this.ihmBas.setCaseSelection(this.model.getCaseSelection());
 		this.ihmBas.setUniteSelection(this.model.getUniteSelection());
 		this.ihmBas.setUniteAdversaireSelection(this.model.getUniteJ2Selection());
+		this.ihmBas.setMsgError(this.model.getMsgError());
 		
 		this.ihmBas.drawIHM();
 			

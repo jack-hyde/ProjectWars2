@@ -27,4 +27,13 @@ public class BatailleIAModel extends PhaseModel{
 		}
 	}
 
+	public ArrayList<Unite> getAl_unites() {
+		return al_unites;
+	}
+
+	public void setAl_unites(ArrayList<Unite> al_unites) {
+		this.al_unites = al_unites;
+	}
+
+	
 }

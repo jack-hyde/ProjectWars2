@@ -91,7 +91,7 @@ public class DeploiementView extends PhaseView {
 		this.ihmBas.setCaseSelection(this.model.getCaseSelection());
 		this.ihmBas.setUniteSelection(this.model.getUniteSelect());
 		this.ihmBas.setViewButtonSupprimerUnite(this.model.isViewButtonSupprimerUnite());
-		this.ihmBas.setMsgErrorDeploiement(this.model.getMsgError());
+		this.ihmBas.setMsgError(this.model.getMsgError());
 		this.ihmBas.drawIHM();
 			
 	}

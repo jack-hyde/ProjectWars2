@@ -18,6 +18,8 @@ public class BatailleModel extends PhaseModel{
 	
 	public static int phaseDeBataille;
 	
+	private ArrayList<Unite> unitesDejaDeplaces = new ArrayList<Unite>();
+	private boolean deplacementPossible;
 	
 	private ArrayList<String> casesPosibiliteDeplacement = new ArrayList<String>();
 	private ArrayList<String> casesChemin = new ArrayList<String>();
@@ -30,12 +32,15 @@ public class BatailleModel extends PhaseModel{
 	private int deplacement;
 	private int tempsPasse;
 	
+	private String msgError;
+	
 	public BatailleModel(Partie partie) throws SlickException
 	{
 		super(partie);
 		
 		this.al_unites = new ArrayList<Unite>(); //où seront stockés l'ensembles des unités présentes sur la carte
-		
+		this.deplacementPossible = false;
+		this.msgError = "";
 	}
 	
 	public void addAllUnites()
@@ -61,48 +66,58 @@ public class BatailleModel extends PhaseModel{
 			
 			if(this.uniteSelection != null)
 			{
-				boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
+				//On vérifie s'il y a déjà une unité sur la case selectionnée. Si c'est le cas, on selectionne la nouvelle unité
 				for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
-	        			uniteSurLaCase = true; //Il y a deja une unitŽ sur cette case
+	        			
 	        			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
-	        			int rayon = unite.getRayonDeplacement();
-	        			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
-	        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
+	        			System.out.println(unite);
+	        			System.out.println(this.unitesDejaDeplaces);
+	        			this.deplacementPossible = false;
 	        			isSelect = true;
+	        			if(this.unitesDejaDeplaces.contains(unite)) //on regarde si lunité a déjà été déplacé
+	        			{
+	        				System.out.println("test");
+	        				this.msgError = "Cette unité a déjà été déplacée.";
+	        				
+	        			}
+	        			else
+	        			{
+		        			int rayon = unite.getRayonDeplacement();
+		        			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
+		        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
+	        			}
 	        		}
 	        	}
-				if(uniteSurLaCase == false) //Si aucune unité du j1 n'a été trouvé, on va chcker pour voir s'il n'y a pas une unité adverse sur cette case
+				
+				if(this.deplacementPossible == true) //Si le déplacement est possible, on regarde si la case selectionné ne contient pas une unité adverse
 				{
 					for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
 		        	{
 		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 		        		{
 		        			this.uniteJ2Selection = unite;
-		        			uniteSurLaCase = true;
+		        			this.deplacementPossible = false;
 		        		}
 		        	}
 				}
 				
-				if(uniteSurLaCase == false) //Si il n'y a pas d'unite du j1 ni de l'j2 sur la case, on deplace l'unite
+				
+				//CA VIENT DE LA CONDITION QUI SUIT !!!!!!!!!!!!!!!
+				if(this.deplacementPossible == true) //Le déplacement de l'unité est possible (la case choisie ne contient pas d'unité du J1 ni de l'ia et l'unité n'a pas encore été déplacé durant ce tour)
 				{
 					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 					{
-							this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
-							this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
-							this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
-							isSelect = true;
+						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+						this.unitesDejaDeplaces.add(this.uniteSelection);
+						//this.deplacementEnCours = true;
+						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
+						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
+						isSelect = true;
 					}
 					
-					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
-					{
-							this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
-						{
-							this.deplacementEnCours = true;
-						}
-					}
 				}
 			}
 			else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
@@ -113,11 +128,22 @@ public class BatailleModel extends PhaseModel{
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
+	        			
 	        			this.uniteSelection = unite;
-	        			int rayon = unite.getRayonDeplacement();
-	        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
 	        			isSelect = true;
-	        			uniteAuj1 = true;
+	        			if(this.unitesDejaDeplaces.contains(unite)) //on regarde si lunité a déjà été déplacé
+	        			{
+	        				this.msgError = "Cette unité a déjà été déplacée.";
+	        				this.deplacementPossible = false;
+	        			}
+	        			else
+	        			{
+	        				int rayon = unite.getRayonDeplacement();
+		        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
+		        			
+		        			uniteAuj1 = true;
+		        			this.deplacementPossible = true;
+	        			}
 	        		}
 	        	}
 				if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
@@ -127,6 +153,7 @@ public class BatailleModel extends PhaseModel{
 		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 		        		{
 		        			this.uniteJ2Selection = unite;
+		        			this.deplacementPossible = false;
 		        		}
 		        	}
 				}
@@ -135,7 +162,9 @@ public class BatailleModel extends PhaseModel{
 		
 		if(isSelect == false)
 		{
-			this.casesPosibiliteDeplacement.clear();
+			if(this.deplacementPossible == false)
+				this.casesPosibiliteDeplacement.clear();
+			
 			this.uniteSelection = null;
 		}		
 	}
@@ -155,6 +184,7 @@ public class BatailleModel extends PhaseModel{
 					x = Integer.parseInt(str[0]);
 					y = Integer.parseInt(str[1]);
 					this.uniteSelection.deplacement(x, y);
+					this.unitesDejaDeplaces.add(this.uniteSelection);
 					this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
 					this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 					tempsPasse = 0;	
@@ -339,6 +369,54 @@ public class BatailleModel extends PhaseModel{
 
 	public void setUniteJ2Selection(Unite uniteJ2Selection) {
 		this.uniteJ2Selection = uniteJ2Selection;
+	}
+
+	public ArrayList<Unite> getUnitesDejaDeplaces() {
+		return unitesDejaDeplaces;
+	}
+
+	public void setUnitesDejaDeplaces(ArrayList<Unite> unitesDejaDeplaces) {
+		this.unitesDejaDeplaces = unitesDejaDeplaces;
+	}
+
+	public boolean isDeplacementPossible() {
+		return deplacementPossible;
+	}
+
+	public void setDeplacementPossible(boolean deplacementPossible) {
+		this.deplacementPossible = deplacementPossible;
+	}
+
+	public boolean isDeplacementEnCours() {
+		return deplacementEnCours;
+	}
+
+	public void setDeplacementEnCours(boolean deplacementEnCours) {
+		this.deplacementEnCours = deplacementEnCours;
+	}
+
+	public int getDeplacement() {
+		return deplacement;
+	}
+
+	public void setDeplacement(int deplacement) {
+		this.deplacement = deplacement;
+	}
+
+	public int getTempsPasse() {
+		return tempsPasse;
+	}
+
+	public void setTempsPasse(int tempsPasse) {
+		this.tempsPasse = tempsPasse;
+	}
+
+	public String getMsgError() {
+		return msgError;
+	}
+
+	public void setMsgError(String msgError) {
+		this.msgError = msgError;
 	}
 	
 	

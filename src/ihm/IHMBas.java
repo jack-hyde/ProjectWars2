@@ -39,7 +39,7 @@ public class IHMBas implements ComponentListener {
 	private boolean viewButtonStart; //deploiement
 	private boolean viewButtonSupprimerUnite; //deploiement
 	
-	private String msgErrorDeploiement;
+	private String msgError;
 	
 	public IHMBas(GameContainer c, Graphics g) throws SlickException {
 		
@@ -55,7 +55,7 @@ public class IHMBas implements ComponentListener {
 		this.viewButtonSupprimerUnite = false;
 		
 		//Les messages
-		this.msgErrorDeploiement = "";
+		this.msgError = "";
 		
 		this.container = c;
 		
@@ -122,6 +122,12 @@ public class IHMBas implements ComponentListener {
 		{
 			this.g.drawString("UNITE ADVERSAIRE : "+this.uniteAdversaireSelection.getName()+" [AT:"+this.uniteAdversaireSelection.getAttaque()+"|DEF:"+this.uniteAdversaireSelection.getDefense()+"]", 300, 710);
 		}
+		
+		if(this.msgError != "")
+		{
+			this.g.setColor(Constantes.COLOR_ROUGE);
+			this.g.drawString(this.msgError, 400, 750);
+		}
 	}
 	
 	public void phaseDeploiement()
@@ -164,10 +170,10 @@ public class IHMBas implements ComponentListener {
 		}
 		
 		
-		if(this.msgErrorDeploiement != "")
+		if(this.msgError != "")
 		{
 			this.g.setColor(Constantes.COLOR_ROUGE);
-			this.g.drawString(this.msgErrorDeploiement, 400, 750);
+			this.g.drawString(this.msgError, 400, 750);
 		}
 	}
 	
@@ -303,13 +309,14 @@ public class IHMBas implements ComponentListener {
 		this.viewButtonSupprimerUnite = viewButtonSupprimerUnite;
 	}
 
-	public String getMsgErrorDeploiement() {
-		return msgErrorDeploiement;
+	public String getMsgError() {
+		return msgError;
 	}
 
-	public void setMsgErrorDeploiement(String msgErrorDeploiement) {
-		this.msgErrorDeploiement = msgErrorDeploiement;
+	public void setMsgError(String msgError) {
+		this.msgError = msgError;
 	}
+
 
 	
 
