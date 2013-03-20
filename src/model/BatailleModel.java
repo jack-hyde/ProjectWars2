@@ -117,7 +117,6 @@ public class BatailleModel extends PhaseModel{
 						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 						isSelect = true;
 					}
-					
 				}
 			}
 			else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
