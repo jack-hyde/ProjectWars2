@@ -90,18 +90,10 @@ public class BatailleModel extends PhaseModel{
 				{
 					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
 					{
-							this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
 							this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
 							this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
 							isSelect = true;
-					}
-					
-					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
-					{
-							this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
-						{
 							this.deplacementEnCours = true;
-						}
 					}
 				}
 			}
