@@ -55,7 +55,7 @@ public class BatailleModel extends PhaseModel{
 		}
 	}
 
-	public void selectionUniteEtDeplacement()
+	public void selectionUnite()
 	{
 		//Si on a dŽjˆ une unitŽ de sŽlectionnŽ, on peut la deplacer...
 		boolean isSelect = false; //variable qui va permettre de voir si une unité DU j1 est sélectionné
@@ -63,99 +63,42 @@ public class BatailleModel extends PhaseModel{
 		if(this.caseSelection != null)
     	{
     		this.uniteJ2Selection = null; //raz du l'unité j2 selectionné
-			
-			if(this.uniteSelection != null)
+		
+			//Première boucle pour voir si il y a une unité appartenant au j1 sur cette case
+			boolean uniteAuj1 = false;
+			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+        	{
+        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
+        		{
+        			
+        			this.uniteSelection = unite;
+        			isSelect = true;
+        			if(this.unitesDejaDeplaces.contains(unite)) //on regarde si lunité a déjà été déplacé
+        			{
+        				this.msgError = "Cette unité a déjà été déplacée.";
+        				this.deplacementPossible = false;
+        			}
+        			else
+        			{
+        				int rayon = unite.getRayonDeplacement();
+	        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
+	        			
+	        			uniteAuj1 = true;
+	        			this.deplacementPossible = true;
+	        			BatailleModel.phaseDeBataille = Constantes.PHASE_BATAILLE_DEPLACEMENT;
+        			}
+        		}
+        	}
+			if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
 			{
-				//On vérifie s'il y a déjà une unité sur la case selectionnée. Si c'est le cas, on selectionne la nouvelle unité
-				for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
-	        			
-	        			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
-	        			System.out.println(unite);
-	        			System.out.println(this.unitesDejaDeplaces);
+	        			this.uniteJ2Selection = unite;
 	        			this.deplacementPossible = false;
-	        			isSelect = true;
-	        			if(this.unitesDejaDeplaces.contains(unite)) //on regarde si lunité a déjà été déplacé
-	        			{
-	        				System.out.println("test");
-	        				this.msgError = "Cette unité a déjà été déplacée.";
-	        				
-	        			}
-	        			else
-	        			{
-		        			int rayon = unite.getRayonDeplacement();
-		        			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
-		        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
-	        			}
 	        		}
 	        	}
-				
-				if(this.deplacementPossible == true) //Si le déplacement est possible, on regarde si la case selectionné ne contient pas une unité adverse
-				{
-					for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
-		        	{
-		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-		        		{
-		        			this.uniteJ2Selection = unite;
-		        			this.deplacementPossible = false;
-		        		}
-		        	}
-				}
-				
-				
-				//CA VIENT DE LA CONDITION QUI SUIT !!!!!!!!!!!!!!!
-				if(this.deplacementPossible == true) //Le déplacement de l'unité est possible (la case choisie ne contient pas d'unité du J1 ni de l'ia et l'unité n'a pas encore été déplacé durant ce tour)
-				{
-					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
-					{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
-						this.unitesDejaDeplaces.add(this.uniteSelection);
-						//this.deplacementEnCours = true;
-						this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
-						this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
-						isSelect = true;
-					}
-				}
-			}
-			else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
-			{
-				//Première boucle pour voir si il y a une unité appartenant au j1 sur cette case
-				boolean uniteAuj1 = false;
-				for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
-	        	{
-	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-	        		{
-	        			
-	        			this.uniteSelection = unite;
-	        			isSelect = true;
-	        			if(this.unitesDejaDeplaces.contains(unite)) //on regarde si lunité a déjà été déplacé
-	        			{
-	        				this.msgError = "Cette unité a déjà été déplacée.";
-	        				this.deplacementPossible = false;
-	        			}
-	        			else
-	        			{
-	        				int rayon = unite.getRayonDeplacement();
-		        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
-		        			
-		        			uniteAuj1 = true;
-		        			this.deplacementPossible = true;
-	        			}
-	        		}
-	        	}
-				if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
-				{
-					for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
-		        	{
-		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-		        		{
-		        			this.uniteJ2Selection = unite;
-		        			this.deplacementPossible = false;
-		        		}
-		        	}
-				}
 			}
     	}
 		
@@ -169,6 +112,22 @@ public class BatailleModel extends PhaseModel{
 	}
 	public void deplacementEnCours()
 	{
+		
+		if(this.deplacementPossible == true) //Le déplacement de l'unité est possible (la case choisie ne contient pas d'unité du J1 ni de l'ia et l'unité n'a pas encore été déplacé durant ce tour)
+		{
+			if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
+			{
+				this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
+				this.unitesDejaDeplaces.add(this.uniteSelection);
+				this.deplacementEnCours = true;
+				this.majDesCasesOccupes(); //on met à jours les cases occupés ou non
+				this.casesPosibiliteDeplacement.clear(); //on delete les cases de possibilite de deplacement
+			}
+			else
+			{
+				BatailleModel.phaseDeBataille = Constantes.PHASE_BATAILLE_SELECTION_UNITE;
+			}
+		}
 		if(this.deplacementEnCours)
 		{
 			int x = 0;

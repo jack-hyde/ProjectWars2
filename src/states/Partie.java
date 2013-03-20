@@ -172,8 +172,12 @@ public class Partie extends BasicGameState {
 	    		case Constantes.PHASE_BATAILLE :
 	    				switch(BatailleModel.phaseDeBataille)
 	    				{
+	    					case Constantes.PHASE_BATAILLE_SELECTION_UNITE : 
+	    						this.viewBatailleJ1.render();
+	    						break;
 	    					case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
 	    						this.viewBatailleJ1.render();
+	    						break;
 	    				}
 	    			break;
 	    		default : break;
@@ -208,7 +212,7 @@ public class Partie extends BasicGameState {
 	    					this.modelBatailleJ1.addAllUnites();
 	    					
 	    					Partie.setPhaseDeJeu(Constantes.PHASE_BATAILLE);
-	    					BatailleModel.setPhaseDeBataille(Constantes.PHASE_BATAILLE_DEPLACEMENT);
+	    					BatailleModel.setPhaseDeBataille(Constantes.PHASE_BATAILLE_SELECTION_UNITE);
 	    					this.setEquipeEnCours(this.j1);
 	    					break;
 	    				
@@ -274,16 +278,25 @@ public class Partie extends BasicGameState {
 	    			
 	    			switch(BatailleModel.phaseDeBataille)
 	    			{
-	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
+	    				case Constantes.PHASE_BATAILLE_SELECTION_UNITE : 
 	    					scroll(touches);
 	    					clique = this.modelBatailleJ1.selectionCase(touches);
 	    					if(clique)
 	    					{
-	    						this.modelBatailleJ1.selectionUniteEtDeplacement();
+	    						this.modelBatailleJ1.selectionUnite();
 	    					}
 	    					this.modelBatailleJ1.checkTouchesEtTemps(touches, delta);
+	    					break;
+	    					
+	    				case Constantes.PHASE_BATAILLE_DEPLACEMENT : 
+	    					scroll(touches);
 	    					this.modelBatailleJ1.afficherChemin();
-	    					this.modelBatailleJ1.deplacementEnCours();
+	    					clique = this.modelBatailleJ1.selectionCase(touches);
+	    					if(clique)
+	    					{
+	    						this.modelBatailleJ1.deplacementEnCours();
+	    					}
+	    					this.modelBatailleJ1.checkTouchesEtTemps(touches, delta);
 	    					break;
 	    					
 	    				default : break;

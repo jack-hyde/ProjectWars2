@@ -33,7 +33,8 @@ public interface Constantes {
 	public final static int PHASE_DEPLOIEMENT_SUPPRIMER_UNITE = 16;
 	
 	public final static int PHASE_BATAILLE = 2;
-	public final static int PHASE_BATAILLE_DEPLACEMENT = 21;
+	public final static int PHASE_BATAILLE_SELECTION_UNITE = 21;
+	public final static int PHASE_BATAILLE_DEPLACEMENT = 22;
 	
 
 	//Variables de dimenssions
