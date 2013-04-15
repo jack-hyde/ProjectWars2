@@ -40,7 +40,7 @@ public class MenuBase {
 		this.barre1.draw(200,430);//barre options
 		this.barre1.draw(200,530);//barre quitter
 		
-		//affiche la barre selectionné
+		//affiche la barre selectionnï¿½
     	switch(this.selection){
     	case 1 :
     		this.barre2.draw(200,130);
@@ -98,8 +98,6 @@ public class MenuBase {
 	public void updateMenuBase(GameContainer container, StateBasedGame game, int delta)
 	{
 		//recupere les touches
-		
-		this.entree.check();
 		HashMap<String, Integer> touches = this.entree.getTouches();		
     	
     	//test sur les touches

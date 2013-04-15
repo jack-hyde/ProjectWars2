@@ -7,12 +7,16 @@ public abstract class Case {
 	protected String typeCase;
 	protected int defense;
 	protected int attaque;	
-	protected boolean estOccupe;
-	protected String equipe;
+	
+	protected Unite unite;
 	
 	public abstract void methode();
 	public abstract void special();
-		
+	
+	public Unite getUnite() {
+		return this.unite;
+	}
+	
 	public int getX() {
 		return x;
 	}
@@ -43,18 +47,4 @@ public abstract class Case {
 	public void setAttaque(int attaque) {
 		this.attaque = attaque;
 	}
-	public boolean isEstOccupe() {
-		return estOccupe;
-	}
-	public void setEstOccupe(boolean estOccupe) {
-		this.estOccupe = estOccupe;
-	}
-	public String getEquipe() {
-		return this.equipe;
-	}
-	public void setEquipe(String equipe) {
-		this.equipe = equipe;
-	}
-
-	
 }

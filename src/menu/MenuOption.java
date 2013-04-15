@@ -170,7 +170,6 @@ public class MenuOption {
 	public void updateMenuOption(GameContainer container, StateBasedGame game, int delta)
 	{
 		//recupere les touches
-		this.entree.check();
 		HashMap<String, Integer> touches = this.entree.getTouches();		
     	
     	//test sur les touches

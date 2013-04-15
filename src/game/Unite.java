@@ -1,9 +1,5 @@
 package game;
 
-import java.util.ArrayList;
-
-import tools.Constantes;
-
 public abstract class Unite {
 
 	protected int caseX;
@@ -17,54 +13,10 @@ public abstract class Unite {
 	protected int attaque;
 	protected int valeur;
 	protected int rayonDeplacement;
-	protected String nomEquipe;
+	protected String equipe;
+	protected String joueur;
+	protected int index;
 	
-	
-	protected int tempsPasse = 0;
-	
-	private static final int DELAY = 1000; // 1 second determine la vitesse de deplacement
-	
-	/*public boolean deplacement(int x, int y, ArrayList<String> casesChemin, int delta)  //m�thode de d�placement abstraite
-	{
-		 // The time that has passed, reset to 0 after +-1 sec
-		
-		tempsPasse = tempsPasse + delta;
-		System.out.println(tempsPasse);
-		if (tempsPasse >= DELAY) 
-		{
-			for(int i = 0; i < casesChemin.size(); i++)
-			{
-				tempsPasse = 0;
-				String s = casesChemin.get(i);
-				String str[] = s.split(":");
-				x = Integer.parseInt(str[0]);
-				y = Integer.parseInt(str[1]);
-				this.caseX = x;
-				this.caseY = y;
-				return true; //retourne vrai si le deplacement est fini
-			}
-		}
-		return false;
-	}*/
-
-	
-	public abstract void deplacement(int x, int y);
-
-	
-	public abstract void vuedeplacement(); //m�thode de la vue du d�placement abstraite
-	{
-		
-	}
-	
-	public abstract void drawImage();
-	
-	public String getNomEquipe() {
-		return nomEquipe;
-	}
-
-	public void setNomEquipe(String nomEquipe) {
-		this.nomEquipe = nomEquipe;
-	}
 	
 	public int getRayonDeplacement() {
 		return rayonDeplacement;
@@ -113,5 +65,9 @@ public abstract class Unite {
 	}
 	public void setCaseY(int caseY) {
 		this.caseY = caseY;
+	}
+	public void drawImage() {
+		// TODO Auto-generated method stub
+		
 	}
 }

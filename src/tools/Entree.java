@@ -4,16 +4,11 @@ import java.util.HashMap;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 
-/*
- A modifier pour reatribuer les touches. 
- liste touches: http://www.slick2d.org/javadoc/org/newdawn/slick/Input.html#getAbsoluteMouseX%28%29
-*/
-
 public class Entree {
 	
 	private Input input;
 	
-	HashMap<String, Integer> touches = new HashMap();
+	HashMap<String, Integer> touches = new HashMap<String, Integer>();
 	
 	public Entree(GameContainer container){
 		input = container.getInput();
@@ -124,14 +119,10 @@ public class Entree {
 		
 	}
 	
-	public void check()
-	{
+	public HashMap<String, Integer> getTouches() {
 		clavier();
 		clicksouris();
 		deplacementsouris();
-	}
-	
-	public HashMap<String, Integer> getTouches() {
 		return touches;
 	}
 }
