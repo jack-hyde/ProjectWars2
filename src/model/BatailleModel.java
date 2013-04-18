@@ -45,13 +45,42 @@ public class BatailleModel extends PhaseModel{
 	
 	public void addAllUnites()
 	{
-		for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+		if(this.partie.getEquipeA().getNbJoueurEquipe() == 1)
 		{
-			this.al_unites.add(unite);
+			for(Unite unite : this.partie.getEquipeA().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
 		}
-		for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+		else
 		{
-			this.al_unites.add(unite);
+			for(Unite unite : this.partie.getEquipeA().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+			for(Unite unite : this.partie.getEquipeA().getJoueur2().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+		}
+		
+		if(this.partie.getEquipeB().getNbJoueurEquipe() == 1)
+		{
+			for(Unite unite : this.partie.getEquipeB().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+		}
+		else
+		{
+			for(Unite unite : this.partie.getEquipeB().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+			for(Unite unite : this.partie.getEquipeB().getJoueur2().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
 		}
 	}
 
@@ -66,7 +95,7 @@ public class BatailleModel extends PhaseModel{
 		
 			//Première boucle pour voir si il y a une unité appartenant au j1 sur cette case
 			boolean uniteAuj1 = false;
-			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+			for(Unite unite : this.partie.getJoueurA1().getListe_unites())
         	{
         		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
         		{
@@ -83,54 +112,6 @@ public class BatailleModel extends PhaseModel{
         				int rayon = unite.getRayonDeplacement();
 	        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
 	        			
-
-	        			this.uniteSelection = unite; //On rŽcup�re donc l'unite qu'il y a sur cette case
-	        			System.out.println(unite);
-	        			System.out.println(this.unitesDejaDeplaces);
-	        			this.deplacementPossible = false;
-	        			isSelect = true;
-	        			if(this.unitesDejaDeplaces.contains(unite)) //on regarde si lunité a déjà été déplacé
-	        			{
-	        				System.out.println("test");
-	        				this.msgError = "Cette unité a déjà été déplacée.";
-	        				
-	        			}
-	        			else
-	        			{
-		        			int rayon = unite.getRayonDeplacement();
-		        			//On calcul toutes les coordonnŽes qui sont possible pour le dŽplacement de cette unite
-		        			this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(this.caseX, this.caseY, rayon, this.partie.getMap());
-	        			}
-	        		}
-	        	}
-				
-				if(this.deplacementPossible == true) //Si le déplacement est possible, on regarde si la case selectionné ne contient pas une unité adverse
-				{
-					for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
-		        	{
-		        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
-		        		{
-		        			this.uniteJ2Selection = unite;
-		        			this.deplacementPossible = false;
-		        		}
-		        	}
-				}
-				
-				
-				//CA VIENT DE LA CONDITION QUI SUIT !!!!!!!!!!!!!!!
-				if(this.deplacementPossible == true) //Le déplacement de l'unité est possible (la case choisie ne contient pas d'unité du J1 ni de l'ia et l'unité n'a pas encore été déplacé durant ce tour)
-				{
-					if(this.casesPosibiliteDeplacement.contains(this.caseX+":"+this.caseY))
-					{
-						this.uniteSelection.deplacement(this.caseX, this.caseY); //deplacement
-						this.unitesDejaDeplaces.add(this.uniteSelection);
-						this.deplacementEnCours = true;
-						isSelect = true;
-					}
-				}
-			}
-			else //S'il n'y a pas d'unitŽ de selectionnŽ, on va regarder si la case selectionne contient une unite
-
 	        			uniteAuj1 = true;
 	        			this.deplacementPossible = true;
 	        			BatailleModel.phaseDeBataille = Constantes.PHASE_BATAILLE_DEPLACEMENT;
@@ -138,9 +119,8 @@ public class BatailleModel extends PhaseModel{
         		}
         	}
 			if(uniteAuj1 == false) //Si l'unité n'appartient pas au j1, on va simplement récupérer les informations de cette unité
-
 			{
-				for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+				for(Unite unite : this.partie.getJoueurB1().getListe_unites())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
@@ -250,6 +230,8 @@ public class BatailleModel extends PhaseModel{
 									if(entree_clavier.moa(cheminXbis * tileWidth + screenX, cheminYbis * tileHeight + screenY, tileWidth, tileHeight))
 									{
 										this.casesChemin.add(cheminXbis+":"+cheminYbis);
+										//this.casesPosibiliteDeplacement.clear();
+										//this.casesPosibiliteDeplacement = Fonction.calculRayonDeplacement(cheminXbis, cheminYbis, rayon - 1, this.map);
 										endFor = true;
 									}
 								}
@@ -268,9 +250,11 @@ public class BatailleModel extends PhaseModel{
 			for(String s : this.casesChemin)
 			{
 				String str[] = s.split(":");
-				System.out.println(s); 
 				if(entree_clavier.moa(Integer.parseInt(str[0]) * tileWidth + screenX, Integer.parseInt(str[1]) * tileHeight + screenY, tileWidth, tileHeight))
-				{		
+				{	
+
+					int indexLast = this.casesChemin.size()-1;
+					
 					for(int index = this.casesChemin.indexOf(s) + 1; index  < this.casesChemin.size(); index++)
 					{
 						this.casesChemin.remove(index);

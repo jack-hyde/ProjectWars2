@@ -30,9 +30,9 @@ public class DeploiementIAModel extends PhaseModel{
 		tank1.setCaseX(26);
 		tank1.setCaseY(7);
 		
-		this.partie.getEquipeEnCours().addUnite(sniper1);
-		this.partie.getEquipeEnCours().addUnite(sniper2);
-		this.partie.getEquipeEnCours().addUnite(tank1);
+		this.partie.getJoueurEnCours().addUnite(sniper1);
+		this.partie.getJoueurEnCours().addUnite(sniper2);
+		this.partie.getJoueurEnCours().addUnite(tank1);
 	}
 	
 	

@@ -48,8 +48,6 @@ public class IHMDeploiementUnite implements ComponentListener {
 		this.button_Close.setMouseOverColor(new Color(1,1,1,0.9f));
 		this.allMouseOverArea = new HashMap<MouseOverArea, Unite>();
 		this.razMouseOverArea();
-		
-		// TODO Auto-generated constructor stub
 	}
   
 	public void razMouseOverArea() throws SlickException

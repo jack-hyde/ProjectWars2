@@ -93,7 +93,7 @@ public class DeploiementModel extends PhaseModel{
 		if(this.al_casesPossibilitesDeploiement.contains(this.caseX+":"+this.caseY))
 		{
 			boolean testPlacement = true; //permet de voir si la case est déjà occupé par une unité ou pas
-			for(Unite unite : this.partie.getEquipeEnCours().getAl_unitesEquipe())
+			for(Unite unite : this.partie.getJoueurEnCours().getListe_unites())
 			{
 				if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 				{
@@ -104,7 +104,7 @@ public class DeploiementModel extends PhaseModel{
 			{
 				this.uniteSelect.setCaseX(this.caseX);
 		    	this.uniteSelect.setCaseY(this.caseY);
-		    	this.partie.getEquipeEnCours().addUnite(this.uniteSelect);
+		    	this.partie.getJoueurEnCours().addUnite(this.uniteSelect);
 		    	DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_AFFICHE_IHM);
 		    	this.valeur += this.uniteSelect.getValeur();
 		    	this.updateUnitesPossibles();
@@ -133,7 +133,7 @@ public class DeploiementModel extends PhaseModel{
 			if(this.al_casesPossibilitesDeploiement.contains(this.caseX+":"+this.caseY))
 			{
 				boolean uniteSurLaCase = false; //on va regarder s'il n'y a pas deja une unite sur la case ou l'ont veut aller
-				for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+				for(Unite unite : this.partie.getJoueurEnCours().getListe_unites())
 	        	{
 	        		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	        		{
@@ -161,7 +161,7 @@ public class DeploiementModel extends PhaseModel{
 		}
 		else
 		{
-			for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+			for(Unite unite : this.partie.getJoueurEnCours().getListe_unites())
 	    	{
 	    		if(unite.getCaseX() == this.caseX && unite.getCaseY() == this.caseY)
 	    		{
@@ -177,7 +177,7 @@ public class DeploiementModel extends PhaseModel{
 	{
 		if(this.uniteSelect != null)
 		{
-			this.partie.getEquipeEnCours().removeUnite(this.uniteSelect);
+			this.partie.getJoueurEnCours().removeUnite(this.uniteSelect);
 			this.valeur = this.valeur - this.uniteSelect.getValeur();
 			this.deselectionCase();
 			this.updateUnitesPossibles();
@@ -231,6 +231,23 @@ public class DeploiementModel extends PhaseModel{
 	}
 	
 
+	public void raz()
+	{
+		this.valeur = 0; //valeur en cours
+		this.valeurMax = 100; //valeur max d'unité pour la partie
+		
+		//On remplit al_unitesPossibles
+		
+		this.viewButtonStart = false;
+		this.viewButtonSupprimerUnite = false;
+		this.msgError = "";
+		
+		this.al_unitesPossibles = new ArrayList<Unite>();
+		this.updateUnitesPossibles();
+		
+		this.al_casesPossibilitesDeploiement = new ArrayList<String>();
+		this.initCasesPossibiliteDeploiement();
+	}
 
 	public ArrayList<Unite> getAl_unitesPossibles() {
 		return al_unitesPossibles;

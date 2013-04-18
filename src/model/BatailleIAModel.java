@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import game.Joueur;
 import game.Unite;
 import states.Partie;
 
@@ -17,13 +18,42 @@ public class BatailleIAModel extends PhaseModel{
 	
 	public void addAllUnites()
 	{
-		for(Unite unite : this.partie.getJ1().getAl_unitesEquipe())
+		if(this.partie.getEquipeA().getNbJoueurEquipe() == 1)
 		{
-			this.al_unites.add(unite);
+			for(Unite unite : this.partie.getEquipeA().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
 		}
-		for(Unite unite : this.partie.getIa().getAl_unitesEquipe())
+		else
 		{
-			this.al_unites.add(unite);
+			for(Unite unite : this.partie.getEquipeA().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+			for(Unite unite : this.partie.getEquipeA().getJoueur2().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+		}
+		
+		if(this.partie.getEquipeB().getNbJoueurEquipe() == 1)
+		{
+			for(Unite unite : this.partie.getEquipeB().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+		}
+		else
+		{
+			for(Unite unite : this.partie.getEquipeB().getJoueur1().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
+			for(Unite unite : this.partie.getEquipeB().getJoueur2().getListe_unites())
+			{
+				this.al_unites.add(unite);
+			}
 		}
 	}
 

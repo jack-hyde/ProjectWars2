@@ -47,7 +47,7 @@ public class DeploiementView extends PhaseView {
 		
 		int placementX;
 		int placementY;
-		for (Unite unite : this.model.getPartie().getEquipeEnCours().getAl_unitesEquipe()) {
+		for (Unite unite : this.model.getPartie().getJoueurEnCours().getListe_unites()) {
 			placementX = unite.getCaseX();
 			placementY = unite.getCaseY();
 

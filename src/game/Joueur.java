@@ -11,17 +11,26 @@ public class Joueur {
 	private String capacite1;
 	private String capacite2;
 	private String capacite3;
+	private Equipe equipe;
 	
-	public Joueur(boolean ia, String nom, ArrayList<Unite> liste_unites, String capacite1, String capacite2, String capacite3)
+	public Joueur(boolean ia, String nom,String capacite1, String capacite2, String capacite3)
 	{
 		this.ia = ia;
 		this.nom = nom;
-		this.liste_unites = liste_unites;
 		this.capacite1 = capacite1;
 		this.capacite2 = capacite2;
 		this.capacite3 = capacite3;
-		this.nbUnites = this.liste_unites.size();
+		this.liste_unites = new ArrayList<Unite>();
+		this.equipe = new Equipe();
 	}	
+
+	public Equipe getEquipe() {
+		return equipe;
+	}
+
+	public void setEquipe(Equipe equipe) {
+		this.equipe = equipe;
+	}
 
 	public Unite getUnite(int i) //retourne une unité qui a ete appelé depuis le hud
 	{ 
@@ -47,11 +56,21 @@ public class Joueur {
 		return nbUnites;
 	}
 
-	public boolean getIa() {
+	public boolean isIa() {
 		return ia;
 	}
 
 	public void setIa(boolean ia) {
-		ia = ia;
+		this.ia = ia;
+	}
+	
+	public void addUnite(Unite unite)
+	{
+		this.liste_unites.add(unite);
+	}
+	
+	public void removeUnite(Unite unite)
+	{
+		this.liste_unites.remove(unite);
 	}
 }

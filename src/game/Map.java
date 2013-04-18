@@ -75,11 +75,11 @@ public class Map extends TiledMap{
 		return laCaseSelectionnee;
 	}
 	
-	/*public void caseOccupe(int x, int y, String nomEquipe)
+	public void caseOccupe(int x, int y, String nomEquipe)
 	{
 		this.allCases.get(x+":"+y).setEstOccupe(true);
 		this.allCases.get(x+":"+y).setEquipe(nomEquipe);
-	}*/
+	}
 	
 	
 	public HashMap<String, Case> getAllCases() {

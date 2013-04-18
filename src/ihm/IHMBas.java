@@ -189,6 +189,7 @@ public class IHMBas implements ComponentListener {
 		else if(source.equals(this.button_Start))  
 		{
 			DeploiementModel.setPhaseDeDeploiement(Constantes.PHASE_DEPLOIEMENT_TERMINER);
+			IHMDeploiementUnite.flagMoaUpdate = true; 
 
 		}
 		else if(source.equals(this.button_SupprimerUnite))  

@@ -33,19 +33,13 @@ public interface Constantes {
 	public final static int PHASE_DEPLOIEMENT_SUPPRIMER_UNITE = 16;
 	
 	public final static int PHASE_BATAILLE = 2;
+	public final static int PHASE_BATAILLE_ADD_UNITES = 23;
 	public final static int PHASE_BATAILLE_SELECTION_UNITE = 21;
 	public final static int PHASE_BATAILLE_DEPLACEMENT = 22;
 	
 
-	//Variables de dimenssions HUD
+	//Variables de dimenssions
 	public final static int IHM_BAS_HAUTEUR = 100;
-	public final static int HUD_LISTE_UNITES_DECALAGE_X = 200;
-	public final static int HUD_LISTE_UNITES_DECALAGE_Y = 10;
-	public final static int HUD_LISTE_UNITES_WIDTH = 800;
-	public final static int HUD_LISTE_UNITES_HEIGHT = 80;
-	public final static int HUD_LISTE_UNITE_WIDTH = 50;
-	public final static int HUD_LISTE_UNITE_HEIGHT = 75;
-	
     
 	//vitesse unités
 	public final static int DELAY = 200; // 1 second determine la vitesse de deplacement de mise a jour du deplacement
